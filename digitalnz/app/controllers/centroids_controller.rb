@@ -1,0 +1,2 @@
+class CentroidsController < ApplicationController
+end

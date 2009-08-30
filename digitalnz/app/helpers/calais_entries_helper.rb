@@ -1,0 +1,2 @@
+module CalaisEntriesHelper
+end

@@ -1,0 +1,2 @@
+class ExtentsController < ApplicationController
+end

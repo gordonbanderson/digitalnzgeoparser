@@ -1,0 +1,2 @@
+class RecordDatesController < ApplicationController
+end

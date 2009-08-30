@@ -1,0 +1,46 @@
+<% content_for :header do %>
+<%= render :partial => 'search_form_small' %>
+<div id="searchMetaInformation">
+<p>
+   Results <%=1+@digital_nz_search_result.start%> - <%=@page.to_i*@digital_nz_search_result.num_results_requested.to_i%> of about <%=@digital_nz_search_result.count%> for '<%=@archive_search.search_text%>'. (<%=@elapsed_time%> seconds) 
+</p>
+</div>
+<%end%>
+
+
+
+
+<% content_for :col1 do %>
+    <div id="searchResultsColumn">
+    <ul>
+    <%for result in @digital_nz_search_result.results
+    metarecord = @metadata_records[result.id]
+    %>
+    <li class="searchResult">
+        <a href="<%=result.display_url%>"><%=result.title%></a>
+        <br/>
+    <%if !result.thumbnail_url.blank?%><img src="<%=result.thumbnail_url%>" class="searchResultImage"/><%end%>
+
+    <p><%=metarecord.description%></p>
+    <div class="searchByLine">
+        <%=hostof(result.display_url)%> - <%=result.content_provider%> - <%=result.category%> - <%=metarecord.dateinfo%> - <%=link_to "Similar Pages", search_archive_searches_url(:q=>result.title)%> -
+<%if !metarecord.submission.blank?%>
+<%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+<%else%>
+<%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+<%end%>
+&nbsp;<%=result.id%> 
+    </div>
+    </li>
+    <%end%>
+    </ul>
+    </div>
+    <%=render :partial => 'page_links'%>
+<%end%>
+
+<% content_for :col2 do %>
+<%=render :partial => 'facets'%>
+<% end %>
+
+
+

@@ -1,0 +1,143 @@
+    <%if !@natlib_metadata.thumbnail_url.blank?%>
+    <a href="<%=@natlib_metadata.landing_url%>"><img style="float:right;" src="<%=@natlib_metadata.thumbnail_url%>" /></a><%end%>
+    <h1><%=@natlib_metadata.title%></h1>
+
+<%=@natlib_metadata.description%>
+<%if !@submission.blank?%>
+<table>
+    <tr>
+        <th>Map</th><th>Search Terms</th>
+    </tr>
+<tr>
+    <td>
+        <%if !@map.blank?%>
+         <%= @map.div(:width => 500, :height => 300) %>
+        <%else%>
+        No map available
+        <%end%>
+        <p>
+        Area of geohits:
+        <%if !@submission.blank?%>
+        <%=@submission.pretty_area%> km&sup2;
+        <%else%>No area defined
+        <%end%>
+
+        </p>
+    </td>
+    <td>
+        <%if @submission.blank?%>
+        <p>Record is not geoparsed</p>
+        <%else%>
+        <p>Submission id = <%=@submission.id%></p>
+        <table id="searchTermList">
+        <tr>
+            <th>Matches</th>
+            <th>Accuracy</th>
+            <th>Address</th>
+            <th>Names</th>
+        </tr>
+        <pre>
+            <%=@search_terms.to_yaml%>
+        </pre>
+        <%for search_term in @search_terms.keys.sort%>
+        <tr>
+            <td><%=@search_terms[search_term]%></td>
+            <td><%=@accuracies[search_term]%></td>
+            <td><%=search_term.class%></td>
+            <td><%=search_term%></td>
+        </tr>
+        <%end%>
+    </table>
+        <%end%>
+        
+    <p>Rejected Terms</p>
+    
+    <table id="searchTermList">
+        <%if !@removed_by_calais.blank?%>
+            <tr>
+                <th>Open Calais</th>
+            </tr>
+            <%for calais in @removed_by_calais%>
+                <tr>
+                    <td><%=calais.phrase.words%><br/></td>
+                </tr>
+            <%end%>
+        <%end%>
+        
+        <%if !@stopped.blank?%>
+            <tr>
+                <th>Stopped</th>
+            </tr>
+            <%for item in @stopped%>
+                <tr>
+                    <td><%=item.phrase.words%><br/></td>
+                </tr>
+            <%end%>
+        <%end%>
+        
+        <%if !@no_matches.blank?%>
+            <tr>
+                <th>No Geocoded Matches</th>
+            </tr>
+            <%for item in @no_matches%>
+                <tr>
+                    <td>"<%=item.phrase.words%>"<br/></td>
+                </tr>
+            <%end%>
+        <%end%>
+        
+        <%if !@too_short.blank?%>
+            <tr>
+                <th>Too Short</th>
+            </tr>
+            <%for item in @too_short%>
+                <tr>
+                    <td><%=item.phrase.words%><br/></td>
+                </tr>
+            <%end%>
+        <%end%>
+        
+        <%if !@geoparser_failed.blank?%>
+            <tr>
+                <th>Geoparser Failed</th>
+            </tr>
+            <%for item in @geoparser_failed%>
+                <tr>
+                    <td><%=item.phrase.words%><br/></td>
+                </tr>
+            <%end%>
+        <%end%>
+        
+    </table>
+    </td>
+</tr>
+</table>
+<%end%>
+<%if !@submission.blank? && !@submission.centroid.blank?%><p><%=@submission.centroid.extent_type%>, size is <%=@size%></p><%end%>
+
+<%if !@natlib_metadata.coverages.blank?%>
+<h1>Coverages</h1>
+<ul>
+<%for item in @natlib_metadata.coverages%>
+<li><%=item.name%></li>
+<%end%>
+</ul>
+<%end%>
+
+<%if !@natlib_metadata.subjects.blank?%>
+<h1>Subjects</h1>
+<ul>
+<%for item in @natlib_metadata.subjects%>
+<li><%=item.name%></li>
+<%end%>
+</ul>
+<%end%>
+
+<%if !@natlib_metadata.placenames.blank?%>
+<h1>Placenames</h1>
+<ul>
+<%for item in @natlib_metadata.placenames%>
+<li><%=item.name%></li>
+<%end%>
+</ul>
+<%end%>

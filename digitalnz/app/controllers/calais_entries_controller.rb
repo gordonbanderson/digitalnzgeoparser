@@ -1,0 +1,2 @@
+class CalaisEntriesController < ApplicationController
+end

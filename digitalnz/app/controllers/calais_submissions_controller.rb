@@ -1,0 +1,2 @@
+class CalaisSubmissionsController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class PhraseFrequenciesController < ApplicationController
+end

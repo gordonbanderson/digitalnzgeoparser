@@ -1,0 +1,2 @@
+module GeoparseHelper
+end

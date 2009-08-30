@@ -1,0 +1,15 @@
+<div id="searchPanelHomePage">
+<img src="/images/dignz.gif" alt="Digital NZ Logo"/><br/>
+<%= error_messages_for :archive_search %>
+<% form_for(@archive_search, :url => search_archive_searches_url,:html => {:method => :post}) do |f| %>
+  <p>
+    <%= f.text_field :search_text,  :size => 60 %>
+  </p>
+
+  <p>
+    <%= f.submit "Search" %>
+  </p>
+<% end %>
+</div>
+
+

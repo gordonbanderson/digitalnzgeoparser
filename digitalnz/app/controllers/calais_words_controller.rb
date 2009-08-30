@@ -1,0 +1,2 @@
+class CalaisWordsController < ApplicationController
+end

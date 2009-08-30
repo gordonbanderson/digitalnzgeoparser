@@ -1,0 +1,14 @@
+<div id="facetsColumn">
+    <%for facet in @facets%>
+    <div class="facetField">
+    <h5><%=facet['facet_field'].camelize%></h5>
+    <ul>
+        <%for value in facet['values']%>
+        <li>
+            <%=value['name']%> (<%=value['num_results']%>)
+        </li>
+        <%end%>
+    </ul>
+    </div>
+    <%end%>
+</div>

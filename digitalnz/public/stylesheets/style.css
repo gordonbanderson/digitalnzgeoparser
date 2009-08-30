@@ -1,0 +1,109 @@
+
+
+
+#facetsColumn ul {
+    padding: 0px 0px 10px 0px;
+    margin: 0px;
+    list-style-type: none;
+    font-size: 0.8em;
+}
+
+#facetsColumn h5 {
+    padding: 0px;
+    margin: 0px;
+}
+
+#searchResultsColumn {
+    padding:  0px;
+    margin: 0px;
+}
+
+.searchResult {
+    clear:both;
+    padding-right: 20px;
+}
+
+li.searchResult {
+    padding-left: 0px;
+    margin-left: 0px;
+    list-style-type: none;
+    padding-bottom: 16px;
+}
+
+li.searchResult p {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Centre the home page search a la google */
+#searchPanelHomePage {
+    text-align: center;
+}
+
+#searchPanelSmall img {
+    float:left;
+    width:200px;
+    padding-right: 20px;
+}
+
+#searchMetaInformation {
+    background: #ddd;
+    padding: 0px;
+    margin-top:0px;
+}
+
+#searchMetaInformation div {
+    float:right;
+}
+
+#searchPanelSmall {
+    border-bottom: solid blue 1px;
+    padding-bottom:10px;
+    vertical-align: bottom;
+}
+
+
+
+
+.searchResultImage {
+    float:left;
+    height:40px;
+    width:40px;
+    padding:0px 10px 0px 0px;
+}
+
+.searchByLine {
+    color: green;
+    clear:both;
+}
+
+.searchByLine a {
+    color: #77f;
+}
+
+
+.pageLinks ul li {
+    list-style-type: none;
+    display: inline;
+}
+
+#footer {
+    border-top: solid #ddd 1px;
+    padding-top: 10px;
+}
+
+#footer img {
+    float:right;
+    padding-bottom: 10px;
+}
+
+
+#searchTermList {
+    font-size: 0.7em;
+    list-style-type: none;
+   
+}
+
+#searchTermList li {
+     border-bottom: solid gray 1px;
+}

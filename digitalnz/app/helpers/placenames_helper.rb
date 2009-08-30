@@ -1,0 +1,2 @@
+module PlacenamesHelper
+end

@@ -1,0 +1,2 @@
+class CachedGeoSearchesController < ApplicationController
+end

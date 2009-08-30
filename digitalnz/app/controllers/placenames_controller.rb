@@ -1,0 +1,2 @@
+class PlacenamesController < ApplicationController
+end
