@@ -1,0 +1,6 @@
+Geoparsing Digital NZ
+=====================
+This code is the web server behind the images seen at http://picasaweb.google.com/gordon.b.anderson/DigitalNZGeoparsing
+
+It is currently *NOT* suitable for production use, as some scaffolding needs to be removed from the model fields.  Each uncached search also hits the Digital NZ API 21 times (1 for the search, 20 for search metadata) so it is recommended only for research purposes within a protected network at present.
+
