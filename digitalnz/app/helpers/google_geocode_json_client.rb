@@ -81,7 +81,6 @@ class GoogleGeocodeJsonClient
   
   
   def geocode(address, memcache_server)
-        puts "GOOGLE:HAMSTERS...."
         geo_url = @url+'&q=' + CGI.escape(address)
         
         geocoder_json = '' #What is returned
