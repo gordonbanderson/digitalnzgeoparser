@@ -86,7 +86,7 @@ Memcache:
     memcache_servers = [ 'YOUR_MEMCACHE_SERVER:YOUR_MEMCACHE_PORT' ]
 
 
-Google maps:
+Google maps, get this from http://code.google.com/apis/maps/signup.html:
     GOOGLE_MAPS_API_KEY='YOUR GOOGLE MAPS KEY'
 
 Digital NZ, get this from http://www.digitalnz.org/terms/developers-api
