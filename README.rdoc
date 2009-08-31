@@ -1,0 +1,144 @@
+= Geoparsing Digital NZ
+
+
+This code is the web server behind the images seen at http://picasaweb.google.com/gordon.b.anderson/DigitalNZGeoparsing
+
+It is currently *NOT* suitable for production use, as some scaffolding needs to be removed from the model fields.  Each uncached search also hits the Digital NZ API 21 times (1 for the search, 20 for search metadata) so it is recommended only for research purposes within a protected network at present.
+
+
+= Installation
+
+== Install Ruby, Ruby on Rails
+
+These are the commands I used to install a working copy of the geoparser on a clean Jaunty instance.
+
+    $ sudo apt-get install ruby rdoc irb memcached
+    $ wget rubygems-1.3.5.tgz
+    $ tar zxvf rubygems-1.3.5.tgz 
+    $ cd rubygems-1.3.5/
+    $ sudo ln -s /usr/bin/gem1.8 /usr/bin/gem
+    $ sudo gem install rails
+    $ sudo apt-get install git git-core
+
+== Clone the Repository
+
+    $ mkdir ~/digitalnz
+    $ cd ~/digitalnz
+    $ git-clone git://github.com/gordonbanderson/digitalnzgeoparser.git
+    $ cd digitalnzgeoparser/digitalnz
+
+
+== Install Postgres
+Install postgres, make your current user a database superuser, and configure to run on port 5432 with no password check
+
+    $ sudo apt-get install postgresql
+    $ sudo su - postgres
+
+User your own username here instead of gordon
+    $ createuser gordon
+      Shall the new role be a superuser? (y/n) y
+    $ exit
+
+Create the database
+    $ createdb -E UTF8 digitalnzgeoparser_development
+
+We now need to make postgres listen on 5432
+Edit  /etc/postgresql/8.3/main/postgresql.conf  as a sudo'd user 
+
+Insert
+    listen_addresses = 'localhost'
+before
+    #listen_addresses = 'localhost'         # what IP address(es) to listen on;
+
+Restart postgres
+    $ sudo /etc/init.d/postgresql-8.3 restart
+
+To check this worked do
+    $ netstat -tln | grep 5432
+
+You should see
+    tcp        0      0 127.0.0.1:5432          0.0.0.0:*               LISTEN     
+    tcp6       0      0 ::1:5432                :::*                    LISTEN 
+
+
+Now edit the postgres configuration file  /etc/postgresql/8.3/main/pg_hba.conf
+
+Change
+    host    all         all         127.0.0.1/32          md5
+to
+    host    all         all         127.0.0.1/32          trust
+
+(Happy to have suggested a more secure set up, just trying to get the service up and running)
+
+== Rails Configuration
+Copy the database config file and edit as appropriate:
+    $ cp config/database.yml.example config/database.yml
+
+
+Copy the environment file and add the API keys
+    $ cp config/environment.rb.example config/environment.rb
+
+
+Edit the following using an editor of your choice:
+
+Memcache:
+    #On debian use 127.0.0.1:11211
+    memcache_servers = [ 'YOUR_MEMCACHE_SERVER:YOUR_MEMCACHE_PORT' ]
+
+
+Google maps:
+    GOOGLE_MAPS_API_KEY='YOUR GOOGLE MAPS KEY'
+
+Digital NZ, get this from http://www.digitalnz.org/terms/developers-api
+    DIGITAL_NZ_KEY='YOUR_DIGITALNZ_KEY'
+
+Open Calais, get this from http://www.opencalais.com/user/register
+    CALAIS_KEY = 'YOUR_OPEN_CALAIS_KEY'
+
+
+Unfortunately the mapping plug duplicate the google maps key
+    $ cp config/gmaps_api_key.yml.example config/gmaps_api_key.yml
+
+Edit this and under development add your google maps API key
+
+For localhost:3000 the key in both cases is            ABQIAAAA0cJpnWSrLTBmLnxPL4nExBTX2XchcwgyHzp4Xo0DHRAzt2aLjhQQr2vWuuCy6CUVfk_5bsJzQrUfogs
+
+
+== Install Required Gems and Packages
+
+Allow github gems
+    $ gem sources -a http://gems.github.com
+
+Get installing:
+    $ sudo gem install simplehttp
+    $ sudo gem install memcache-client
+    $ sudo gem install postgres-pr
+    $ sudo apt-get install libhttp-access2-ruby ruby-dev curl
+    $ sudo apt-get install libcurl4-gnutls-dev libxml2 libxml2-dev libxslt libxslt-dev libxslt1-dev libxslt1-dev 
+    $ sudo gem install rc-rest
+    $ sudo gem install jsl-placemaker
+    $ sudo gem install hpricot
+    $ sudo gem install digitalnz
+    $ sudo gem install json
+    $ sudo rake gems:install
+
+Populate the database
+    $ rake db:migrate
+
+
+We need to install a tweaked copy of the digitalnz gem.  In a separate terminal on the same machine:
+
+    $ cd /tmp
+    $ git clone git://github.com/jamesotron/digitalnz.git
+    $ cd digitalnz
+    $ git-apply /your/path/to/digitalnzgeoparser/thirdparty/patches/digitalnzgem/digitalnzgemfacets.patch
+    $ rake gem && sudo gem install pkg/digitalnz-0.1.2.gem
+
+== Run the Server
+Execute
+
+    $ ./script/server
+
+Go to YOUR_IP_ADDRESS:3000 and you should see a page with a search term.  Type in a search term, e.g. 'roseneath' and wait around 20 seconds for the response.  The lag is due to the API being hit 21 times, once for the search and 20 times for metadata.  All responses are cached in the database so the second hit will be less painful :)
+
+
