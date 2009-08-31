@@ -77,7 +77,7 @@ class YahooPlacemakerLocation < Struct.new(:woe_id, :admin_sco, :date); end
 
 
  p = Placemaker::Client.new(:appid => YOUR_APP_ID, :document_content => geocoder_text[:yahoo], :document_type => 'text/plain')
- p.fetch!(CACHE)
+ p.fetch!
  
  #response = CACHE[memcache_key]
 
