@@ -1,0 +1,16 @@
+diff --git a/lib/digitalnz/search.rb b/lib/digitalnz/search.rb
+index cbde5de..66a3958 100644
+--- a/lib/digitalnz/search.rb
++++ b/lib/digitalnz/search.rb
+@@ -18,6 +18,11 @@ class DigitalNZ::Search
+     for r in res['results']
+       @results << Result.new(r)
+     end
++    @facets = res['facets']
++  end
++
++  def facets
++    @facets
+   end
+ 
+   def num_results_requested
