@@ -11,7 +11,7 @@ require 'digest/sha2'
 # Library for looking up coordinates with Google's Geocoding API.
 #
 
-#http://maps.google.com/maps/geo?q=They&output=json&oe=utf8&sensor=true_or_false&key=ABQIAAAA0cJpnWSrLTBmLnxPL4nExBTX2XchcwgyHzp4Xo0DHRAzt2aLjhQQr2vWuuCy6CUVfk_5bsJzQrUfogs
+#
 
 # http://www.google.com/apis/maps/documentation/#Geocoding_HTTP_Request
 
