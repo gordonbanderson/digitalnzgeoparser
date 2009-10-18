@@ -48,7 +48,7 @@ class GoogleGeocodeJsonClient
 
   def initialize(key)
     @key = key
-    @url = 'http://maps.google.com/maps/geo?output=json&oe=utf8&sensor=true_or_false&key='+@key
+    @url = 'http://maps.google.com/maps/geo?output=json&oe=utf8&sensor=false&key='+@key
     puts @url
   end
   
