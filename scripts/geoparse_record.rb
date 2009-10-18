@@ -49,8 +49,6 @@ puts r[1].to_yaml
 
 
 puts "BRIEF:#{nl.natlib_id} - #{nl.title}"
-
-YOUR_APP_ID = 'E4_lvoHV34ED0HkakwTESbCERRodT5aebG4XsBvyTzU1g07YELp0cq78HiY'
 puts nl.geo_text
 
 geocoder_text = remove_non_geo_items_for_geocoders(nl.geo_text)
@@ -76,8 +74,9 @@ removed_by_calais = geocoder_text[:removed]
 class YahooPlacemakerLocation < Struct.new(:woe_id, :admin_sco, :date); end
 
 
- p = Placemaker::Client.new(:appid => YOUR_APP_ID, :document_content => geocoder_text[:yahoo], :document_type => 'text/plain')
- p.fetch!
+ puts "YAHOO KEY:#{YAHOO_PLACEMAKER_KEY}"
+ p = Placemaker::Client.new(:appid => YAHOO_PLACEMAKER_KEY, :document_content => geocoder_text[:yahoo], :document_type => 'text/plain')
+ p.fetch!(CACHE)
  
  #response = CACHE[memcache_key]
 
