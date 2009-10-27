@@ -37,6 +37,46 @@ class ArchiveSearchesController < ApplicationController
     @facets = @digital_nz_search_result.facets
     @facet_fields = query_hash[:facets].split(',')
     
+    @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', @facet_fields])
+    
+=begin
+<%for facet in @facets%>
+  <div class="facetField">
+  <h5><%=facet['facet_field'].camelize%></h5>
+  <ul>
+      <%for value in facet['values']%>
+      <li>
+          <%=value['name']%> (<%=value['num_results']%>)
+
+=end
+    #FIXME - make this more efficient
+    for f in @facets
+      parent_name = f['facet_field']
+      parent_facet_field = FacetField.find_by_name(parent_name)
+      logger.debug "PARENT FACET:#{parent_facet_field}"
+      for child_facet_name_value in f['values']
+        child_facet_name = child_facet_name_value['name']
+        sql_conditions = "parent_id = ? and name = ?"
+        logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
+
+        #FIXME - check for correct error conditino
+        begin
+          child_facet_field = FacetField.find(
+            :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
+          )
+          
+        #Create this if it does not exist
+        
+        rescue
+          child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
+          child_facet_field.save!
+        end
+
+        
+        
+      end
+    end
+    
     @num_pages = 1+@digital_nz_search_result.count/PAGE_SIZE
     
     #check metadata IDs
