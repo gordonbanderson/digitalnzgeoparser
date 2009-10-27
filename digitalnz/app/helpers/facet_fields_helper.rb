@@ -1,0 +1,2 @@
+module FacetFieldsHelper
+end

@@ -1,0 +1,2 @@
+class FacetFieldsController < ApplicationController
+end

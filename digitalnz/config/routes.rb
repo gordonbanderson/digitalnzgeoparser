@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :facet_fields
+
   map.resources :calais_entries
 
   map.resources :calais_child_words
