@@ -28,6 +28,14 @@ class ArchiveSearchesController < ApplicationController
     
     @title = "Digital NZ - #{params[:q]}"
     
+    
+    #Form the basics of the current query for facetting purposes
+    @previous_params = ""
+    @query_term = params[:q]
+    @previous_params << "?q=#{params[:q]}"
+    @previous_params << "&page=#{@page}"
+    
+    #Do the search
     query_hash = {}
     query_hash[:search_text] = @archive_search.search_text
     query_hash[:num_results] = "#{PAGE_SIZE}"
@@ -38,7 +46,7 @@ class ArchiveSearchesController < ApplicationController
     @facet_fields = query_hash[:facets].split(',')
     
     @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', @facet_fields])
-    
+    @child_facet_fields = {}
 =begin
 <%for facet in @facets%>
   <div class="facetField">
@@ -60,18 +68,20 @@ class ArchiveSearchesController < ApplicationController
         logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
 
         #FIXME - check for correct error conditino
-        begin
-          child_facet_field = FacetField.find(
+        
+          child_facet_field = FacetField.find(:first, 
             :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
           )
           
         #Create this if it does not exist
         
-        rescue
-          child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
-          child_facet_field.save!
-        end
+          if child_facet_field.blank?
+            child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
+            child_facet_field.save!
+          end
+        
 
+        @child_facet_fields[child_facet_name] = child_facet_field
         
         
       end
@@ -125,6 +135,8 @@ category, content_partner, creator, language, rights, century, decade, and year.
         format.xml  { render :xml => @archive_search.errors, :status => :unprocessable_entity }
       end
     end
+    
+
   end
   
   
