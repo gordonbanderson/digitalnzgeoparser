@@ -3,9 +3,12 @@
     <div class="facetField">
     <h5><%=facet['facet_field'].camelize%></h5>
     <ul>
-        <%for value in facet['values']%>
+        <%for value in facet['values']
+        child_facet = @child_facet_fields[value['name']]
+        link = '/archive_searches/search'+@previous_params+'&f='+child_facet.id.to_s
+        %>
         <li>
-            <%=value['name']%> (<%=value['num_results']%>)
+            <a href="<%=link%>"><%=value['name']%></a>
         </li>
         <%end%>
     </ul>
