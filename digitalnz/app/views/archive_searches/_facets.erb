@@ -8,7 +8,7 @@
         link = '/archive_searches/search'+@previous_params+'&f='+child_facet.id.to_s
         %>
         <li>
-            <a href="<%=link%>"><%=value['name']%></a>
+            <a href="<%=link%>"><%=value['name']%></a> (<%=value['num_results']%>)
         </li>
         <%end%>
     </ul>
