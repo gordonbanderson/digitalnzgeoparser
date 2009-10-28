@@ -28,6 +28,17 @@ class ArchiveSearchesController < ApplicationController
     
     @title = "Digital NZ - #{params[:q]}"
     
+    @filters = {}
+    
+    @filter_params = params[:f]
+    @filter_params = {} if @filter_params.blank?
+    
+    if !@filter_params.blank?
+      for filter_id in @filter_params
+        f = FacetField.find(filter_id)
+        @filters[f.parent.name] = f
+      end
+    end
     
     #Form the basics of the current query for facetting purposes
     @previous_params = ""
@@ -35,9 +46,20 @@ class ArchiveSearchesController < ApplicationController
     @previous_params << "?q=#{params[:q]}"
     @previous_params << "&page=#{@page}"
     
+    #If we have any filters we need to expand the query
+    @filter_query = ""
+    for filter in @filters.values
+      logger.debug filter.class
+      logger.debug filter.to_yaml
+      filter_parent_name = filter.parent.name
+      filter_name = filter.name
+      @filter_query << ' '
+      @filter_query << "#{filter_parent_name}:\"#{filter_name}\""
+    end
+    
     #Do the search
     query_hash = {}
-    query_hash[:search_text] = @archive_search.search_text
+    query_hash[:search_text] = @archive_search.search_text+@filter_query
     query_hash[:num_results] = "#{PAGE_SIZE}"
     query_hash[:start] = "#{PAGE_SIZE*(@page.to_i-1)}"
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
