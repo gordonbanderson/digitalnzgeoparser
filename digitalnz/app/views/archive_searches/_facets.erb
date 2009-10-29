@@ -12,7 +12,16 @@
         %>
         <h5><a href="<%=link%>"><%=facet_parent_name.camelize%></a></h5>
         <ul>
-            <li> &raquo; <%=child_facet.name%></li>
+            <%for value in facet['values']
+            child_facet_result = @child_facet_fields[value['name']]
+            if child_facet_result['name'] == child_facet.name
+            %>
+            <li>
+                &raquo; <%=child_facet_result['name'] %> (<%=value['num_results']%>)
+            </li>
+            <%  break
+                end
+            end%>
         </ul>
     <%else%>
     <h5><%=facet_parent_name.camelize%>
