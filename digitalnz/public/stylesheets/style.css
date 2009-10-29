@@ -47,9 +47,9 @@ li.searchResult p {
 }
 
 #searchMetaInformation {
-    background: #ddd;
     padding: 0px;
     margin-top:0px;
+    padding-left: 15px;
 }
 
 #searchMetaInformation div {
@@ -58,7 +58,7 @@ li.searchResult p {
 
 #searchPanelSmall {
     border-bottom: solid blue 1px;
-    padding-bottom:10px;
+    padding-bottom:12px;
     vertical-align: bottom;
 }
 
@@ -88,13 +88,16 @@ li.searchResult p {
 }
 
 #footer {
+    clear: both;
     border-top: solid #ddd 1px;
     padding-top: 10px;
+    width: 100%;
 }
 
 #footer img {
     float:right;
     padding-bottom: 10px;
+    padding-right: 10px;
 }
 
 
