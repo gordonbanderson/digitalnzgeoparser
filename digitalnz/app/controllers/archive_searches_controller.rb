@@ -72,6 +72,10 @@ class ArchiveSearchesController < ApplicationController
     @facets = @digital_nz_search_result.facets
     @facet_fields = query_hash[:facets].split(',')
     
+    @nresult_on_page = @page.to_i*@digital_nz_search_result.num_results_requested.to_i
+    @nresult_on_page = @digital_nz_search_result.count if @digital_nz_search_result.count < @nresult_on_page
+    
+    
     @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', @facet_fields])
     @child_facet_fields = {}
 =begin
