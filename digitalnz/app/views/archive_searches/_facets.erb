@@ -1,11 +1,17 @@
 <div id="facetsColumn">
-    <%for facet in @facets%>
+    <%for facet in @facets
+    facet_parent_name = facet['facet_field']
+    facet_already_chosen = !@filters[facet_parent_name].blank?
+    %>
     <div class="facetField">
-    <h5><%=facet['facet_field'].camelize%></h5>
+    <h5><%=facet_parent_name.camelize%> - <%=facet_already_chosen%>
+        
+    </h5>
     <ul>
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
-        link = '/archive_searches/search'+@previous_params+'&f='+child_facet.id.to_s
+        link = '/archive_searches/search'+@previous_params+'&f[]='+child_facet.id.to_s
+        link << @facet_params_chosen
         %>
         <li>
             <a href="<%=link%>"><%=value['name']%></a> (<%=value['num_results']%>)
@@ -14,4 +20,10 @@
     </ul>
     </div>
     <%end%>
+    
+    <div>
+        <pre>
+            
+        </pre>
+    </div>
 </div>

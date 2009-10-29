@@ -48,6 +48,9 @@ class ArchiveSearchesController < ApplicationController
     
     #If we have any filters we need to expand the query
     @filter_query = ""
+    
+    #Also create URL params to append to facet links to drill down
+    @facet_params_chosen=''
     for filter in @filters.values
       logger.debug filter.class
       logger.debug filter.to_yaml
@@ -55,11 +58,13 @@ class ArchiveSearchesController < ApplicationController
       filter_name = filter.name
       @filter_query << ' '
       @filter_query << "#{filter_parent_name}:\"#{filter_name}\""
+      @facet_params_chosen << "&f[]=#{filter.id}"
     end
     
     #Do the search
     query_hash = {}
-    query_hash[:search_text] = @archive_search.search_text+@filter_query
+    @full_solr_query = @archive_search.search_text+@filter_query
+    query_hash[:search_text] = @full_solr_query
     query_hash[:num_results] = "#{PAGE_SIZE}"
     query_hash[:start] = "#{PAGE_SIZE*(@page.to_i-1)}"
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
