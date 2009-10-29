@@ -6,10 +6,13 @@
     <div class="facetField">
     <%if facet_already_chosen
         child_facet = @filters[facet_parent_name]
+        fparam = "&f[]=#{child_facet.id}"
+        link = '/archive_searches/search'+@previous_params
+        link << @facet_params_chosen.gsub(fparam,'')
         %>
-        <h5><%=facet_parent_name.camelize%></h5>
+        <h5><a href="<%=link%>"><%=facet_parent_name.camelize%></a></h5>
         <ul>
-            <li> >> <%=child_facet.name%></li>
+            <li> &raquo; <%=child_facet.name%></li>
         </ul>
     <%else%>
     <h5><%=facet_parent_name.camelize%>
