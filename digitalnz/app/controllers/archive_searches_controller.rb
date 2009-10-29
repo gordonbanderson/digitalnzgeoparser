@@ -3,7 +3,7 @@ class ArchiveSearchesController < ApplicationController
   require 'digitalnz'
   DigitalNZ.api_key = DIGITAL_NZ_KEY
   
-  PAGE_SIZE=20
+  PAGE_SIZE=10
   
   def search_form
     
