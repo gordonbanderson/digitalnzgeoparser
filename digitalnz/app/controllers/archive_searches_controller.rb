@@ -26,6 +26,8 @@ class ArchiveSearchesController < ApplicationController
       @archive_search.search_text = params[:q]
     end
     
+    @archive_search.search_text = '' if @archive_search.search_text.blank?
+    
     @title = "Digital NZ - #{params[:q]}"
     
     @filters = {}
