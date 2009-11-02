@@ -82,6 +82,11 @@ li.searchResult p {
 }
 
 
+.pageLinks {
+    padding-left: 40px;
+    padding-top: 10px;
+}
+
 .pageLinks ul li {
     list-style-type: none;
     display: inline;
