@@ -1,0 +1,17 @@
+= Analyzing Geoparsed Submissions
+
+== Ordering by Area to find Good / Bad parses
+    select s.id as submissionid, nm.natlib_id as digitalnz_natlib_record_id, natlib_metadata_id, area from submissions s
+    inner join natlib_metadatas nm
+    on (s.natlib_metadata_id = nm.id)
+    order by area;
+
+== Natlib Records yet to be Geoparsed
+    select s.id as submissionid, nm.natlib_id as digitalnz_natlib_record_id, natlib_metadata_id, area from submissions s
+    inner join natlib_metadatas nm
+    on (s.natlib_metadata_id = nm.id)
+    order by area;
+    
+    select nm.id from natlib_metadatas nm as natlib_metadata_id
+    where nm.id not in (select natlib_metadata_id from submissions)
+    ;
