@@ -1,0 +1,38 @@
+<table class="imageResultsTable">
+
+<%
+width = 4 # a la google
+ctr = 0
+for result in @digital_nz_search_result.results
+    metarecord = @metadata_records[result.id]
+    if ctr % width == 0
+        %>
+        <tr>
+        <%
+    end
+    %>
+    <td class="imageResult">
+        <a href="<%=result.display_url%>"><img src="<%=result.thumbnail_url%>"/></a>
+        <p><%=result.title%><br/>
+            <%if !metarecord.submission.blank?%>
+            <%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+            <%else%>
+            <%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+            <%end%>    
+        <br/>
+        <%=hostof(result.display_url)%>
+        </p>
+        
+    </td>
+    <%
+    ctr = ctr + 1
+    
+    if ctr % width == 0
+        %>
+        </tr>
+        <%
+    end
+end
+%>
+    
+</table>
