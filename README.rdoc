@@ -130,6 +130,7 @@ Get installing:
     $ sudo gem install simplehttp
     $ sudo gem install memcache-client
     $ sudo gem install postgres-pr
+    $ sudo gem install mislav-will_paginate
     $ sudo apt-get install libhttp-access2-ruby ruby-dev curl
     $ sudo apt-get install libcurl4-gnutls-dev libxml2 libxml2-dev libxslt libxslt-dev libxslt1-dev libxslt1-dev 
     $ sudo gem install rc-rest
