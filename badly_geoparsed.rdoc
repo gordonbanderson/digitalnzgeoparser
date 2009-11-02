@@ -67,11 +67,18 @@ http://localhost:3000/natlib_metadatas/1226315/map
 
 Aotorea not recognised....
 
+== Stopwords
+http://localhost:3000/natlib_metadatas/1302557/map << why is miramar in stop list?
+
 
 === Erroneous Word
 http://localhost:3000/natlib_metadatas/28895/map
 
 Where the feck does 'Whitcombe' come from?
+
+Oh the title... Whitcombe's map of Auckland City and suburbs
+
+Remove any capitalised words ending in apostrophe s ??
 
 
 
