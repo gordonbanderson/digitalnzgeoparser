@@ -1,0 +1,79 @@
+= Badly Geoparsed Examples
+
+Record any examples of poor geoparsing in this document, well at least until a proper bug tracker is set up...
+
+== Open Calais Stripping Necessary Information
+
+=== Schools
+In this example Kohokohu School is removed, which is the only geoparsable info in the record
+http://localhost:3000/natlib_metadatas/43988/map
+
+
+
+
+
+
+== Need to Throw Away Least Accurate Results
+
+=== Region and Town example
+If only a town and region returned, and town is of that region, then only show region
+
+http://localhost:3000/natlib_metadatas/1175758/map is an example, containing Rawene and Northland
+
+
+=== Region Town and Street Example
+Do the same again?
+
+http://localhost:3000/natlib_metadatas/112896/map
+
+Perhaps apply recursive algoritm
+http://localhost:3000/natlib_metadatas/1226315/map << good example, only Coopers Beach should be returned
+
+Counterexample... http://localhost:3000/natlib_metadatas/116840/map
+
+
+== Errors in Word Parsing
+=== Semi Colons not splitting phrases
+http://localhost:3000/natlib_metadatas/1319179/map
+
+
+== Issues with Algorithm
+
+=== Clustering
+http://localhost:3000/natlib_metadatas/103059/map
+One way off point
+
+=== Issue with Full Stop
+http://localhost:3000/natlib_metadatas/53181/map
+
+Mt. Christina parsed as Christina...  due to 'Too Short' parsing
+
+
+=== Word Frequency
+Word frequency is currently not taken into account
+e.g. http://localhost:3000/natlib_metadatas/116520/map has Houhora Harbour appearing 3 times
+
+=== Positional Prepositions
+http://localhost:3000/natlib_metadatas/58625/map
+
+Probably *in* Auckland
+
+=== Line Breaks
+http://localhost:3000/natlib_metadatas/1216871/map
+Is this line breaked correctly?
+
+=== Recognising Maori
+http://localhost:3000/natlib_metadatas/1226315/map
+
+Aotorea not recognised....
+
+
+=== Erroneous Word
+http://localhost:3000/natlib_metadatas/28895/map
+
+Where the feck does 'Whitcombe' come from?
+
+
+
+
+
