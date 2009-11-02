@@ -4,12 +4,13 @@ class ArchiveSearchesController < ApplicationController
   require 'will_paginate'
   DigitalNZ.api_key = DIGITAL_NZ_KEY
   
+  #Page size for any search that is not images only
   PAGE_SIZE=10
   
-  def search_form
-    
-  end
+  #Page size for images only
+  IMAGE_PAGE_SIZE=20
   
+
   def search
     start_time = Time.now
     @archive_search = ArchiveSearch.new(params[:archive_search])
@@ -54,22 +55,29 @@ class ArchiveSearchesController < ApplicationController
     
     #Also create URL params to append to facet links to drill down
     @facet_params_chosen=''
+    @images_category = false  # True if images category selected
     for filter in @filters.values
-      logger.debug filter.class
-      logger.debug filter.to_yaml
       filter_parent_name = filter.parent.name
       filter_name = filter.name
       @filter_query << ' '
       @filter_query << "#{filter_parent_name}:\"#{filter_name}\""
       @facet_params_chosen << "&f[]=#{filter.id}"
+      @images_category = true if filter_name == 'Images'
     end
     
     #Do the search
+    @result_page_size = PAGE_SIZE
+    if @images_category
+      @result_page_size = IMAGE_PAGE_SIZE
+    end
+    
+    
+    
     query_hash = {}
     @full_solr_query = @archive_search.search_text+@filter_query
     query_hash[:search_text] = @full_solr_query
-    query_hash[:num_results] = "#{PAGE_SIZE}"
-    query_hash[:start] = "#{PAGE_SIZE*(@page.to_i-1)}"
+    query_hash[:num_results] = "#{@result_page_size}"
+    query_hash[:start] = "#{@result_page_size*(@page.to_i-1)}"
     query_hash[:facet_num_results]='50000'
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
     @digital_nz_search_result = DigitalNZ.search(query_hash)
@@ -122,7 +130,7 @@ class ArchiveSearchesController < ApplicationController
       end
     end
     
-    @num_pages = 1+@digital_nz_search_result.count/PAGE_SIZE
+    @num_pages = 1+@digital_nz_search_result.count/@result_page_size
     
     #check metadata IDs
     new_metadata_ids = []
@@ -145,9 +153,9 @@ class ArchiveSearchesController < ApplicationController
 
     #Deal with pagination
     @page_results = WillPaginate::Collection.create(
-      @page, PAGE_SIZE, @digital_nz_search_result.count) do |pager|
-      start = (@page.to_i-1)*PAGE_SIZE
-      #pager.replace(@digital_nz_search_result.results.to_array[start, PAGE_SIZE])
+      @page, @result_page_size, @digital_nz_search_result.count) do |pager|
+      start = (@page.to_i-1)*@result_page_size
+      #pager.replace(@digital_nz_search_result.results.to_array[start, result_page_size])
     end
 
 =begin
