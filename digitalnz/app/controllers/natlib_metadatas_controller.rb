@@ -53,31 +53,42 @@ class NatlibMetadatasController < ApplicationController
        
        @size = 7 if @size.blank?
 
-       
-       if !@centroid.blank?
-         
-         @size = EXTENT_SIZE[@centroid.extent_type]
-         
-         
+       # If we have coordinates found, take an average for centre and heuristic for size
+       # from the google search results
+       @n_places_found = @submission.cached_geo_searches.length
+       logger.debug "TRACE:#{@n_places_found} found"
+       if @n_places_found > 0
          # if the submission area is small, zoom in more
-         if !@submission.blank?
-           
-           #Deal with size
-           if !@submission.area.blank?
-             @size = get_size_from_km_area(@submission.area)
-           end
-           
-           #Deal with centre of points
-           
-         end
-         
-         logger.debug(@centroid.extent_type)
-         @map.center_zoom_init([@centroid.latitude,@centroid.longitude], @size)
+            if !@submission.area.blank?
+              @size = get_size_from_km_area(@submission.area)
+            end
+          
+            #Deal with centre of points
+            le_sum = 0
+            cen_lat_array = @submission.cached_geo_searches.map{|l| l.latitude}
+            cen_lon_array = @submission.cached_geo_searches.map{|l| l.longitude}
+            cen_lat = cen_lat_array.sum.to_f / cen_lat_array.size
+            cen_lon = cen_lon_array.sum.to_f / cen_lon_array.size
+            @map.center_zoom_init([cen_lat,cen_lon], @size)
+            logger.debug "TRACE: Average centre is #{cen_lat}, #{cen_lon}"
+
        else
-         @size = 4
-         @map.center_zoom_init([0,0], @size)
+        logger.debug "TRACE:no places found, using yahoo"
+         #Google has provided no answers, so use the yahoo extents instead
+         #If Yahoo has also failed, show the entire world
+         if !@centroid.blank?
+          logger.debug "TRACE: Using yahoo centroid as it is not blank (#{@centroid.latitude}, "+
+                      "#{@centroid.longitude}) of extent type #{@centroid.extent_type}"
+           @size = EXTENT_SIZE[@centroid.extent_type]
+           logger.debug(@centroid.extent_type)
+           @map.center_zoom_init([@centroid.latitude,@centroid.longitude], @size)
+         else
+           logger.debug "TRACE: Defaulting to the whole world as both yahoo and google cannot provide info"
+           @size = 4
+           @map.center_zoom_init([0,0], @size)
          
-       end
+         end
+      end
        
 
 
@@ -152,12 +163,40 @@ class NatlibMetadatasController < ApplicationController
   
   #Convert area to a size
   def get_size_from_km_area(km_area)
+    
     result = 15
-     if km_area < 10
-       result=9
-     elsif km_area < 20
-       result = 10
-     end
+    result = case
+      when km_area == 0
+        13 #May be region
+      when km_area < 4
+        14
+      when km_area < 20
+        13
+      when km_area < 30
+        12 # e.g.http://localhost:3000/natlib_metadatas/66096/map
+      when km_area < 40
+        11
+      when km_area < 80
+        10 # e.g. http://localhost:3000/natlib_metadatas/12509/map
+      when km_area < 400
+        9 #e.g. http://localhost:3000/natlib_metadatas/1231515/map
+      when km_area < 800
+        8
+      when km_area < 3200
+        7
+      when km_area < 6400
+        6
+      when km_area < 25000
+        5
+      when km_area < 130000
+        4 #this is nz sized
+      when km_area < 250000
+        3
+      #Default to the whole wide world
+      else
+        1 #e.g. http://localhost:3000/natlib_metadatas/1328919/map
+    end
+
      
      result
   end
