@@ -1,7 +1,3 @@
 <div class="pageLinks">
-<ul>
-    <%for i in 1..@num_pages%>
-    <li><%=link_to i.to_s, search_archive_searches_url({:q=>@archive_search.search_text, :page => i})%></li>
-    <%end%>
-</ul>    
+<%= will_paginate @page_results %>    
 </div>
