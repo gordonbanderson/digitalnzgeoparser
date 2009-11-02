@@ -52,7 +52,6 @@ class NatlibMetadata < ActiveRecord::Base
   def self.parse_metadata_api(record_number)
       puts "Getting metadata for record #{record_number}" #eg 68346
       result = get_metadata(record_number)
-      puts result.to_yaml
       metadata = NatlibMetadata::new
       metadata.natlib_id = record_number
       metadata.title = result['dc']['title']
