@@ -1,6 +1,7 @@
 class ArchiveSearchesController < ApplicationController
   
   require 'digitalnz'
+  require 'will_paginate'
   DigitalNZ.api_key = DIGITAL_NZ_KEY
   
   PAGE_SIZE=10
@@ -69,6 +70,7 @@ class ArchiveSearchesController < ApplicationController
     query_hash[:search_text] = @full_solr_query
     query_hash[:num_results] = "#{PAGE_SIZE}"
     query_hash[:start] = "#{PAGE_SIZE*(@page.to_i-1)}"
+    query_hash[:facet_num_results]='50000'
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
     @digital_nz_search_result = DigitalNZ.search(query_hash)
     @facets = @digital_nz_search_result.facets
@@ -140,7 +142,13 @@ class ArchiveSearchesController < ApplicationController
       nl = NatlibMetadata.parse_metadata_api(nlid)
       @metadata_records[nlid] = nl
     end
-    
+
+    #Deal with pagination
+    @page_results = WillPaginate::Collection.create(
+      @page, PAGE_SIZE, @digital_nz_search_result.count) do |pager|
+      start = (@page.to_i-1)*PAGE_SIZE
+      #pager.replace(@digital_nz_search_result.results.to_array[start, PAGE_SIZE])
+    end
 
 =begin
 num_results - the number of results the user wishes returned
