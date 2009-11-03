@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091102051220) do
+ActiveRecord::Schema.define(:version => 20091103030941) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -173,6 +173,24 @@ ActiveRecord::Schema.define(:version => 20091102051220) do
   end
 
   create_table "natlib_metadatas", :force => true do |t|
+    t.text     "creator"
+    t.text     "contributor"
+    t.text     "description"
+    t.text     "language"
+    t.text     "publisher"
+    t.text     "title"
+    t.text     "collection"
+    t.text     "landing_url"
+    t.text     "thumbnail_url"
+    t.integer  "tipe_id"
+    t.text     "content_partner"
+    t.boolean  "circa_date"
+    t.integer  "natlib_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "natlib_metadatas_old", :force => true do |t|
     t.string   "creator"
     t.string   "contributor"
     t.text     "description"
