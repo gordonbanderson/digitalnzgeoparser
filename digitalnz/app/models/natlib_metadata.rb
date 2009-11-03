@@ -108,8 +108,8 @@ class NatlibMetadata < ActiveRecord::Base
 
 
             rescue Exception => e
-              puts "FAILED TO PARSE DATE:#{the_date}"
-              puts e.to_yaml
+              logger.debug "FAILED TO PARSE DATE:#{the_date}"
+              logger.debug e.to_yaml
             end
           end
         end
