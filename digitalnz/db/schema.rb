@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091103030941) do
+ActiveRecord::Schema.define(:version => 20091103034737) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -134,6 +134,13 @@ ActiveRecord::Schema.define(:version => 20091103030941) do
   end
 
   create_table "facet_fields", :force => true do |t|
+    t.text     "name"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "facet_fields_old", :force => true do |t|
     t.string   "name"
     t.integer  "parent_id"
     t.datetime "created_at"
