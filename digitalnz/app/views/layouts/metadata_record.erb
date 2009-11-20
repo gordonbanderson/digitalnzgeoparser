@@ -11,7 +11,8 @@
 <%= javascript_include_tag :defaults %>
 </head>
 <body>
-    
+    <%= render :partial => 'shared/google_analytics'%>
+ 
     <%=yield%>
 <div id="footer">
 <img src="/images/powered_grey.gif" alt="Powered by Logo for National Library">
