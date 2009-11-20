@@ -48,11 +48,60 @@ class NatlibMetadata < ActiveRecord::Base
   end
   
   
+  #Create a new natlib metadata record from a search result
+  #Note that rendering of the search result uses in main the search result info so no need to populate
+  #or attempt to populate natlib record here
+  def self.new_from_search_result(searchresult)
+    metadata = NatlibMetadata::new
+    metadata.natlib_id = searchresult.id
+    metadata.title = searchresult.title
+    metadata.description = searchresult.description
+    metadata.pending = true
+    metadata.save!
+    return metadata
+  end
   
-  def self.parse_metadata_api(record_number)
+=begin
+
+id              | integer                     | not null default nextval('natlib_metadatas_id_seq1'::regclass)
+creator         | text                        | 
+contributor     | text                        | 
+description     | text                        | 
+language        | text                        | 
+publisher       | text                        | 
+title           | text                        | 
+collection      | text                        | 
+landing_url     | text                        | 
+thumbnail_url   | text                        | 
+tipe_id         | integer                     | 
+content_partner | text                        | 
+circa_date      | boolean                     | 
+natlib_id       | integer                     | 
+created_at      | timestamp without time zone | 
+updated_at      | timestamp without time zone | 
+pending         | boolean                     | default true
+
+
+metadata_url: http://api.digitalnz.org/records/v1/959171
+category: Images
+title: Me and my whanau
+content_provider: Kete Horowhenua
+source_url: http://api.digitalnz.org/records/v1/959171/source
+syndication_date: "2009-11-05T20:50:43.390Z"
+id: "959171"
+date: "2009-05-19T00:00:00.000Z"
+thumbnail_url: http://horowhenua.kete.net.nz/image_files/0000/0008/2572/bio_photo_medium.jpg
+description: ""
+display_url: http://horowhenua.kete.net.nz/site/images/show/15801-me-and-my-whanau
+=end
+  
+  
+  #Parse the metadata returned for a single record form the Digital NZ API
+  def self.update_or_create_metadata_from_api(record_number)
       puts "Getting metadata for record #{record_number}" #eg 68346
       result = get_metadata(record_number)
-      metadata = NatlibMetadata::new
+      metadata = NatlibMetadata.find_by_natlib_id(record_number)
+      metadata = NatlibMetadata::new if metadata.blank?
       metadata.natlib_id = record_number
       metadata.title = result['dc']['title']
       metadata.creator = result['dc']['creator']
@@ -60,6 +109,7 @@ class NatlibMetadata < ActiveRecord::Base
       metadata.language = result['dc']['language']
       metadata.description = result['dc']['description']
       metadata.publisher = result['dc']['publisher']
+      metadata.pending = false
       record_dates = result['dc']['date']
 
       #Appears date can be an array...
