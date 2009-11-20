@@ -1,5 +1,7 @@
 class NatlibMetadatasController < ApplicationController
+  require 'will_paginate'
   
+  PAGE_SIZE=20
   
   #This maps yahoo extent sizes to google map scale
   EXTENT_SIZE = {
@@ -168,6 +170,31 @@ class NatlibMetadatasController < ApplicationController
 
     render :layout => 'metadata_record'
 
+  end
+  
+  
+  #Render those records already geoparsed
+  def geoparsed
+    #Check the page
+    @page=1
+    @page = params[:page] if !params[:page].blank?
+    
+    #ordering
+    @order = 'updated_at desc'
+    
+    #@posts = Post.paginate :page => params[:page], :order => 'created_at DESC'
+=begin
+    @natlib_records = NatlibMetadata.find(:all, :conditions => [
+      "pending = false"
+    ],
+    :order => @order,
+    :limit => PAGE_SIZE
+    )
+=end
+    @natlib_records = NatlibMetadata.paginate :page => @page, :order => @order
+    render :layout => 'metadata_record'
+    
+    
   end
   
   
