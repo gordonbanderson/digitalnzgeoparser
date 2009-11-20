@@ -5,7 +5,7 @@ class ArchiveSearchesController < ApplicationController
   DigitalNZ.api_key = DIGITAL_NZ_KEY
   
   #Page size for any search that is not images only
-  PAGE_SIZE=10
+  PAGE_SIZE=20
   
   #Page size for images only
   IMAGE_PAGE_SIZE=20
