@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091120062342) do
+ActiveRecord::Schema.define(:version => 20091120082300) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -17,6 +17,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "accuracies", ["google_id"], :name => "index_accuracies_on_google_id"
 
   create_table "archive_searches", :force => true do |t|
     t.string   "search_text"
@@ -34,6 +36,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "updated_at"
     t.boolean  "is_country"
   end
+
+  add_index "cached_geo_search_terms", ["search_term"], :name => "index_cached_geo_search_terms_on_search_term"
 
   create_table "cached_geo_searches", :force => true do |t|
     t.float    "latitude"
@@ -81,11 +85,15 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "updated_at"
   end
 
+  add_index "calais_submissions", ["signature"], :name => "index_calais_submissions_on_signature"
+
   create_table "calais_words", :force => true do |t|
     t.string   "word"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "calais_words", ["word"], :name => "index_calais_words_on_word"
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -108,6 +116,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "countries", ["abbreviation"], :name => "index_countries_on_abbreviation"
 
   create_table "country_names", :force => true do |t|
     t.integer  "country_id"
@@ -140,6 +150,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "updated_at"
   end
 
+  add_index "facet_fields", ["name"], :name => "index_facet_fields_on_name"
+
   create_table "facet_fields_old", :force => true do |t|
     t.string   "name"
     t.integer  "parent_id"
@@ -152,6 +164,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "filter_types", ["name"], :name => "index_filter_types_on_name"
 
   create_table "filtered_phrases", :force => true do |t|
     t.integer  "phrase_id"
@@ -198,6 +212,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.boolean  "pending",         :default => true
   end
 
+  add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
+
   create_table "natlib_metadatas_old", :force => true do |t|
     t.string   "creator"
     t.string   "contributor"
@@ -229,6 +245,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "phrases", ["words"], :name => "index_phrases_on_words"
 
   create_table "placenames", :force => true do |t|
     t.string   "name"
@@ -265,6 +283,8 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "updated_at"
   end
 
+  add_index "stop_words", ["word"], :name => "index_stop_words_on_word"
+
   create_table "subjects", :force => true do |t|
     t.string   "name"
     t.integer  "natlib_metadata_id"
@@ -288,5 +308,7 @@ ActiveRecord::Schema.define(:version => 20091120062342) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "tipes", ["name"], :name => "index_tipes_on_name"
 
 end
