@@ -51,9 +51,12 @@
     </table>
         <%end%>
         
-    <p>Rejected Terms</p>
+    
     
     <table id="searchTermList">
+	<tr>
+		<th>Rejected Terms</th>
+	</tr>
         <%if !@removed_by_calais.blank?%>
             <tr>
                 <th>Open Calais</th>
@@ -114,7 +117,6 @@
 </tr>
 </table>
 <%end%>
-<%if !@submission.blank? && !@submission.centroid.blank?%><p><%=@submission.centroid.extent_type%>, size is <%=@size%></p><%end%>
 
 <%if !@natlib_metadata.coverages.blank?%>
 <h1>Coverages</h1>
