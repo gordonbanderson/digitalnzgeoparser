@@ -133,12 +133,14 @@ class ArchiveSearchesController < ApplicationController
     @num_pages = 1+@digital_nz_search_result.count/@result_page_size
     
     #check metadata IDs
-    new_metadata_ids = []
+    new_metadata_results = []
     @metadata_records = {}
     for result in @digital_nz_search_result.results
+      logger.debug "RESULT:"
+      logger.debug result.to_yaml
       nl = NatlibMetadata.find_by_natlib_id(result.id)
       if nl.blank?
-        new_metadata_ids << result.id if nl.blank?
+        new_metadata_results << result if nl.blank?
       else
         @metadata_records[result.id] = nl
       end
@@ -146,10 +148,12 @@ class ArchiveSearchesController < ApplicationController
     end
     
     
-    for nlid in new_metadata_ids
-      nl = NatlibMetadata.parse_metadata_api(nlid)
-      @metadata_records[nlid] = nl
+    for result in new_metadata_results
+      nl = NatlibMetadata.new_from_search_result(result)
+      logger.debug "NEW FROM SEARCH:#{nl.blank?}"
+      @metadata_records[nl.natlib_id.to_s] = nl
     end
+
 
     #Deal with pagination
     @page_results = WillPaginate::Collection.create(
