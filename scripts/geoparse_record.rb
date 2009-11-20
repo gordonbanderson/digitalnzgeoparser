@@ -225,27 +225,24 @@ elapsed_time("Trace 14")
           #ActiveRecord::Base.connection.execute(sql)
         
       nl.submission.filtered_phrases = []
-      nl.submission.save!
 
       puts "AUDIT: Removing old submission of id #{nl.submission.id}"
       destroyed = nl.submission.destroy
-      puts "AUDIT:#{destroyed}"
-      nl.submission = nil
-      nl.save
-    
+      puts "BRIEF: AUDIT:#{destroyed}"
+      elapsed_time("Trace 17a")
 
     end
-  elapsed_time("Trace 17")
+    elapsed_time("Trace 17b - removed any previous submission")
     new_filtered_phrases = []
   
     puts nl.geo_text
     submission = Submission::new
     submission.body_of_text = nl.geo_text
     submission.signature = Digest::MD5.hexdigest(nl.geo_text)
-    submission.save!
+    #submission.save!
   
     nl.submission = submission
-  elapsed_time("Trace 18")
+    elapsed_time("Trace 18")
   
     puts
     if !geo_scope.blank?
@@ -266,7 +263,7 @@ elapsed_time("Trace 14")
 
   
 
-    submission.save!
+    #submission.save!
   
     if !extents.blank?
       puts "\nEXTENT"
@@ -285,7 +282,7 @@ elapsed_time("Trace 14")
       extent.save
   
       submission.extent = extent
-      submission.save!
+      #submission.save!
       elapsed_time("Trace 21")
     end
   
@@ -314,7 +311,7 @@ elapsed_time("Trace 14")
     elapsed_time("Trace 22")
   
     submission.cached_geo_searches = submission_places
-    submission.save!
+    #submission.save!
   
   elapsed_time("Trace 23")
     #Other info
@@ -422,7 +419,8 @@ elapsed_time("Trace 14")
       pf.phrase = phrase
       pf.submission = submission
       pf.frequency = google_places[:geohits][k]
-      #pf.save!
+      puts "PF - setting submission to be #{submission} of id #{submission.id}"
+      pf.save!
       puts
     end
     
