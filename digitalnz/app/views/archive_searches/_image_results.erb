@@ -14,7 +14,9 @@ for result in @digital_nz_search_result.results
     <td class="imageResult">
         <a href="<%=result.display_url%>"><img src="<%=result.thumbnail_url%>"/></a>
         <p><%=result.title%><br/>
-            <%if !metarecord.submission.blank?%>
+			<%if metarecord.pending %>
+			Not Geoparsed (<%=metarecord.natlib_id%>)
+            <%elsif !metarecord.submission.blank?%>
             <%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
             <%else%>
             <%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
