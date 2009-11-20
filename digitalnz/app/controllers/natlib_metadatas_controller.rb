@@ -148,6 +148,18 @@ class NatlibMetadatasController < ApplicationController
       @no_matches = @submission.filtered_by('no_geocoder_matches')
       @too_short = @submission.filtered_by('too_short')
       @geoparser_failed = @submission.filtered_by('geoparser_failed')
+      
+      @phrases = Phrase.find(:all, :conditions => ["words in (?)", @search_terms.keys])
+      pfs = PhraseFrequency.find(
+        :all,
+        :conditions => ["submission_id = ? and phrase_id in (?) ", @submission.id, @phrases]
+      ) 
+      
+      
+      @phrase_frequencies = {}
+      for pf in pfs
+        @phrase_frequencies[pf.phrase.words] = pf.frequency
+      end
     else
       
     end
