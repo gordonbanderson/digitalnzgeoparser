@@ -28,7 +28,6 @@
         <%if @submission.blank?%>
         <p>Record is not geoparsed</p>
         <%else%>
-        <p>Submission id = <%=@submission.id%></p>
         <table id="searchTermList">
         <tr>
             <th>Matches</th>
@@ -37,9 +36,6 @@
             <th>Names</th>
 			<th>Occurences</th>
         </tr>
-        <pre>
-            <%=@search_terms.to_yaml%>
-        </pre>
         <%for search_term in @search_terms.keys.sort
 			freak = @phrase_frequencies[search_term]
 			freak = 'Missing' if freak.blank?
