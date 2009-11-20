@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091103034737) do
+ActiveRecord::Schema.define(:version => 20091120044902) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(:version => 20091103034737) do
     t.integer  "natlib_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pending",         :default => true
   end
 
   create_table "natlib_metadatas_old", :force => true do |t|
