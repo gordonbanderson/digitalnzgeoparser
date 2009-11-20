@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><%=@title%></title>
-<%= GMap.header %>
+<%= GMap.header(:host => request.host) %>
 <%if !@map.blank?%>
 <%= @map.to_html %>
 <%end%>
