@@ -35,16 +35,21 @@
             <th>Accuracy</th>
             <th>Address</th>
             <th>Names</th>
+			<th>Occurences</th>
         </tr>
         <pre>
             <%=@search_terms.to_yaml%>
         </pre>
-        <%for search_term in @search_terms.keys.sort%>
+        <%for search_term in @search_terms.keys.sort
+			freak = @phrase_frequencies[search_term]
+			freak = 'Missing' if freak.blank?
+		%>
         <tr>
             <td><%=@search_terms[search_term]%></td>
             <td><%=@accuracies[search_term]%></td>
             <td><%=search_term.class%></td>
             <td><%=search_term%></td>
+			<td><%=freak%></td>
         </tr>
         <%end%>
     </table>
