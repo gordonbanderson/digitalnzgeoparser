@@ -1,7 +1,8 @@
 class Someindexes < ActiveRecord::Migration
 
   def self.up
-    add_index :facet_fields, :name
+    #Does not work with MySQL - column needs to be varchar < 255
+    #add_index :facet_fields, :name
     add_index :natlib_metadatas, :natlib_id
     add_index :calais_submissions, :signature
     add_index :stop_words, :word
@@ -15,7 +16,7 @@ class Someindexes < ActiveRecord::Migration
   end
 
   def self.down
-    drop_index :facet_fields, :name
+    #drop_index :facet_fields, :name
     drop_index :natlib_metadatas, :natlib_id
     drop_index :calais_submissions, :signature
     drop_index :stop_words, :word
