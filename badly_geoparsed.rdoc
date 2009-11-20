@@ -81,6 +81,11 @@ Oh the title... Whitcombe's map of Auckland City and suburbs
 Remove any capitalised words ending in apostrophe s ??
 
 
+== All Terms Being Used
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/69053/map
+Why no 'Wellington Region'?
+
+
 
 
 
