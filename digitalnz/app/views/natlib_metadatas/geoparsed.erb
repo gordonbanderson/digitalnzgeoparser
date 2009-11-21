@@ -1,3 +1,11 @@
+<% content_for :col2 do%>
+<h4>Geoparsed Results</h4>
+<p>Results are ordered by content provider and then title</p>
+<p>The area of a result is an indication of the quality of the geoparse.  No Area Defined means no matches, 0km means one match (though possibly incorrect) and a large number usually is caused by a word such as 'Minister' matching a far off place from New Zealand</p>
+</ul>
+<%end%>
+
+<% content_for :col1 do %>
 <h1>Already Geoparsed</h1>
 
 
@@ -25,9 +33,13 @@ Not Geoparsed
 <%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
 <%end%>
 &nbsp;<%=result.natlib_id%> 
+<%if !metarecord.submission.blank?%>
+&nbsp; (<%=metarecord.submission.pretty_area%> km&sup2;)
+<%end%>
 </div>
 </li>
 <%end%>
 </ul>
 
 <%= will_paginate @natlib_records %>
+<%end%>
