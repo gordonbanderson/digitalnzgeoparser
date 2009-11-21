@@ -454,6 +454,10 @@ failed = []
           check3 = cached_place.latitude < extents.north_east.lat
           check4 = cached_place.latitude > extents.south_west.lat
           keep = (check1 && check2 && check3 && check4)
+          keepstring = "Is(#{cached_place.latitude}, #{cached_place.longitude}) inside of "
+          keepstring << "SW:(#{extents.south_west.lat}, #{extents.south_west.lng})"
+          keepstring << "to NE:(#{extents.north_east.lat}, #{extents.north_east.lng})?  - "
+          keepstring << "#{keep}"
         end
 
        # puts
@@ -485,7 +489,7 @@ failed = []
     
             filtered_locations << cached_place
         else
-          puts "FILTERING OUT:#{place_string} of CLASS #{cached_place.class}"
+          puts "FILTERING OUT:#{place_string} of CLASS #{cached_place.class} [#{keepstring}]"
           outside_bounds << cached_place
         end
 
