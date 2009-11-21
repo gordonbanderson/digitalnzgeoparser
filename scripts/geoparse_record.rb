@@ -116,18 +116,31 @@ for natlib_record_id in natlib_record_ids
  
    puts "RESULTS"
    puts p.to_yaml
- 
+   puts "/RESULTS"
    yahoo_place_names = {}
-
+   
+   puts "BRIEF: n YAHOO DOCS = #{p.documents.length}  (Should be 1)"
     for document in p.documents
       place_details = document.place_details
       admin_scope = document.administrative_scope
       geo_scope = document.geographic_scope
       extents = document.extents
+      
+      #YAHOO does not always return the correct bounding box.  As such stretch it if we have zero results
+      northing_extent = extents.north_east.lat
+      easting_extent = extents.north_east.lng
+      westing_extent = extents.south_west.lng
+      southing_extent = extents.south_west.lat
+      
+
 
 
       for place in place_details
         location = place.place
+        westing_extent = location.centroid.lng if location.centroid.lng < westing_extent
+        easting_extent = location.centroid.lng if location.centroid.lng > easting_extent
+        northing_extent = location.centroid.lat if location.centroid.lat > northing_extent
+        southing_extent = location.centroid.lat if location.centroid.lat < southing_extent
         # FIXME - TEST yahoo_place_names[location.name] = location.name
         puts "LOC (YAHOO):#{location.woe_id}\t#{location.name}\t#{location.location_type}\t#{location.centroid.lat}\t#{location.centroid.lng}\tWEIGHT=#{place.weight}\tCONFIDENCE=#{place.confidence}"
       end
@@ -139,6 +152,12 @@ for natlib_record_id in natlib_record_ids
         puts "\nEXTENT #{extents.blank?}"
         puts "\tSW: #{extents.south_west.lat}, #{extents.south_west.lng}"
         puts "\tNE: #{extents.north_east.lat}, #{extents.north_east.lng}"
+        
+
+        puts
+        puts "STRETCHED EXTENT"
+        puts "\tSW:#{southing_extent}, #{westing_extent}"
+        puts "\tNE: #{northing_extent}, #{easting_extent}"
       end
 
       if !geo_scope.blank?
@@ -164,10 +183,17 @@ for natlib_record_id in natlib_record_ids
   #  puts geo_scope.centroid.class
   
 
-
-
+  #Filter google geocoded locations by Yahoo placemaker boundary
+  bounding_extent = nil
+  if !extents.blank?
+    bounding_extent = Extent::new
+    bounding_extent.north = extents.north_east.lat
+    bounding_extent.east = extents.north_east.lng
+    bounding_extent.south = extents.south_west.lat
+    bounding_extent.west = extents.south_west.lng
+  end
   
-  filtered = filter_google_results(place_details, admin_scope, geo_scope, extents, google_places )
+  filtered = filter_google_results(place_details, admin_scope, geo_scope, bounding_extent, google_places )
   keepers = filtered[:keepers]
   google_placenames = {}
   for term in keepers
@@ -176,44 +202,76 @@ for natlib_record_id in natlib_record_ids
   end
   
   elapsed_time("Trace 11")
+  number_filtered_google_results = google_placenames.keys.size
+  puts "BRIEF: NUMBER OF GOOGLE PLACENAMES INSIDE YAHOO BOUNDARY:#{number_filtered_google_results}"
   
+  #If we have no results the yahoo boundary may be incorrect.  Extend it and try again
+  if number_filtered_google_results == 0
+      stretched_extent = Extent::new
+      stretched_extent.west = westing_extent
+      stretched_extent.east = easting_extent
+      stretched_extent.north = northing_extent
+      stretched_extent.south = southing_extent
+      puts "Checking extended bounding box:"
+      puts "\tSW:#{southing_extent}, #{westing_extent}"
+      puts "\tNE: #{northing_extent}, #{easting_extent}"
+      filtered = filter_google_results(place_details, admin_scope, geo_scope, stretched_extent, google_places )
+      keepers = filtered[:keepers]
+      google_placenames = {}
+      for term in keepers
+        p = term.cached_geo_search_term.search_term
+        google_placenames[p]=p
+      end
+      
+      puts "BRIEF: NUMBER OF GOOGLE PLACENAMES INSIDE STRETCHED YAHOO BOUNDARY:#{number_filtered_google_results}"
+      
+  end
 
-  puts filtered[:zero_matches].to_yaml
+  puts filtered[:zero_matches]
   for term in filtered[:zero_matches]
     puts "ZERO:#{term.search_term}"
   
   end
 
-elapsed_time("Trace 12")
+    elapsed_time("Trace 12")
 
-  for word in filtered[:too_short]
+    for word in filtered[:too_short]
     puts "SHORT:#{word}"
-  end
-
-  for word in filtered[:failed]
-    puts "FAILED TO GEOCODE FUNCTION:#{word}"
-  end
-
-  for word in filtered[:stopped]
-    puts "STOPWORD:#{word}"
-  end
-
-  yahoo_string = ""
-  for name in yahoo_place_names.keys
-    if google_placenames[name].blank?
-      yahoo_string << name
-      yahoo_string << "\n\n"
     end
-  
-  end
-elapsed_time("Trace 13")
-  yahoo_google_places = geoparse_text(yahoo_string)
-elapsed_time("Trace 14")
-  yahoo_keepers = filter_google_results(place_details, admin_scope, geo_scope, extents, yahoo_google_places )[:keepers]
-  
-    puts "YAHOO"
-    puts yahoo_string
-  
+
+    for word in filtered[:failed]
+    puts "FAILED TO GEOCODE FUNCTION:#{word}"
+    end
+
+    for word in filtered[:stopped]
+    puts "STOPWORD:#{word}"
+    end
+
+    #FIXME - Check functionality
+    yahoo_string = ""
+    puts "BREIF: YAHOO PLACE NAME KEYS ARE #{yahoo_place_names.keys.join(' | ')}"
+    for name in yahoo_place_names.keys
+        puts "BRIEF: Checking yahoo place name #{name} against list of google placenames found"
+        
+        if google_placenames[name].blank?
+            yahoo_string << name
+            yahoo_string << "\n\n"
+            puts "\tBRIEF: No google match for #{name}, appending to yahoo string"
+        else
+            puts "\tBRIEF:Already found google match for #{name} but may have been rejected due to Yahoo bounding box"
+        end
+    end
+    yahoo_keepers = []
+    elapsed_time("Trace 13")
+    puts "PARSING YAHOO INFO:#{yahoo_string}"
+    
+    if !yahoo_string.blank?
+      puts "YAHOO"
+      puts yahoo_string
+      yahoo_google_places = geoparse_text(yahoo_string)
+      elapsed_time("Trace 14")
+      yahoo_keepers = filter_google_results(place_details, admin_scope, geo_scope, bounding_extent, yahoo_google_places )[:keepers]
+    end
   
   
     puts "KEEPERS"
