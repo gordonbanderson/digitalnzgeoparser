@@ -180,21 +180,10 @@ class NatlibMetadatasController < ApplicationController
     @page = params[:page] if !params[:page].blank?
     
     #ordering
-    @order = 'updated_at desc'
-    
-    #@posts = Post.paginate :page => params[:page], :order => 'created_at DESC'
-=begin
-    @natlib_records = NatlibMetadata.find(:all, :conditions => [
-      "pending = false"
-    ],
-    :order => @order,
-    :limit => PAGE_SIZE
-    )
-=end
-    @natlib_records = NatlibMetadata.paginate :page => @page, :order => @order
-    render :layout => 'metadata_record'
-    
-    
+    @order = 'content_partner, title'
+    @natlib_records = NatlibMetadata.paginate :page => @page, :order => @order, :conditions => ["pending = false"]
+     render :layout => 'archive_search_results'
+     
   end
   
   
