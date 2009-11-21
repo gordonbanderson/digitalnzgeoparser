@@ -103,10 +103,15 @@ for natlib_record_id in natlib_record_ids
  
    #response = CACHE[memcache_key]
 
-
+   
    google_places = geoparse_text(geocoder_text[:google])
+   puts "BRIEF:== POTENTIAL PLACES FOUND =="
+   for term in google_places[:geohits].keys
+     puts "BRIEF: Potential place\t\t#{term.search_term}"
+   end
+   puts "\n"
    elapsed_time("Trace 8 - just geoparsed text")
-
+   
 
  
    puts "RESULTS"
@@ -420,11 +425,15 @@ elapsed_time("Trace 14")
       pf.submission = submission
       pf.frequency = google_places[:geohits][k]
       puts "PF - setting submission to be #{submission} of id #{submission.id}"
-      pf.save!
-      puts
+      pfs << pf
+      puts "Saved #{pf} immediately"
     end
     
+    pfs.map{|pf| pf.save}
+    
     submission.save! #Save the whole shebang in one go
+    
+    puts "Have now saved submission"
 
 
   elapsed_time("Trace 30 - just saved phrase frequencies")
