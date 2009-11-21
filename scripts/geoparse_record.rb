@@ -127,11 +127,19 @@ for natlib_record_id in natlib_record_ids
       extents = document.extents
       
       #YAHOO does not always return the correct bounding box.  As such stretch it if we have zero results
-      northing_extent = extents.north_east.lat
-      easting_extent = extents.north_east.lng
-      westing_extent = extents.south_west.lng
-      southing_extent = extents.south_west.lat
       
+      if !extents.blank?
+          northing_extent = extents.north_east.lat
+          easting_extent = extents.north_east.lng
+          westing_extent = extents.south_west.lng
+          southing_extent = extents.south_west.lat
+      else
+          #The whole world
+          northing_extent = 90
+          easting_extent = 180
+          westing_extent = -180
+          southing_extent = -90
+      end
 
 
 
