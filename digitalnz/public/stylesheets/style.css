@@ -1,4 +1,15 @@
+.frontPageLinks {
+	color: #777;
+	font-size: 0.8em;
+	text-decoration: none;
+	padding-top: 100px;
+	padding-bottom: 10px;
+	text-align: center;
+}
 
+.frontPageLinks a {
+	color: #777;
+}
 
 
 #facetsColumn ul {
