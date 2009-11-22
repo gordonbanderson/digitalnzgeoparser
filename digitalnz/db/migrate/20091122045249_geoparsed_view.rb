@@ -1,6 +1,8 @@
 class GeoparsedView < ActiveRecord::Migration
   def self.up
       add_index :submissions, :area
+      add_index :natlib_metadatas, :title
+      add_index :natlib_metadatas, :content_partner
       
       sql=<<-EOF
       create view geoparsed_records as
@@ -16,7 +18,9 @@ class GeoparsedView < ActiveRecord::Migration
   end
 
   def self.down
-      drop_index :submissions, :area
+      remove_index :submissions, :area
+      remove_index :natlib_metadatas, :title
+      remove_index :natlib_metadatas, :content_partner
       ActiveRecord::Base.connection().execute('drop view geoparsed_records')
   end
 end
