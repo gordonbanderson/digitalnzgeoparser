@@ -426,11 +426,11 @@ failed = []
   #Filter out google results using yahoo results
   #This returns all the google geocoder results that fall within the specified extent
   #@param place details - hash from the geo parser method
-  def filter_google_results(place_details, admin_scope, geo_scope, extents, google_places )
-    if extents.blank?
+  def filter_google_results(place_details, admin_scope, geo_scope, bounding_extent, google_places )
+    if bounding_extent.blank?
       extent_string = "The whole world!"
     else
-      extent_string = "SW(#{extents.south_west.lat}, #{extents.south_west.lng})->NE(#{extents.north_east.lat}, #{extents.north_east.lng})"
+      extent_string = "SW(#{bounding_extent.south}, #{bounding_extent.west})->NE(#{bounding_extent.north}, #{bounding_extent.east})"
     end
     
     attempted_places = {}
@@ -446,17 +446,17 @@ failed = []
       zero_matches << term if cached_searches.length == 0
       for cached_place in cached_searches
         keep = false
-        if extents.blank?
+        if bounding_extent.blank?
           keep = true #the whole world as we have no filter
         else
-          check1 = cached_place.longitude > extents.south_west.lng
-          check2 = cached_place.longitude < extents.north_east.lng
-          check3 = cached_place.latitude < extents.north_east.lat
-          check4 = cached_place.latitude > extents.south_west.lat
+          check1 = cached_place.longitude >= bounding_extent.west
+          check2 = cached_place.longitude <= bounding_extent.east
+          check3 = cached_place.latitude <= bounding_extent.north
+          check4 = cached_place.latitude >= bounding_extent.south
           keep = (check1 && check2 && check3 && check4)
-          keepstring = "Is(#{cached_place.latitude}, #{cached_place.longitude}) inside of "
-          keepstring << "SW:(#{extents.south_west.lat}, #{extents.south_west.lng})"
-          keepstring << "to NE:(#{extents.north_east.lat}, #{extents.north_east.lng})?  - "
+          keepstring = "Is (#{cached_place.latitude}, #{cached_place.longitude}) inside of "
+          keepstring << "SW:(#{bounding_extent.south}, #{bounding_extent.west})"
+          keepstring << "to NE:(#{bounding_extent.north}, #{bounding_extent.east})?  - "
           keepstring << "#{keep}"
         end
 
