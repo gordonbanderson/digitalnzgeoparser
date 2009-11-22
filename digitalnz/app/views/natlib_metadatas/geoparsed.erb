@@ -1,14 +1,28 @@
+<% content_for :header do %>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<div id="searchMetaInformation">
+<p>
+  Results A to B of C (TODO)
+</p>
+</div>
+<%end%>
+
 <% content_for :col2 do%>
 <h4>Geoparsed Results</h4>
+<%if @order_requested.blank?%>
 <p>Results are ordered by content provider and then title</p>
 <p>The area of a result is an indication of the quality of the geoparse.  No Area Defined means no matches, 0km means one match (though possibly incorrect) and a large number usually is caused by a word such as 'Minister' matching a far off place from New Zealand</p>
+<%elsif @order_requested=='ha'%>
+<p>Geoparsed records that have a high area are usually poorly geoparsed, in that either stop words skew results or there is a weakness in the algorithm.  This is the best initially place to look for poor parsing.  However some records will validly have large areas of coverage</p>
+<%elsif @order_requested=='la'%>
+<p>Geoparsed records that have a low area spread are generally the most accurate.  However a record with a zero area (ie one point) may be wildly incorrect.</p>
+<%elsif @order_requested=='na'%>
+<p>Geoparsed records with no area defined are either a record that is inherently non geoparseable, or the geoparser erroneously could not find a placename in the body of metadata</p>
+<%end%>
 </ul>
 <%end%>
 
 <% content_for :col1 do %>
-<h1>Already Geoparsed</h1>
-
-
 <ul>
 <%for result in @natlib_records
 metarecord = result
@@ -25,17 +39,11 @@ metarecord = result
 <%#result.category%> - 
 <%#result.dateinfo%> - 
 <%=link_to "Similar Pages", search_archive_searches_url(:q=>result.title)%> -
-<%if metarecord.pending %>
-Not Geoparsed
-<%elsif !metarecord.submission.blank?%>
+
 <%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
-<%else%>
-<%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
-<%end%>
+
 &nbsp;<%=result.natlib_id%> 
-<%if !metarecord.submission.blank?%>
-&nbsp; (<%=metarecord.submission.pretty_area%> km&sup2;)
-<%end%>
+&nbsp; (<%=SubmissionsHelper.pretty_area(result.area)%> km&sup2;)
 </div>
 </li>
 <%end%>
