@@ -18,7 +18,7 @@
         <p>
         Area of geohits:
         <%if !@submission.blank?%>
-        <%=@submission.pretty_area%> km&sup2;
+        <%=SubmissionsHelper.pretty_area(@submission.area)%> km&sup2;
         <%else%>No area defined
         <%end%>
 
