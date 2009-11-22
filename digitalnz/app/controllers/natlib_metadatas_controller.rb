@@ -178,10 +178,31 @@ class NatlibMetadatasController < ApplicationController
     #Check the page
     @page=1
     @page = params[:page] if !params[:page].blank?
-    
-    #ordering
+    @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+
+    #Default ordering if none provied
     @order = 'content_partner, title'
-    @natlib_records = NatlibMetadata.paginate :page => @page, :order => @order, :conditions => ["pending = false"]
+    
+    #Alter order above depending on parameters
+    @order_requested = params[:order]
+    conditions = []
+    
+    if @order_requested == 'la'
+        @order = 'area,content_partner, title'
+        conditions = ["area is not ?", nil]
+        
+    elsif @order_requested == 'ha'
+        @order = 'area desc,content_partner, title'
+        conditions = ["area is not ?", nil]
+        
+    elsif @order_requested == 'na'
+        conditions = ["area is ?", nil]
+        
+    end
+
+    
+    
+    @natlib_records = GeoparsedRecord.paginate :page => @page, :order => @order, :conditions => conditions
      render :layout => 'archive_search_results'
      
   end
