@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091120082300) do
+ActiveRecord::Schema.define(:version => 20091122045249) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -212,7 +212,9 @@ ActiveRecord::Schema.define(:version => 20091120082300) do
     t.boolean  "pending",         :default => true
   end
 
+  add_index "natlib_metadatas", ["content_partner"], :name => "index_natlib_metadatas_on_content_partner"
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
+  add_index "natlib_metadatas", ["title"], :name => "index_natlib_metadatas_on_title"
 
   create_table "natlib_metadatas_old", :force => true do |t|
     t.string   "creator"
@@ -302,6 +304,8 @@ ActiveRecord::Schema.define(:version => 20091120082300) do
     t.datetime "updated_at"
     t.float    "area"
   end
+
+  add_index "submissions", ["area"], :name => "index_submissions_on_area"
 
   create_table "tipes", :force => true do |t|
     t.string   "name"
