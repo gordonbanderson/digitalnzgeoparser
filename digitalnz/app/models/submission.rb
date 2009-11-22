@@ -110,11 +110,5 @@ class Submission < ActiveRecord::Base
   end
   
   
-  def pretty_area
-    result = 'No area defined'
-    if !area.blank?
-      result = area.round 
-    end
-    result
-  end
+
 end
