@@ -11,6 +11,20 @@
 	color: #777;
 }
 
+/* Tags on the home page */
+.searchTermTags {
+	padding: 20px 40px 20px 40px;
+}
+
+.searchTermTags a {
+	color: #777;
+}
+
+.searchTermTag {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 
 #facetsColumn ul {
     padding: 0px 0px 10px 0px;
@@ -107,6 +121,7 @@ li.searchResult p {
     clear: both;
     border-top: solid #ddd 1px;
     padding-top: 10px;
+	margin-top: 20px;
     width: 100%;
 }
 
@@ -144,4 +159,16 @@ td.imageResult img {
 td.imageResult p {
     padding-top: 0px;
     margin-top: 0px;
+}
+
+
+/* Links in the footer to geoparsed records */
+
+#geoparsingLinks {
+	font-size: 0.8em;
+	color: #777;
+}
+
+#geoparsingLinks a {
+	color: #777;
 }
