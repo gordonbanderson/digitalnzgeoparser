@@ -173,6 +173,17 @@ class NatlibMetadatasController < ApplicationController
   end
   
   
+  
+=begin
+<a href="/geoparsed/provider-and-title">Content Provider, Title</a> | 
+<a href="/geoparsed/lowest-area">Lowest Area</a> | 
+<a href="/geoparsed/highest-area">Highest Area</a> | 
+<a href="/geoparsed/no-places-found">No Area Defined</a>
+=end
+
+
+
+
   #Render those records already geoparsed
   def geoparsed
     #Check the page
@@ -187,24 +198,31 @@ class NatlibMetadatasController < ApplicationController
     @order_requested = params[:order]
     conditions = []
     
-    if @order_requested == 'la'
+    if @order_requested == 'lowest-area'
         @order = 'area,content_partner, title'
         conditions = ["area is not ?", nil]
         
-    elsif @order_requested == 'ha'
+    elsif @order_requested == 'highest-area'
         @order = 'area desc,content_partner, title'
         conditions = ["area is not ?", nil]
         
-    elsif @order_requested == 'na'
+    elsif @order_requested == 'no-places-found'
         conditions = ["area is ?", nil]
         
     end
 
     
     
-    @natlib_records = GeoparsedRecord.paginate :page => @page, :order => @order, :conditions => conditions
-     render :layout => 'archive_search_results'
+    @natlib_records = GeoparsedRecord.paginate :page => @page, :order => @order, :conditions => conditions, :per_page => PAGE_SIZE
      
+    #Work out page metainfo
+	@start_count = 1+(@natlib_records.current_page-1) * PAGE_SIZE
+	@finish_count = PAGE_SIZE * @natlib_records.current_page
+	@finish_count = @natlib_records.total_entries if @natlib_records.total_entries < @finish_count
+	@total_count = @natlib_records.total_entries
+	
+	render :layout => 'archive_search_results'
+    
   end
   
   
