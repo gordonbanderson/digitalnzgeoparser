@@ -2,6 +2,7 @@
 <%for result in @digital_nz_search_result.results
 metarecord = @metadata_records[result.id]
 %>
+<%cache "NONIMAGERESULT:#{metarecord.natlib_id}" do%>
 <li class="searchResult">
     <a href="<%=result.display_url%>"><%=result.title%></a>
     <br/>
@@ -20,5 +21,6 @@ Not Geoparsed
 &nbsp;<%=result.id%> 
 </div>
 </li>
+<%end%>
 <%end%>
 </ul>
