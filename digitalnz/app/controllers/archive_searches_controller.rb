@@ -77,7 +77,7 @@ class ArchiveSearchesController < ApplicationController
     query_hash[:search_text] = @full_solr_query
     query_hash[:num_results] = "#{@result_page_size}"
     query_hash[:start] = "#{@result_page_size*(@page.to_i-1)}"
-    query_hash[:facet_num_results]='50000'
+    query_hash[:facet_num_results]='200' #Have emailed list suggesting further facets in content creator / provider categories
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
     @digital_nz_search_result = DigitalNZ.search(query_hash)
     @facets = @digital_nz_search_result.facets
@@ -202,5 +202,13 @@ category, content_partner, creator, language, rights, century, decade, and year.
   def index
     #We just want to render a form here
     @archive_search = ArchiveSearch::new
+    
+    #Get the metatags from the db
+    #FIXME - only perform query when no fragment available
+    @search_term_tags = SearchTermTag.find(:all) #This is a database view
+    @search_term_hash = {}
+    for tag in @search_term_tags
+       @search_term_hash[tag.search_text] = tag 
+    end
   end
 end
