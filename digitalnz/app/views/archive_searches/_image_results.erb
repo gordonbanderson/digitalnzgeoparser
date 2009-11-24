@@ -11,6 +11,7 @@ for result in @digital_nz_search_result.results
         <%
     end
     %>
+<%cache "IMAGERESULT:#{metarecord.natlib_id}" do%>
     <td class="imageResult">
         <a href="<%=result.display_url%>"><img src="<%=result.thumbnail_url%>"/></a>
         <p><%=result.title%><br/>
@@ -26,6 +27,7 @@ for result in @digital_nz_search_result.results
         </p>
         
     </td>
+<%end%>
     <%
     ctr = ctr + 1
     
