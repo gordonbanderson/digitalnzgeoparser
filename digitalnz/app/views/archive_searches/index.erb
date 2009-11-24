@@ -2,10 +2,23 @@
     <%= render :partial => 'search_form' %>
 </div>
 
-<div class="frontPageLinks">
-Browse geoparsed records by<br/>
-<a href="/natlib_metadatas/geoparsed">Content Provider, Title</a> | 
-<a href="/natlib_metadatas/geoparsed?order=la">Lowest Area</a> | 
-<a href="/natlib_metadatas/geoparsed?order=ha">Highest Area</a> | 
-<a href="/natlib_metadatas/geoparsed?order=na">No Area Defined</a>
+
+
+<div class="searchTermTags">
+	<%
+	max_font_size =24
+	max_tag_count = @search_term_tags[0].c
+	for tag_text in @search_term_hash.keys.sort
+		tag = @search_term_hash[tag_text]
+		tag_count = tag.c.to_f
+		font_size = 8+tag_count*max_font_size/max_tag_count
+	%>
+	<span class="searchTermTag" style="font-size: <%=font_size%>pt;">
+	<a href="/archive_searches/search?q=<%=tag.search_text%>">
+	<%=tag.search_text%>
+	</a>
+	</span>
+	<%
+	end
+	%>
 </div>
