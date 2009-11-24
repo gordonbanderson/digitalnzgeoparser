@@ -2,21 +2,24 @@
 <%= render :partial => 'archive_searches/search_form_small' %>
 <div id="searchMetaInformation">
 <p>
-  Results A to B of C (TODO)
+
+	
+	
+  Results <%=@start_count%> to <%=@finish_count%> of <%=@total_count%>
 </p>
 </div>
 <%end%>
 
 <% content_for :col2 do%>
 <h4>Geoparsed Results</h4>
-<%if @order_requested.blank?%>
+<%if @order_requested == 'provider-and-title'%>
 <p>Results are ordered by content provider and then title</p>
 <p>The area of a result is an indication of the quality of the geoparse.  No Area Defined means no matches, 0km means one match (though possibly incorrect) and a large number usually is caused by a word such as 'Minister' matching a far off place from New Zealand</p>
-<%elsif @order_requested=='ha'%>
+<%elsif @order_requested=='highest-area'%>
 <p>Geoparsed records that have a high area are usually poorly geoparsed, in that either stop words skew results or there is a weakness in the algorithm.  This is the best initially place to look for poor parsing.  However some records will validly have large areas of coverage</p>
-<%elsif @order_requested=='la'%>
+<%elsif @order_requested=='lowest-area'%>
 <p>Geoparsed records that have a low area spread are generally the most accurate.  However a record with a zero area (ie one point) may be wildly incorrect.</p>
-<%elsif @order_requested=='na'%>
+<%elsif @order_requested=='no-places-found'%>
 <p>Geoparsed records with no area defined are either a record that is inherently non geoparseable, or the geoparser erroneously could not find a placename in the body of metadata</p>
 <%end%>
 </ul>
