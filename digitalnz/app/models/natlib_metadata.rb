@@ -22,8 +22,12 @@ class NatlibMetadata < ActiveRecord::Base
   has_one :submission
   
   #This is text that will be checked for geo locations
-  def geo_text
-    result = ""
+  def geo_text(return_array=false)
+    if return_array
+       result = [] 
+    else
+        result = ""
+    end
     result << title
     result << PARA_BREAK
     result << description if !description.blank?
