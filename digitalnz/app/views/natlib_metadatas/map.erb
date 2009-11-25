@@ -1,3 +1,9 @@
+<% content_for :header do%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
+
+<% content_for :col1 do %>
+
     <%if !@natlib_metadata.thumbnail_url.blank?%>
     <a href="<%=@natlib_metadata.landing_url%>"><img style="float:right;" src="<%=@natlib_metadata.thumbnail_url%>" /></a><%end%>
     <h1><%=@natlib_metadata.title%></h1>
@@ -143,4 +149,9 @@
 <li><%=item.name%></li>
 <%end%>
 </ul>
+<%end%>
+<%end%>
+
+<% content_for :col2 do %>
+Some content	
 <%end%>
