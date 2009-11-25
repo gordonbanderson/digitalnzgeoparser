@@ -2,7 +2,7 @@
 <%= render :partial => 'search_form_small' %>
 <div id="searchMetaInformation">
 <p>
-   Results <%=1+@digital_nz_search_result.start%> - <%=@nresult_on_page%> of about <%=@digital_nz_search_result.count%> for '<%=@archive_search.search_text%>'. (<%=@elapsed_time%> seconds) 
+   Results <%=1+@digital_nz_search_result.start%> - <%=@n_last_result_on_page%> of about <%=@digital_nz_search_result.count%> for '<%=@archive_search.search_text%>'. (<%=@elapsed_time%> seconds) 
 </p>
 </div>
 <%end%>
