@@ -20,11 +20,15 @@
         <%end%>
 
 <div id="geonameFrequencies">
-		<%for geoname in @accuracies.keys
-			freak = @phrase_frequencies[geoname]
+		<%for words in @phrases
+			freak = @phrase_frequencies[words]
 			the_size = 7+1.5*freak.to_f
+			non_geo_string = ''
+			if @accuracies[words].blank?
+			non_geo_string = ' nongeo'	
+			end
 		%>
-		<span class="geonameFrequency" style="font-size: <%=the_size%>pt;"><%=geoname%></span>
+		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt;"><%=words%></span>
 		<%
 		end%>
 </div>
@@ -34,10 +38,12 @@
 <div class="extractedText">
 	<h2>Extracted Metadata Text</h2>
 	<p>The following text was collated from the metadata and used for geoparsing:</p>
-	<%for paras in @natlib_metadata.geo_text.split('\n')%>
+	<div class="metatext">
+	<%for para in @natlib_metadata.geo_text(true)%>
+	<p><%=para%></p>
 	<%end%>
-<pre>
-<%=@natlib_metadata.geo_text%></pre>
+	</div>
+
 </div>
 <%end%>
 
@@ -87,7 +93,6 @@
 	</ul>
 	<%end%>
 	
-	<div class="infoSpacer">&nbsp;</div>
 	
 	<h3>Places Found</h3>
 	<%for acc in @all_accuracies
