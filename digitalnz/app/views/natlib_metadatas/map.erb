@@ -3,76 +3,42 @@
 <%end%>
 
 <% content_for :col1 do %>
-
+<div class="content">
     <%if !@natlib_metadata.thumbnail_url.blank?%>
     <a href="<%=@natlib_metadata.landing_url%>"><img style="float:right;" src="<%=@natlib_metadata.thumbnail_url%>" /></a><%end%>
     <h1><%=@natlib_metadata.title%></h1>
-
+<div class="metadataDescription">
 <%=@natlib_metadata.description%>
+</div>
+
 <%if !@submission.blank?%>
-<table>
-    <tr>
-        <th>Map</th><th>Search Terms</th>
-    </tr>
-<tr>
-    <td>
+
         <%if !@map.blank?%>
          <%= @map.div(:width => 600, :height => 300) %>
         <%else%>
         No map available
         <%end%>
-        <p>
-        Area of geohits:
-        <%if !@submission.blank?%>
-        <%=SubmissionsHelper.pretty_area(@submission.area)%> km&sup2;
-        <%else%>No area defined
-        <%end%>
 
-		<pre>
-			<%=@accuracies.invert.to_yaml%>
-		</pre>
-		
-		<pre>
-			****
-			<%=@accuracies.to_yaml%>
-		</pre>
-
-        </p>
-    </td>
-    <td>
-        <%if @submission.blank?%>
-        <p>Record is not geoparsed</p>
-        <%else%>
-        <table id="searchTermList">
-        <tr>
-            <th>Matches</th>
-            <th>Accuracy</th>
-            <th>Address</th>
-            <th>Names</th>
-			<th>Occurences</th>
-        </tr>
-        <%for search_term in @search_terms.keys.sort
-			freak = @phrase_frequencies[search_term]
-			freak = 'Missing' if freak.blank?
+<div id="geonameFrequencies">
+		<%for geoname in @accuracies.keys
+			freak = @phrase_frequencies[geoname]
+			the_size = 7+1.5*freak
 		%>
-        <tr>
-            <td><%=@search_terms[search_term]%></td>
-            <td><%=@accuracies[search_term]%></td>
-            <td><%=search_term.class%></td>
-            <td><%=search_term%></td>
-			<td><%=freak%></td>
-        </tr>
-        <%end%>
-    </table>
-        <%end%>
-        
-    
-    
-    </td>
-</tr>
-</table>
+		<span class="geonameFrequency" style="font-size: <%=the_size%>pt;"><%=geoname%></span>
+		<%
+		end%>
+</div>
+</div>
 <%end%>
 
+<div class="extractedText">
+	<h2>Extracted Metadata Text</h2>
+	<p>The following text was collated from the metadata and used for geoparsing:</p>
+	<%for paras in @natlib_metadata.geo_text.split('\n')%>
+	<%end%>
+<pre>
+<%=@natlib_metadata.geo_text%></pre>
+</div>
 <%end%>
 
 
@@ -81,6 +47,19 @@
 	<div id="natlibRecordInformation">
 		
 	<h3>Digital NZ Metadata</h3>
+	<h4>Record Number</h4>
+	<ul>
+	<li><%=@natlib_metadata.natlib_id%></li>
+	</ul>
+	<h4>Content Provider</h4>
+	<ul>
+	<li><%=@natlib_metadata.natlib_id%></li>
+	</ul>
+	<h4>Creator</h4>
+	<ul>
+	<li><%=@natlib_metadata.natlib_id%></li>
+	</ul>
+
 	<%if !@natlib_metadata.coverages.blank?%>
 	<h4>Coverages</h4>
 	<ul>
@@ -120,9 +99,9 @@
 			if @accuracies[geoname] == acc.name
 				freak = @phrase_frequencies[geoname]
 				freak_string = ""
-				freak_string = "(#{freak})" if !freak.blank?
+				freak_string = " (#{freak})" if !freak.blank?
 			%>
-			<li><%=geoname%><%=freak_string%></li>
+			<li><%=geoname%></li>
 			<%
 			end
 			end%>
@@ -131,15 +110,10 @@
 		end
 	end
 	%>
-	<ul>
-	<%for search_term in @search_terms.keys.sort
-		freak = @phrase_frequencies[search_term]
-		freak = 'Missing' if freak.blank?
-		accuracy=@search_terms[search_term]
-	%>
-BLAh
-    <%end%>
- 	</ul>
+	
+	<h3>Area</h3>
+	<ul><li><%=SubmissionsHelper.pretty_area(@submission.area)%></li></ul>
+
 	
 	<h3>Rejected Terms</h3>	
 	<%if !@removed_by_calais.blank?%>
