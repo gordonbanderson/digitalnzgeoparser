@@ -17,7 +17,7 @@
 <tr>
     <td>
         <%if !@map.blank?%>
-         <%= @map.div(:width => 500, :height => 300) %>
+         <%= @map.div(:width => 600, :height => 300) %>
         <%else%>
         No map available
         <%end%>
@@ -27,6 +27,15 @@
         <%=SubmissionsHelper.pretty_area(@submission.area)%> km&sup2;
         <%else%>No area defined
         <%end%>
+
+		<pre>
+			<%=@accuracies.invert.to_yaml%>
+		</pre>
+		
+		<pre>
+			****
+			<%=@accuracies.to_yaml%>
+		</pre>
 
         </p>
     </td>
@@ -59,99 +68,131 @@
         
     
     
-    <table id="searchTermList">
-	<tr>
-		<th>Rejected Terms</th>
-	</tr>
-        <%if !@removed_by_calais.blank?%>
-            <tr>
-                <th>Open Calais</th>
-            </tr>
-            <%for calais in @removed_by_calais%>
-                <tr>
-                    <td><%=calais.phrase.words%><br/></td>
-                </tr>
-            <%end%>
-        <%end%>
-        
-        <%if !@stopped.blank?%>
-            <tr>
-                <th>Stopped</th>
-            </tr>
-            <%for item in @stopped%>
-                <tr>
-                    <td><%=item.phrase.words%><br/></td>
-                </tr>
-            <%end%>
-        <%end%>
-        
-        <%if !@no_matches.blank?%>
-            <tr>
-                <th>No Geocoded Matches</th>
-            </tr>
-            <%for item in @no_matches%>
-                <tr>
-                    <td>"<%=item.phrase.words%>"<br/></td>
-                </tr>
-            <%end%>
-        <%end%>
-        
-        <%if !@too_short.blank?%>
-            <tr>
-                <th>Too Short</th>
-            </tr>
-            <%for item in @too_short%>
-                <tr>
-                    <td><%=item.phrase.words%><br/></td>
-                </tr>
-            <%end%>
-        <%end%>
-        
-        <%if !@geoparser_failed.blank?%>
-            <tr>
-                <th>Geoparser Failed</th>
-            </tr>
-            <%for item in @geoparser_failed%>
-                <tr>
-                    <td><%=item.phrase.words%><br/></td>
-                </tr>
-            <%end%>
-        <%end%>
-        
-    </table>
     </td>
 </tr>
 </table>
 <%end%>
 
-<%if !@natlib_metadata.coverages.blank?%>
-<h1>Coverages</h1>
-<ul>
-<%for item in @natlib_metadata.coverages%>
-<li><%=item.name%></li>
-<%end%>
-</ul>
 <%end%>
 
-<%if !@natlib_metadata.subjects.blank?%>
-<h1>Subjects</h1>
-<ul>
-<%for item in @natlib_metadata.subjects%>
-<li><%=item.name%></li>
-<%end%>
-</ul>
-<%end%>
 
-<%if !@natlib_metadata.placenames.blank?%>
-<h1>Placenames</h1>
-<ul>
-<%for item in @natlib_metadata.placenames%>
-<li><%=item.name%></li>
-<%end%>
-</ul>
-<%end%>
-<%end%>
 
 <% content_for :col2 do %>
-Some content	
-<%end%>
+	<div id="natlibRecordInformation">
+		
+	<h3>Digital NZ Metadata</h3>
+	<%if !@natlib_metadata.coverages.blank?%>
+	<h4>Coverages</h4>
+	<ul>
+	<%for item in @natlib_metadata.coverages%>
+	<li><%=item.name%></li>
+	<%end%>
+	</ul>
+	<%end%>
+
+	<%if !@natlib_metadata.subjects.blank?%>
+	<h4>Subjects</h4>
+	<ul>
+	<%for item in @natlib_metadata.subjects%>
+	<li><%=item.name%></li>
+	<%end%>
+	</ul>
+	<%end%>
+
+	<%if !@natlib_metadata.placenames.blank?%>
+	<h4>Placenames</h4>
+	<ul>
+	<%for item in @natlib_metadata.placenames%>
+	<li><%=item.name%></li>
+	<%end%>
+	</ul>
+	<%end%>
+	
+	<div class="infoSpacer">&nbsp;</div>
+	
+	<h3>Places Found</h3>
+	<%for acc in @all_accuracies
+		if !@inverted_accuracies[acc.name].blank?
+	%>
+		<h4><%=acc.name%></h4>
+		<ul>
+			<%for geoname in @accuracies.keys
+			if @accuracies[geoname] == acc.name
+				freak = @phrase_frequencies[geoname]
+				freak_string = ""
+				freak_string = "(#{freak})" if !freak.blank?
+			%>
+			<li><%=geoname%><%=freak_string%></li>
+			<%
+			end
+			end%>
+		</ul>
+	<%
+		end
+	end
+	%>
+	<ul>
+	<%for search_term in @search_terms.keys.sort
+		freak = @phrase_frequencies[search_term]
+		freak = 'Missing' if freak.blank?
+		accuracy=@search_terms[search_term]
+	%>
+BLAh
+    <%end%>
+ 	</ul>
+	
+	<h3>Rejected Terms</h3>	
+	<%if !@removed_by_calais.blank?%>
+		<h4>Open Calais</h4>
+		<ul>
+		<%for calais in @removed_by_calais%>
+			<li><%=calais.phrase.words%></li>
+		<%end%>
+		</ul>
+    <%end%>
+
+	<%if !@too_short.blank?%>
+		<h4>Too Short</h4>
+		<ul>
+		<%for item in @too_short%>
+			<li><%=item.phrase.words%></li>
+		<%end%>
+		</ul>
+    <%end%>
+
+	<%if !@no_matches.blank?%>
+		<h4>No Geo Matches</h4>
+		<ul>
+		<%for item in @no_matches%>
+			<li><%=item.phrase.words%></li>
+		<%end%>
+		</ul>
+    <%end%>
+
+	<%if !@stopped.blank?%>
+		<h4>Stopped</h4>
+		<ul>
+		<%for item in @stopped%>
+			<li><%=item.phrase.words%></li>
+		<%end%>
+		</ul>
+    <%end%>
+
+	<%if !@geoparser_failed.blank?%>
+		<h4>Geoparser Failed</h4>
+		<ul>
+		<%for item in @geoparser_failed%>
+			<li><%=item.phrase.words%></li>
+		<%end%>
+		</ul>
+    <%end%>
+
+
+
+	
+
+	
+	
+	</div>
+<%end%>	
+
