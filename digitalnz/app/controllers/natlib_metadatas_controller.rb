@@ -33,7 +33,8 @@ class NatlibMetadatasController < ApplicationController
     order by area desc;
 =end    
     
-    @natlib_metadata = NatlibMetadata.find_by_natlib_id(params[:id])
+    id_string = params[:id].split('-')[0]
+    @natlib_metadata = NatlibMetadata.find_by_natlib_id(id_string)
     
     @title = 'Digital NZ:'+@natlib_metadata.title
     
