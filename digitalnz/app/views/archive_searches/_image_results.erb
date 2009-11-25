@@ -17,10 +17,12 @@ for result in @digital_nz_search_result.results
         <p><%=result.title%><br/>
 			<%if metarecord.pending %>
 			Not Geoparsed (<%=metarecord.natlib_id%>)
-            <%elsif !metarecord.submission.blank?%>
-            <%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+            <%elsif !metarecord.submission.blank?
+			id_string = seo_id(metarecord.natlib_id, metarecord.title)
+			%>
+            <%=link_to 'Map', map_natlib_metadata_url(:id=>id_string)%>
             <%else%>
-            <%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+            <%=link_to 'Metadata', map_natlib_metadata_url(:id=>id_string)%>
             <%end%>    
         <br/>
         <%=hostof(result.display_url)%>

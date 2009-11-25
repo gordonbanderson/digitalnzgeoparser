@@ -13,8 +13,10 @@ metarecord = @metadata_records[result.id]
     <%=hostof(result.display_url)%> - <%=result.content_provider%> - <%=result.category%> - <%=metarecord.dateinfo%> - <%=link_to "Similar Pages", search_archive_searches_url(:q=>result.title)%> -
 <%if metarecord.pending %>
 Not Geoparsed
-<%elsif !metarecord.submission.blank?%>
-<%=link_to 'Map', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
+<%elsif !metarecord.submission.blank?
+id_string = seo_id(metarecord.natlib_id, metarecord.title)
+%>
+<%=link_to 'Map', map_natlib_metadata_url(:id=>id_string)%>
 <%else%>
 <%=link_to 'Metadata', map_natlib_metadata_url(:id=>metarecord.natlib_id)%>
 <%end%>
