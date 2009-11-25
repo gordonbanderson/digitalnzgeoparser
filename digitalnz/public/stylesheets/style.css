@@ -228,7 +228,12 @@ td.imageResult p {
 }
 
 .geonameFrequency {
-	padding-left: 10px;
+	padding-left: 14px;
+}
+
+ .nongeo {
+	color: red;
+	text-decoration: line-through;
 }
 
 
@@ -241,7 +246,7 @@ td.imageResult p {
 	font-size: 1em;
 }
 
-.extractedText pre {
+.metatext {
 	font-style: italic;
 	padding-left: 30px;
 	padding-right: 30px;
