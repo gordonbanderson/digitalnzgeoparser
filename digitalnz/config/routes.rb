@@ -50,8 +50,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :natlib_metadatas, :member => { :map => :get },
                 :collection => {:geoparsed, :get}
-
-
+                
+map.purchase 'geoparsed/addresses', :controller => 'natlib_metadatas', :action => 'addresses'
+map.purchase 'geoparsed/address/:name', :controller => 'natlib_metadatas', :action => 'address'
+map.purchase 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
+map.purchase 'geoparsed/coverages', :controller => 'natlib_metadatas', :action => 'coverages'
 map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
 
 #Search URL - keep it short
