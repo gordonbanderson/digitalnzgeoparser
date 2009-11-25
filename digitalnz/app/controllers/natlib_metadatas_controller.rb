@@ -167,9 +167,8 @@ class NatlibMetadatasController < ApplicationController
     end
     
 
-
+    @archive_search = ArchiveSearch::new
     render :layout => 'metadata_record'
-
   end
   
   
