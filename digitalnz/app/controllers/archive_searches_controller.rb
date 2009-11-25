@@ -8,7 +8,7 @@ class ArchiveSearchesController < ApplicationController
   PAGE_SIZE=20
   
   #Page size for images only
-  IMAGE_PAGE_SIZE=20
+  IMAGE_PAGE_SIZE=48
 
   def search
     start_time = Time.now
@@ -85,7 +85,7 @@ class ArchiveSearchesController < ApplicationController
     
     @nresult_on_page = @page.to_i*@digital_nz_search_result.num_results_requested.to_i
     @nresult_on_page = @digital_nz_search_result.count if @digital_nz_search_result.count < @nresult_on_page
-    
+    @n_last_result_on_page = [@digital_nz_search_result.count, @result_page_size*@page.to_i].min
     
     @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', @facet_fields])
     @child_facet_fields = {}
