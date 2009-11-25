@@ -179,8 +179,47 @@ class NatlibMetadatasController < ApplicationController
 <a href="/geoparsed/no-places-found">No Area Defined</a>
 =end
 
+    #Display a list of addresses
+    def addresses
+        @page = 1
+        @page = params[:page] if !params[:page].blank?
+        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+        @addresses = GeoparsedLocation.paginate :select => 'distinct address', :page => @page,
+        :per_page => PAGE_SIZE
+        render :layout => 'archive_search_results'
+    end
+    
+    
+    #Display a list of natlib results for said address
+    def address
+       @page = 1
+       @page = params[:page] if !params[:page].blank?
+       @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+       address_name = params[:name]
+       @results = GeoparsedLocation.paginate :conditions => ["address = ?", address_name],
+        :page => @page, :per_page => PAGE_SIZE
+       render :layout => 'archive_search_results'
+    end
 
-
+    #Display a list of all coverages
+    def coverages
+       @page = 1
+       @page = params[:page] if !params[:page].blank?
+       @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+       @coverages = Coverage.paginate :select => 'distinct name', :page => @page, :order => 'name', :per_page => PAGE_SIZE
+       render :layout => 'archive_search_results'
+    end
+    
+    #Display a paged set of natlib records for a given coverage
+    def coverage
+         @page = 1
+         @page = params[:page] if !params[:page].blank?
+         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+        coverage_name = params[:name]
+        @coverages = Coverage.paginate :conditions => ["lower(name) = ?", coverage_name], :page => @page, :order => 'name', :per_page => PAGE_SIZE
+        render :layout => 'archive_search_results'
+        
+    end
 
   #Render those records already geoparsed
   def geoparsed
