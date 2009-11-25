@@ -51,6 +51,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :natlib_metadatas, :member => { :map => :get },
                 :collection => {:geoparsed, :get}
 
+
+map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
+
 #Use 'collection' for methods that operate on the whole of the collection, in this case
 #a search of the digital nz api
   map.resources :archive_searches, :collection => { :search => :post, :search => :get}
