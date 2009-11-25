@@ -26,6 +26,21 @@
 }
 
 
+/*
+Metadata content
+*/
+h1,h2,h3,h4,h5,h6 {
+	font-family: Arial, Helvetica, Sans-serif;
+}
+
+.content h1 {
+	font-size: 1.4em;
+}
+
+.content .metadataDescription {
+	padding-bottom: 10px;
+}
+
 #facetsColumn ul {
     padding: 0px 0px 10px 0px;
     margin: 0px;
@@ -171,4 +186,63 @@ td.imageResult p {
 
 #geoparsingLinks a {
 	color: #777;
+}
+
+/* Information about natlib record being viewed with map */
+#natlibRecordInformation {
+	font-size: 0.8em;
+}
+
+#natlibRecordInformation h3,h4 {
+	padding: 0px;
+	margin: 0px;
+}
+
+#natlibRecordInformation h3 {
+	border-bottom: solid blue 1px;
+	font-family: Arial, Helvetica, Sans-serif;
+	font-style: italic;
+	margin-bottom: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+#natlibRecordInformation ul {
+	padding: 0px 0px 4px 0px;
+	margin: 0px;
+}
+
+#natlibRecordInformation li {
+	list-style: none;
+}
+
+.infoSpacer {
+	border-top: dashed blue 1px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+#geonameFrequencies {
+	color: #777;
+}
+
+.geonameFrequency {
+	padding-left: 10px;
+}
+
+
+
+.extractedText {
+	margin-top: 30px;
+}
+
+.extractedText h2 {
+	font-size: 1em;
+}
+
+.extractedText pre {
+	font-style: italic;
+	padding-left: 30px;
+	padding-right: 30px;
 }
