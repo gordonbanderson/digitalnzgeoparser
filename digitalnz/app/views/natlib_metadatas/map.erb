@@ -51,13 +51,13 @@
 	<ul>
 	<li><%=@natlib_metadata.natlib_id%></li>
 	</ul>
-	<h4>Content Provider</h4>
+	<h4>Content Partner</h4>
 	<ul>
-	<li><%=@natlib_metadata.natlib_id%></li>
+	<li><%=@natlib_metadata.content_partner %></li>
 	</ul>
-	<h4>Creator</h4>
+	<h4>Collection</h4>
 	<ul>
-	<li><%=@natlib_metadata.natlib_id%></li>
+	<li><%=@natlib_metadata.collection%></li>
 	</ul>
 
 	<%if !@natlib_metadata.coverages.blank?%>
