@@ -1,0 +1,25 @@
+<% content_for :header do%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
+
+<% content_for :col1 do%>
+	<div id="content">
+		<h1>Address</h1>
+		<ul>
+			
+		<%for address in @addresses
+			id_string = address.address
+			%>
+			<li><a href="/geoparsed/address/<%=id_string%>"><%=address.address%></span></li>
+		<%end%>
+			
+		</ul>
+	</div>
+	
+	<%= will_paginate @addresses %>
+	
+<%end%>
+
+<% content_for :col2 do%>
+	Addresses are returned by the Google Geocoder using placenames extracted from the text
+<%end%>

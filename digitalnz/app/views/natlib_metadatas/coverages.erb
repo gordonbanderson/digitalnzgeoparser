@@ -1,0 +1,25 @@
+<% content_for :header do%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
+
+<% content_for :col1 do%>
+	<div id="content">
+		<h1>Coverages</h1>
+		<ul>
+			
+		<%for coverage in @coverages
+			id_string = coverage.name.downcase
+			%>
+			<li><a href="/geoparsed/coverage/<%=id_string%>"><%=coverage.name%></span></li>
+		<%end%>
+			
+		</ul>
+	</div>
+	
+	<%= will_paginate @coverages %>
+	
+<%end%>
+
+<% content_for :col2 do%>
+	Coverages are included in the metadata provided by the Digital NZ service
+<%end%>

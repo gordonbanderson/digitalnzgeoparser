@@ -1,0 +1,57 @@
+<% content_for :header do %>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<div id="searchMetaInformation">
+<p>
+
+	
+	
+  Results <%=@start_count%> to <%=@finish_count%> of <%=@total_count%>
+</p>
+</div>
+<%end%>
+
+<% content_for :col2 do%>
+<h4>Geoparsed Results</h4>
+<%if @order_requested == 'provider-and-title'%>
+<p>Results are ordered by content provider and then title</p>
+<p>The area of a result is an indication of the quality of the geoparse.  No Area Defined means no matches, 0km means one match (though possibly incorrect) and a large number usually is caused by a word such as 'Minister' matching a far off place from New Zealand</p>
+<%elsif @order_requested=='highest-area'%>
+<p>Geoparsed records that have a high area are usually poorly geoparsed, in that either stop words skew results or there is a weakness in the algorithm.  This is the best initially place to look for poor parsing.  However some records will validly have large areas of coverage</p>
+<%elsif @order_requested=='lowest-area'%>
+<p>Geoparsed records that have a low area spread are generally the most accurate.  However a record with a zero area (ie one point) may be wildly incorrect.</p>
+<%elsif @order_requested=='no-places-found'%>
+<p>Geoparsed records with no area defined are either a record that is inherently non geoparseable, or the geoparser erroneously could not find a placename in the body of metadata</p>
+<%end%>
+</ul>
+<%end%>
+
+<% content_for :col1 do %>
+<div class="content">
+	<h1>Address:<%=@results[0].address%></h1>
+<ul>
+<%for result in @results
+metarecord = NatlibMetadata.find_by_natlib_id(result.natlib_metadata_id)
+%>
+<li class="searchResult">
+    <a href="<%=metarecord.landing_url%>"><%=metarecord.title%></a>
+    <br/>
+<%if !metarecord.thumbnail_url.blank?%><img src="<%=metarecord.thumbnail_url%>" class="searchResultImage"/><%end%>
+
+<p><%=metarecord.description%></p>
+<div class="searchByLine">
+    <%=hostof(metarecord.landing_url)%> - 
+<%=metarecord.content_partner%> - 
+<%#metarecord.category%> - 
+<%#metarecord.dateinfo%> - 
+<%=link_to "Similar Pages", search_archive_searches_url(:q=>metarecord.title)%> -
+
+<%=link_to 'Map', map_natlib_metadata_url(:id=>seo_id(metarecord.natlib_id,metarecord.title))%>
+
+&nbsp;<%=metarecord.natlib_id%> 
+</div>
+</li>
+<%end%>
+</ul>
+</div>
+<%= will_paginate @results %>
+<%end%>
