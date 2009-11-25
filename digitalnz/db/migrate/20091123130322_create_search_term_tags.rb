@@ -1,12 +1,36 @@
 class CreateSearchTermTags < ActiveRecord::Migration
   def self.up
-    create_table :search_term_tags do |t|
+          sql=<<-EOF
+            create view geoparsed_locations as 
 
-      t.timestamps
-    end
-  end
+            select s.id as submission_id,
+            nm.natlib_id as natlib_metadata_id,
+            nm.title as title,
+            cgss.cached_geo_search_id,
+            cgst.search_term,
+            cgs.accuracy_id,
+            cgs.address
 
-  def self.down
-    drop_table :search_term_tags
-  end
+            from submissions s
+
+            inner join natlib_metadatas nm
+            on (s.natlib_metadata_id = nm.id)
+
+            inner join cached_geo_searches_submissions cgss
+            on (s.id = cgss.submission_id)
+
+            inner join cached_geo_searches cgs
+            on (cgss.cached_geo_search_id = cgs.id)
+
+            inner join cached_geo_search_terms cgst
+            on (cgs.cached_geo_search_term_id = cgst.id)
+
+            order by address, title;
+            EOF
+
+            ActiveRecord::Base.connection().execute(sql)
+      end
+
+      def self.down
+      end
 end
