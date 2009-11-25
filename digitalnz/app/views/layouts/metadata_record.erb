@@ -8,14 +8,34 @@
 <%end%>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <%=stylesheet_link_tag 'style'%>
+<%=stylesheet_link_tag '2col'%>
 <%= javascript_include_tag :defaults %>
 </head>
+
 <body>
     <%= render :partial => 'shared/google_analytics'%>
- 
-    <%=yield%>
-	<%=render :partial => 'shared/footer'%>
+
+<div id="header">
+<%= yield :header %>
+</div>
+<div class="colmask leftmenu">
+    <div class="colright">
+        <div class="col1wrap">
+            <div class="col1">
+                <!-- Column 2 start -->
+                <%= yield :col1%>
+            </div>
+        </div>
+        <div class="col2">
+            <!-- Column 1 start -->
+            <%= yield :col2 %>
+			<!-- Column 1 end -->
+        </div>
+    </div>
+</div>
+
+<%=render :partial => 'shared/footer'%>
+
 
 </body>
 </html>
-
