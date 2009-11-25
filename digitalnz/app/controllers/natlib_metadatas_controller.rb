@@ -166,7 +166,8 @@ class NatlibMetadatasController < ApplicationController
       
     end
     
-
+    @all_accuracies = Accuracy.find(:all, :order => :id)
+    @inverted_accuracies = @accuracies.invert #Accuracy name => [geonames]
     @archive_search = ArchiveSearch::new
     render :layout => 'metadata_record'
   end
