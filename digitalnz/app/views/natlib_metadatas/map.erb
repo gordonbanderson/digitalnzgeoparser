@@ -22,7 +22,7 @@
 <div id="geonameFrequencies">
 		<%for geoname in @accuracies.keys
 			freak = @phrase_frequencies[geoname]
-			the_size = 7+1.5*freak
+			the_size = 7+1.5*freak.to_f
 		%>
 		<span class="geonameFrequency" style="font-size: <%=the_size%>pt;"><%=geoname%></span>
 		<%
