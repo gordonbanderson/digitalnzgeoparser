@@ -8,7 +8,7 @@ class ArchiveSearchesController < ApplicationController
   PAGE_SIZE=20
   
   #Page size for images only
-  IMAGE_PAGE_SIZE=48
+  IMAGE_PAGE_SIZE=40
 
   def search
     start_time = Time.now
