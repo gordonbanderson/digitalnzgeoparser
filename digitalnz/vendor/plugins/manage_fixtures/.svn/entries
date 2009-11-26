@@ -1,0 +1,51 @@
+8
+
+dir
+0
+svn://10.1.1.3/picticle/trunk/GeoGallery122/geophoto/vendor/plugins/manage_fixtures
+svn://10.1.1.3/picticle
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+tasks
+dir
+
+
+
+add
+
+lib
+dir
+
+
+
+add
+
+CHANGELOG
+file
+
+
+
+add
+
+MIT-LICENSE
+file
+
+
+
+add
+
+README
+file
+
+
+
+add
+
