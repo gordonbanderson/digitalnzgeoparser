@@ -1,0 +1,61 @@
+--- 
+accuracies_010: 
+  name: Premises
+  created_at: 2009-11-16 09:56:34.896474
+  updated_at: 2009-11-16 09:56:34.896474
+  google_id: "9"
+  id: "10"
+accuracies_001: 
+  name: Unknown
+  created_at: 2009-11-16 09:56:34.870417
+  updated_at: 2009-11-16 09:56:34.870417
+  google_id: "0"
+  id: "1"
+accuracies_002: 
+  name: Country Level Accuracy
+  created_at: 2009-11-16 09:56:34.875818
+  updated_at: 2009-11-16 09:56:34.875818
+  google_id: "1"
+  id: "2"
+accuracies_003: 
+  name: Regional
+  created_at: 2009-11-16 09:56:34.881856
+  updated_at: 2009-11-16 09:56:34.881856
+  google_id: "2"
+  id: "3"
+accuracies_004: 
+  name: Sub Region
+  created_at: 2009-11-16 09:56:34.883868
+  updated_at: 2009-11-16 09:56:34.883868
+  google_id: "3"
+  id: "4"
+accuracies_005: 
+  name: Town
+  created_at: 2009-11-16 09:56:34.887109
+  updated_at: 2009-11-16 09:56:34.887109
+  google_id: "4"
+  id: "5"
+accuracies_006: 
+  name: Post Code
+  created_at: 2009-11-16 09:56:34.889994
+  updated_at: 2009-11-16 09:56:34.889994
+  google_id: "5"
+  id: "6"
+accuracies_007: 
+  name: Street
+  created_at: 2009-11-16 09:56:34.891747
+  updated_at: 2009-11-16 09:56:34.891747
+  google_id: "6"
+  id: "7"
+accuracies_008: 
+  name: Intersection
+  created_at: 2009-11-16 09:56:34.893467
+  updated_at: 2009-11-16 09:56:34.893467
+  google_id: "7"
+  id: "8"
+accuracies_009: 
+  name: Address
+  created_at: 2009-11-16 09:56:34.89495
+  updated_at: 2009-11-16 09:56:34.89495
+  google_id: "8"
+  id: "9"
