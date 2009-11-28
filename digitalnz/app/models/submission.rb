@@ -3,14 +3,14 @@ require 'geo_parser_helper'
 include GeoParserHelper
 
 class Submission < ActiveRecord::Base
-  has_and_belongs_to_many :cached_geo_searches
-  has_and_belongs_to_many :filtered_phrases
+  has_and_belongs_to_many :cached_geo_searches, :include => [:cached_geo_search_term, :accuracy]
+  has_and_belongs_to_many :filtered_phrases, :include => [:filter_type, :phrase]
   
   has_one :extent
   has_one :centroid
   belongs_to :natlib_metadata
   has_many :phrases
-  has_many :phrase_frequencies
+  has_many :phrase_frequencies, :include => [:phrase]
   
   
   #Return a decent description of the location found from the text submitted
