@@ -80,7 +80,7 @@ class GoogleGeocodeJsonClient
   end
   
   
-  def geocode(address, memcache_server)
+  def geocode(address, memcache_server=nil)
         geo_url = @url+'&q=' + CGI.escape(address)
         
         geocoder_json = '' #What is returned
@@ -90,11 +90,14 @@ class GoogleGeocodeJsonClient
         
         if !memcache_server.blank?
           geocoder_json = memcache_server[memcache_key]
-          puts "GOOGLE: geocoder info cached"
+          puts "GOOGLE: geocoder info cached, cache was #{memcache_server}"
         end
         
+        locations = []
         
         if geocoder_json.blank?
+            
+            
             puts "GOOGLE: geocoder info not cached"
             #Restrict to viewpoint centre if avail
             if !@viewport_centre.blank?
@@ -107,12 +110,13 @@ class GoogleGeocodeJsonClient
               geo_url << "&gl="+@country_bias
             end
 
-            puts geo_url
+            puts "GEOCODER URL:#{geo_url}"
 
 
 
             geocoder_json = fetch(geo_url)
 
+            puts "JSON:"
             puts geocoder_json.to_yaml
             
             memcache_server[memcache_key] = geocoder_json if !memcache_server.blank?
@@ -123,12 +127,10 @@ class GoogleGeocodeJsonClient
         res = JSON.parse(geocoder_json.body)
         puts res.to_yaml
         
-        
         search_term=res['name']
         status_code=res['Status']['code']
         
         
-        locations = []
 
         placemarks = res['Placemark']
         if !placemarks.blank?
@@ -137,13 +139,13 @@ class GoogleGeocodeJsonClient
           
           for placemark in placemarks
             location = Location::new
-  puts "t1"
             location.name=res['name']
             location.status_code=res['Status']['code']
-
-            puts "STATUS:"+location.status_code.to_s
-          
             location.address = placemark['address']
+            
+
+            puts "TRACE (#{location.address}):"+location.status_code.to_s
+          
             #puts "ADDRESS FOUND"
             coordinates = placemark['Point']['coordinates']
             location.latitude= coordinates[1]
@@ -159,7 +161,7 @@ class GoogleGeocodeJsonClient
           
             if !country.blank?
               location.country = country['CountryName']
-            
+              puts "TRACE 1"
               locality = country['Locality']
               if !locality.blank?
                 location.locality = locality['LocalityName']
@@ -168,29 +170,39 @@ class GoogleGeocodeJsonClient
               admin_area = address_details['Country']['AdministrativeArea']
           
               if !admin_area.blank?
+                  puts "TRACE 2"
+                  
                 location.admin_area = admin_area['AdministrativeAreaName']
                 subadmin_area = admin_area['SubAdministrativeArea']
                 if !subadmin_area.blank?
                   location.subadmin_area = subadmin_area['SubAdministrativeAreaName']
+                  puts "TRACE 3"
             
                   #Note that dependent locality sometimes comes on its own, not just inside locality
                   locality = subadmin_area['Locality']
                   if !locality.blank?
                     location.locality = locality['LocalityName']
+                    puts "TRACE 4"
+                    
                     dependent_locality = subadmin_area['DependentLocality']
                     if !dependent_locality.blank?
+                        puts "TRACE 5"
+                        
                       location.dependent_locality = ['DependentLocalityName']
                     end
                   end
             
                   dependent_locality = subadmin_area['DependentLocality']
                   if !dependent_locality.blank?
+                      puts "TRACE 6"
+                      
                     location.dependent_locality = ['DependentLocalityName']
                   end
                 end
               end
             end
           
+            puts "TRACE 7"
           
             #Now get the lat lon box
             extended_data = placemark['ExtendedData']
@@ -203,15 +215,28 @@ class GoogleGeocodeJsonClient
                 location.bbox_south = latlonbox['south']
               end
             end
+            puts "TRACE 8"
+            
+            puts "TRACE 8a"
             location.accuracy = address_details['Accuracy']
+            puts "TRACE 8b"
+            locations << location
+            
           end
           
           puts "===="
+          
+          puts "TRACE 9"
+          
           puts location.to_yaml
-          locations << location
+          puts "FOUND LOCATION:#{location.address}"
         end
 
 
+        puts "FOUND #{locations.size} LOCATIONS"
+
+
+    
     
         {
           :search_term => search_term,
