@@ -25,22 +25,38 @@ class CachedGeoSearchTest < ActiveSupport::TestCase
   
   # Replace this with your real tests.
   def test_valid_uncached_search
+      CACHE.flush_all
     previous = CachedGeoSearchTerm.find_by_search_term("Aberfoyle")
+    assert_equal previous, nil
     previous.destroy if !previous.blank?
-    locations = parse_address("Aberfoyle, Scotland")
+    locations = parse_address("Aberfoyle")
     puts locations.to_yaml
     
     #Check for the cached search term
-    search_terms = CachedGeoSearchTerm.find(:all)
+    search_terms = CachedGeoSearchTerm.find_by_search_term("Aberfoyle").cached_geo_searches
     puts search_terms.to_yaml
-    assert_equal 1, search_terms.length
-    assert_equal "Aberfoyle, Scotland", search_terms[0].search_term
+    assert_equal 6, search_terms.length
+    assert_equal "Aberfoyle", search_terms[0].address
+
     
     #And now the cached google search result
-    cached_geo_searches = CachedGeoSearch.find(:all)
+    cached_geo_search_terms = CachedGeoSearchTerm.find(:all)
     puts cached_geo_searches.to_yaml
-    assert_equal 1, cached_geo_searches.length
+    assert_equal 1, cached_geo_search_terms.length
     
+  end
+  
+  #Test for bug where only one result was being returned
+  def test_lots_of_results
+      locations = parse_address("Springfield")
+      
+      search_terms = CachedGeoSearchTerm.find_by_search_term("Springfield").cached_geo_searches
+      for res in search_terms
+         puts res.to_yaml
+         puts "======" 
+      end
+      assert_equal 12, search_terms.length
+      
   end
   
   
