@@ -137,7 +137,7 @@ class GeoParserHelperTest < Test::Unit::TestCase
   def test_with_apostophres
     result = possible_place_names("England's")
     keys = result.keys
-    assert_equal "England", keys[0]
+    check_for_place "England", result
     assert_equal 1, keys.length
   end
   
@@ -233,8 +233,8 @@ class GeoParserHelperTest < Test::Unit::TestCase
   def test_with_punctuation
     result = possible_place_names("Pro-China people in Hong Kong?")
     keys = result.keys
-    assert_equal "Pro China", keys[0]
-    assert_equal "Hong Kong", keys[1]
+    check_for_place "Pro China", result
+    check_for_place "Hong Kong", result
   end
   
   def test_with_underscores
@@ -255,7 +255,8 @@ class GeoParserHelperTest < Test::Unit::TestCase
     keys = result.keys
     puts result.to_yaml
     puts result.class
-    assert_equal "Baghdad", result[:possible_place_names].keys[0]
+    check_for_place "Baghdad", result
+    
   end
   
   
@@ -267,11 +268,35 @@ class GeoParserHelperTest < Test::Unit::TestCase
   end
   
   
-  def test_with_country_in_phrase
+  def test_with_country_in_phrase_at_start_of_sentence
     result = possible_place_names("This England, speak of it sir.")
     keys = result.keys
-    assert_equal "England", result[:possible_place_names].keys[1]
+    puts result.to_yaml
+    check_for_place "England", result
+    
   end
+  
+  #Swimming -- New Zealand
+  def test_double_dash
+    result = possible_place_names("Swimming -- New Zealand")
+    keys = result.keys
+    puts result.to_yaml
+    check_for_place "New Zealand", result
+    
+    #Why is this missing?
+    check_for_place "Swimming", result
+    
+  end
+  
+  #Homewood Station (Farm : N.Z.)
+  def test_punctuation_brackets
+      result = possible_place_names("Homewood Station (Farm : N.Z.)")
+      keys = result.keys
+      puts result.to_yaml
+      check_for_place "Homewood Station", result
+      check_for_place "N.Z.", result
+  end
+  
   
   
   def test_with_msoft_quotes
@@ -279,7 +304,9 @@ class GeoParserHelperTest < Test::Unit::TestCase
     #text = 'This England, speak of it sir.'
     result = possible_place_names(text)
     puts result.to_yaml
-    assert result[:possible_place_names].keys.include?('Shannon')
+    #assert result[:possible_place_names].keys.include?('Shannon')
+    check_for_place "Shannon", result
+    
   end
   
   #Saw fail on the 88, being stripped to nothing
