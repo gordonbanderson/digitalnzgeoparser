@@ -12,12 +12,17 @@ class ArchiveSearchesController < ApplicationController
 
   def search
     start_time = Time.now
-    @archive_search = ArchiveSearch.new(params[:archive_search])
+    
     
     if request.method == :post
-      redirect_to search_archive_searches_url(:q=>@archive_search.search_text)
+      redirect_to search_archive_searches_url(
+            :q=>params[:archive_search][:search_text],
+            :f=>params[:archive_search][:filter_ids].split(',')
+      )
       return
     end
+    
+    @archive_search = ArchiveSearch.new(params[:archive_search])
     
     @page=1
     @page = params[:page] if !params[:page].blank?
@@ -34,7 +39,7 @@ class ArchiveSearchesController < ApplicationController
     @filters = {}
     
     @filter_params = params[:f]
-    @filter_params = {} if @filter_params.blank?
+    @filter_params = [] if @filter_params.blank?
     
     if !@filter_params.blank?
       for filter_id in @filter_params
