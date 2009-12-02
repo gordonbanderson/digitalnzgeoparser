@@ -3,7 +3,7 @@
 </div>
 
 
-
+<%if !@search_term_tags.blank?%>
 <div class="searchTermTags">
 	<%
 	max_font_size =24
@@ -22,3 +22,5 @@
 	end
 	%>
 </div>
+
+<%end%>
