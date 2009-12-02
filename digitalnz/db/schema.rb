@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091122045249) do
+ActiveRecord::Schema.define(:version => 20091201141636) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -52,6 +52,11 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "accuracy_id"
     t.string   "country"
     t.string   "address"
+    t.string   "permalink"
+    t.float    "bbox_west"
+    t.float    "bbox_east"
+    t.float    "bbox_north"
+    t.float    "bbox_south"
   end
 
   create_table "cached_geo_searches_submissions", :id => false, :force => true do |t|
@@ -91,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.string   "word"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   add_index "calais_words", ["word"], :name => "index_calais_words_on_word"
@@ -100,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   create_table "centroids", :force => true do |t|
@@ -107,6 +114,13 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.float    "longitude"
     t.string   "extent_type"
     t.integer  "submission_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "content_partners", :force => true do |t|
+    t.string   "name"
+    t.string   "permalink"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -131,6 +145,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   create_table "extents", :force => true do |t|
@@ -149,8 +164,6 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "facet_fields", ["name"], :name => "index_facet_fields_on_name"
 
   create_table "facet_fields_old", :force => true do |t|
     t.string   "name"
@@ -216,6 +229,11 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
   add_index "natlib_metadatas", ["title"], :name => "index_natlib_metadatas_on_title"
 
+  create_table "natlib_metadatas_coverages", :force => true do |t|
+    t.integer "coverage_id"
+    t.integer "natlib_metadata_id"
+  end
+
   create_table "natlib_metadatas_old", :force => true do |t|
     t.string   "creator"
     t.string   "contributor"
@@ -234,6 +252,11 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.datetime "updated_at"
   end
 
+  create_table "natlib_metadatas_rights", :force => true do |t|
+    t.integer "right_id"
+    t.integer "natlib_metadata_id"
+  end
+
   create_table "phrase_frequencies", :force => true do |t|
     t.integer  "submission_id"
     t.integer  "frequency"
@@ -246,6 +269,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.string   "words"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   add_index "phrases", ["words"], :name => "index_phrases_on_words"
@@ -255,6 +279,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   create_table "record_dates", :force => true do |t|
@@ -277,6 +302,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   create_table "stop_words", :force => true do |t|
@@ -292,6 +318,7 @@ ActiveRecord::Schema.define(:version => 20091122045249) do
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   create_table "submissions", :force => true do |t|
