@@ -160,19 +160,6 @@ class ArchiveSearchesController < ApplicationController
       start = (@page.to_i-1)*@result_page_size
       #pager.replace(@digital_nz_search_result.results.to_array[start, result_page_size])
     end
-
-=begin
-num_results - the number of results the user wishes returned
-start - the offset from which the result list should start
-sort - the field upon which results are sorted. If sort_field isn't specified the results are sorted by relevance. The sort_field must be one of: category, content_provider, date, syndication_date, title
-direction - the direction in which the results are sorted. Can only be used in conjunction with the sort field and must be either asc or desc. If not specified, sort_direction defaults to asc
-facets - a list of facet fields to include in the output. See the note on facets below for more information.
-facet_num_results - the number of facet results to include. Only used if the facets parameter is specified, and defaults to 10.
-facet_start - the offset from which the facet value list should start. Only used if the facets parameter is specified, and defaults to 0.
-
-
-category, content_partner, creator, language, rights, century, decade, and year.
-=end
     
     respond_to do |format|
       if @archive_search.save
