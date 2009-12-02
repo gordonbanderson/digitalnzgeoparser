@@ -1,8 +1,21 @@
 class GeoparsedView < ActiveRecord::Migration
   def self.up
+      
+      c = ActiveRecord::Base.connection()
+      classname = c.class.to_s
+      puts classname
+      
+      #MySQL has a limit on length of index key
+      if classname == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
+          c.execute 'create index natlib_title_index on natlib_metadatas(title(255));'
+          c.execute 'create index natlib_content_partner_index on natlib_metadatas(content_partner(255));'
+      else
+          add_index :natlib_metadatas, :title
+          add_index :natlib_metadatas, :content_partner
+      end
+      
       add_index :submissions, :area
-      #add_index :natlib_metadatas, :title
-      #add_index :natlib_metadatas, :content_partner
+
       
       sql=<<-EOF
       create view geoparsed_records as
@@ -19,8 +32,8 @@ class GeoparsedView < ActiveRecord::Migration
 
   def self.down
       remove_index :submissions, :area
-      #remove_index :natlib_metadatas, :title
-      #remove_index :natlib_metadatas, :content_partner
+      remove_index :natlib_metadatas, :title
+      remove_index :natlib_metadatas, :content_partner
       ActiveRecord::Base.connection().execute('drop view geoparsed_records')
   end
 end
