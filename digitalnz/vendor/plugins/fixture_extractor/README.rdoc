@@ -1,0 +1,70 @@
+= FixtureExtractor
+
+FixtureExtractor is a Rails plugin that simplifies management of yaml test fixtures.  FixtureExtractor allows you to declare a list of ActiveRecord model objects to "extract" from a database into yaml fixtures.  FixtureExtractor recursively extracts records by following ActiveRecord associations declared in the model.  You can customize how each ActiveRecord model class is extracted including:
+
+  - custom naming of the yaml fixture
+  - declaring which associations to extract or ignore
+  - defining how to extract a model's ActiveRecord associations
+
+= Example
+
+I have created an example project to demonstrate how the FixtureExtractor works:  http://github.com/brewski/fixture_extractor_examples.  This project is derived from Ryan Bates' complex-form-examples project http://github.com/ryanb/complex-form-examples/tree.
+
+This rails app is a simple project management tool used to demonstrate the nested form capabilities in Rails.  It contains 4 model classes: Project, Task, Assignment, and Step.  It has a sqlite deveopment database with 4 projects pre-populated.  To see the FxitureExtractor demo, checkout the project:
+
+  git clone git://github.com/brewski/fixture_extractor_examples.git
+  cd fixture_extractor_examples
+  git submodule init
+  git submodule update
+
+start the server:
+
+  ./script/server
+
+And browse to http://localhost:3000.  From here you can see all the projects in the development database.  To run the extractor:
+
+  rake db:fixtures:extract[test/fixtures]
+
+The list of fixtures extracted in the above rake task is defined in test/fixtures.rb:
+
+  map_fixtures do |map|
+    map.project 'Clean up our Streets', :with_tasks_for_superheros
+
+    map.assignment 'Superman', :owned_by_hero
+    map.assignment 'Brian', :owned_by_brian
+
+    map.task 'Add Pork', :for_a_sleezy_politian
+  end
+
+=== Fixture Helper
+
+FixtureExtractor also contains a useful utility for mapping fixture names to ActiveRecord objects.  Assuming the fixtures already exist in the database, the fixtures can be accessed by name from any environment.  Including the FixtureHelper module will define a method +fixture+ which will look up fixtures mapped by their name as declared in <em>test/fixtures.rb</em>.  For example, using the mapping declared above: 
+
+  ./script/console development
+  >> include FixtureHelper
+  >> require 'test/fixtures.rb'
+  >> project = fixture(Project, :with_tasks_for_superheros)
+
+Assuming you extracted the test fixtures from the development environment, the last line will return the 'Clean up our Streets' project.
+
+=== Custom Fixture Extracting
+
+To provide custom fixture extracting you can extend the FixtureExtractor::Fixture class.  For ActiveRecord models that require custom extracting rules, create a class FixtureExtractor::<ModelName>Fixture extending from FixtureExtractor::Fixture.  In fixture_extractor_example, the Project model objects are extracted from the database via the FixtureExtractor::ProjectFixture class in <em>lib/fixture_extractor/project_fixture.rb</em>:
+
+  module FixtureExtractor
+    class ProjectFixture < Fixture
+      def name
+        return "project_#{@model.name}"
+      end
+    
+      def before_collect(options)
+        print "collecting project '#{@model.name}'..."
+      end
+      
+      def after_collect(options)
+        puts " done"
+      end    
+    end
+  end
+
+Copyright (c) 2009 Brian Abreu, released under the MIT license
