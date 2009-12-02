@@ -3,6 +3,8 @@ class NatlibMetadatasController < ApplicationController
   
   PAGE_SIZE=20
   
+  SHADES='fedcba9876543210'
+
   #This maps yahoo extent sizes to google map scale
   EXTENT_SIZE = {
     'Timezone' => 4,
@@ -100,7 +102,6 @@ class NatlibMetadatasController < ApplicationController
        
        @search_terms = {}
        
-       @addresses
        for cached_geo_search in @submission.cached_geo_searches
          search_term = cached_geo_search.cached_geo_search_term.search_term
          if @search_terms[search_term].blank?
@@ -114,6 +115,11 @@ class NatlibMetadatasController < ApplicationController
 
 
        @accuracies = {}
+       minx=+180
+       maxx=-180
+       miny=+90
+       maxy=-90
+       
        for cached_search in @submission.cached_geo_searches
          if cached_search.accuracy.google_id < @filter.to_i
            info_text = cached_search.address
@@ -127,10 +133,32 @@ class NatlibMetadatasController < ApplicationController
             :options => {:draggable => true},
             :info_window =>info_text
             ))
+            
+            w = cached_search.bbox_west
+            e = cached_search.bbox_east
+            s = cached_search.bbox_south
+            n = cached_search.bbox_north
+            
+            minx = [minx,w].min
+            maxx = [maxx,e].max
+            miny = [miny,s].min
+            maxy = [maxy,n].max
+            
+            fill_shade = SHADES[cached_search.accuracy.google_id].chr
+            fill_color  = "##{fill_shade}#{fill_shade}#{fill_shade}"
+            fill_alpha = cached_search.accuracy.google_id * 0.1
+            polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",2,1,fill_color, fill_alpha)
+            @map.overlay_init(polygon)
          end
        end
      end
      
+     
+     @info = "BOUNDED BY #{minx} => #{maxx}, #{miny} => #{maxy}"
+     bounds = GLatLngBounds.new([miny, minx], [maxy,maxx])
+     @zoom = @map.get_bounds_zoom_level(bounds)
+     @center = [(miny+maxy)*0.5, (minx+maxx)*0.5 ]
+     #page << @map.set_center(@center,@zoom)
      #Add location markers
 =begin
      for key in @locations.keys
