@@ -86,6 +86,47 @@ http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/69053/map
 Why no 'Wellington Region'?
 
 
+== Foxton
+150353 looks suspicous - Foxton in the UK?
 
+
+MISC
+
+http://localhost:3000/natlib_metadatas/130293/map << why no Hamilton Railway Station?
+http://localhost:3000/natlib_metadatas/128454/map << lacks nz
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/130450/map
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/139802/map << area incorrect
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1293101/map << should find Truby King Park, Melrose
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/42584/map << why no Miramar?
+http://localhost:3000/natlib_metadatas/50446/map << some anomoloes
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/96000/map << why no pencarrow head
+http://localhost:3000/natlib_metadatas/62785/map << Wellington college removed by Open Calais
+http://localhost:3000/natlib_metadatas/128601/map << deal with long dashes
+http://localhost:3000/natlib_metadatas/143455/map << gare de lyon, paris
+http://localhost:3000/natlib_metadatas/136798/map << Capitalisatin
+http://localhost:3000/natlib_metadatas/53581/map << need more info
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/75375/map << no Kapiti island
+http://localhost:3000/natlib_metadatas/99509/map << Wellington Four should not be removed
+http://localhost:3000/natlib_metadatas/1166989-photograph-swimming-pool-at-homewood/map << double dash needs to be a phrase splitter
+http://localhost:3000/natlib_metadatas/83599-birch-hill-station-farmhouse-garden-and-grounds/map << single dashes also
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1374202-looking-towards-baring-head/map << open calais being too aggressive?
+
+http://localhost:3000/natlib_metadatas/106854-wellington-girls-college-pupils-and-staff-thorndon/map << Says open calais ahs removed a term subsequently used
+
+ <td></td>
+    <td><%=@accuracies[search_term]%></td>
+    <td><%=search_term.class%></td>
+    <td><%=search_term%></td>
+	<td><%=freak%></td>
+	
+==================
+
+N+1 showing:
+http://localhost:3000/natlib_metadatas/1166989-photograph-swimming-pool-at-homewood/map
+
+
+
+Issue with dual content providers
+http://localhost:3000/natlib_metadatas/76092/map
 
 
