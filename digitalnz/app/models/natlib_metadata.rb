@@ -14,7 +14,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_many :placenames
   has_many :formats
   has_many :relations
-  has_many :rights
+  has_and_belongs_to_many :rights
   has_many :identifiers
   has_many :categories
   has_many :record_dates
