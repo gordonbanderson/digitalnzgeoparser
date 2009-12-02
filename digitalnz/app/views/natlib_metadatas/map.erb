@@ -22,13 +22,18 @@
 <div id="geonameFrequencies">
 		<%for words in @phrases
 			freak = @phrase_frequencies[words]
+			tooltip = "#{freak} occurences found in source text"
+			
 			the_size = 7+1.5*freak.to_f
 			non_geo_string = ''
 			if @accuracies[words].blank?
-			non_geo_string = ' nongeo'	
+				non_geo_string = ' nongeo'
+				tooltip << "\nNo location found"
+			else
+				tooltip << "\nLocation found"
 			end
 		%>
-		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt;"><%=words%></span>
+		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt;" title="<%=tooltip%>"><%=words%></span>
 		<%
 		end%>
 </div>
