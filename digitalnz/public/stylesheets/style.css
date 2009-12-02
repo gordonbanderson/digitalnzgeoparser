@@ -162,7 +162,7 @@ li.searchResult p {
 td.imageResult img {
     display: block;
     border: solid blue 1px;
-    height: 80px;
+    width: 80px;
     margin-left: auto;
     margin-right: auto;
     text-align: centre;
