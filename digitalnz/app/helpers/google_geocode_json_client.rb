@@ -85,7 +85,10 @@ class GoogleGeocodeJsonClient
         
         geocoder_json = '' #What is returned
         
-        digsig = Digest::SHA256.hexdigest(address)
+        bias_key="NONE"
+        bias_key = @country_bias if !@country_bias.blank?
+        
+        digsig = Digest::SHA256.hexdigest(address+':'+bias_key)
         memcache_key = "googlegeocoderjson_#{digsig}"
         
         if !memcache_server.blank?
@@ -118,8 +121,10 @@ class GoogleGeocodeJsonClient
 
             puts "JSON:"
             puts geocoder_json.to_yaml
-            
-            memcache_server[memcache_key] = geocoder_json if !memcache_server.blank?
+            if !memcache_server.blank?
+                puts "MEMCACHE KEY:#{memcache_server}"
+                memcache_server[memcache_key] = geocoder_json
+            end
         end
         
         
