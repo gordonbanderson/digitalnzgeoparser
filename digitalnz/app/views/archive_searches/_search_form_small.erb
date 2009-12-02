@@ -3,10 +3,16 @@
 <img src="/images/dignz.gif" alt="Digital NZ Logo"/>
 <% form_for(@archive_search, :url => search_archive_searches_url,:html => {:method => :post}) do |f| %>
   <p>
-    <%= f.text_field :search_text,  :size => 60 %><%= f.submit "Search" %>
+    <%= f.text_field :search_text,  :size => 60 %>
+	<%= f.hidden_field :filter_ids, :value => @filter_params.join(',')%>
+	<%= f.submit "Search" %>
   </p>
 <% end %>
 </div>
 </div>
+
+<pre>
+	DEBUG:<%=@filter_params.to_yaml%>
+</pre>
 
 
