@@ -5,8 +5,9 @@ require 'memcache'
   
 module GeographyHelper
   
+  
 
-  def parse_address(geo_search_term, create_alternative_country_names=true)
+  def parse_address(geo_search_term, country_bias='nz', create_alternative_country_names=true)
     
     #Search for a cached entry first
     search_term = geo_search_term.strip #Remove spaces
@@ -16,8 +17,8 @@ module GeographyHelper
     puts "CACHED SEARCH TERM:#{cached_search_term.to_yaml}"
     
     gg = GoogleGeocodeJsonClient.new GOOGLE_MAPS_API_KEY
-    gg.set_country_bias('nz')
-    puts CACHE
+    gg.set_country_bias(country_bias) if !country_bias.blank?
+    puts "CACHE:#{CACHE}"
 
     if cached_search_term.blank?
       
@@ -48,13 +49,17 @@ module GeographyHelper
           cached = CachedGeoSearch::new
           cached.latitude = location.latitude
           cached.longitude =  location.longitude
+          cached.bbox_west = location.bbox_west
+          cached.bbox_east = location.bbox_east
+          cached.bbox_south = location.bbox_south
+          cached.bbox_north = location.bbox_north
+          
+          
           cached.country =  location.country
           cached.admin_area =  location.admin_area
           cached.subadmin_area =  location.subadmin_area          
           cached.locality =  location.locality
           cached.dependent_locality =  location.dependent_locality
-        
-        
      
         
           accuracy_number = location.accuracy
