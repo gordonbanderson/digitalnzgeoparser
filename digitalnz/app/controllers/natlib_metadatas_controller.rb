@@ -1,6 +1,8 @@
 class NatlibMetadatasController < ApplicationController
   require 'will_paginate'
   
+  ZOOM_BOUNDS = [0.00001, 0.00005, 0.0002, 0.002, 0.02, 0.2,0.5,1,2,4,32,64,128,256,512]
+  
   PAGE_SIZE=20
   
   SHADES='fedcba9876543210'
@@ -64,9 +66,77 @@ class NatlibMetadatasController < ApplicationController
        logger.debug "TRACE:#{@n_places_found} found"
        if @n_places_found > 0
          # if the submission area is small, zoom in more
-            if !@submission.area.blank?
-              @size = get_size_from_km_area(@submission.area)
+  
+            
+            @search_terms = {}
+
+            for cached_geo_search in @submission.cached_geo_searches
+              search_term = cached_geo_search.cached_geo_search_term.search_term
+              if @search_terms[search_term].blank?
+                @search_terms[search_term] = 1
+              else
+                @search_terms[search_term] = @search_terms[search_term]+1
+              end
             end
+            
+            
+            @stopped_words = @submission.filtered_by('stopped')
+            @removed_by_calais = @submission.filtered_by('filtered_by_calais')
+            @stopped = @submission.filtered_by('stopped')
+            @no_matches = @submission.filtered_by('no_geocoder_matches')
+            @too_short = @submission.filtered_by('too_short')
+            @geoparser_failed = @submission.filtered_by('geoparser_failed')
+
+            @phrases = Phrase.find(:all, :conditions => ["words in (?)", @search_terms.keys])
+            pfs = @submission.phrase_frequencies
+            @phrases = pfs.map{|pf| pf.phrase.words}
+
+            @phrase_frequencies = {}
+            for pf in pfs
+            @phrase_frequencies[pf.phrase.words] = pf.frequency
+            end
+            
+            
+            
+              @accuracies = {}
+              minx=+180
+              maxx=-180
+              miny=+90
+              maxy=-90
+
+              for cached_search in @submission.cached_geo_searches
+                if cached_search.accuracy.google_id < @filter.to_i
+                  info_text = cached_search.address
+                  info_text << '<br/>'
+                  info_text << cached_search.accuracy.name
+                  info_text << '<br/>'
+                  info_text << '"'+cached_search.cached_geo_search_term.search_term+'"'
+                  @accuracies[cached_search.cached_geo_search_term.search_term] = cached_search.accuracy.name
+                  @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
+                   :title => cached_search.cached_geo_search_term.search_term,
+                   :options => {:draggable => true},
+                   :info_window =>info_text
+                   ))
+
+                   w = cached_search.bbox_west
+                   e = cached_search.bbox_east
+                   s = cached_search.bbox_south
+                   n = cached_search.bbox_north
+
+                   minx = [minx,w].min
+                   maxx = [maxx,e].max
+                   miny = [miny,s].min
+                   maxy = [maxy,n].max
+
+                   fill_shade = SHADES[cached_search.accuracy.google_id].chr
+                   fill_color  = "#000"
+                   fill_alpha = cached_search.accuracy.google_id * 0.04
+                   polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",0,1,fill_color, fill_alpha)
+                   @map.overlay_init(polygon)
+                end
+              end
+            end
+
           
             #Deal with centre of points
             le_sum = 0
@@ -74,8 +144,14 @@ class NatlibMetadatasController < ApplicationController
             cen_lon_array = @submission.cached_geo_searches.map{|l| l.longitude}
             cen_lat = cen_lat_array.sum.to_f / cen_lat_array.size
             cen_lon = cen_lon_array.sum.to_f / cen_lon_array.size
-            @map.center_zoom_init([cen_lat,cen_lon], @size)
             logger.debug "TRACE: Average centre is #{cen_lat}, #{cen_lon}"
+            
+            @info = "BOUNDED BY #{minx} => #{maxx}, #{miny} => #{maxy}"
+            @bounds = GLatLngBounds.new([miny, minx], [maxy,maxx])
+            @area_lat_lon = (maxx-minx)*(maxy-miny)
+            @size = get_size_from_km_area miny, minx, maxy, maxx
+            @center = [(miny+maxy)*0.5, (minx+maxx)*0.5 ]
+            @map.center_zoom_init(@center, @size)
 
        else
         logger.debug "TRACE:no places found, using yahoo"
@@ -100,97 +176,16 @@ class NatlibMetadatasController < ApplicationController
        
        
        
-       @search_terms = {}
-       
-       for cached_geo_search in @submission.cached_geo_searches
-         search_term = cached_geo_search.cached_geo_search_term.search_term
-         if @search_terms[search_term].blank?
-           @search_terms[search_term] = 1
-         else
-           @search_terms[search_term] = @search_terms[search_term]+1
-         end
-       end
 
 
 
 
-       @accuracies = {}
-       minx=+180
-       maxx=-180
-       miny=+90
-       maxy=-90
-       
-       for cached_search in @submission.cached_geo_searches
-         if cached_search.accuracy.google_id < @filter.to_i
-           info_text = cached_search.address
-           info_text << '<br/>'
-           info_text << cached_search.accuracy.name
-           info_text << '<br/>'
-           info_text << '"'+cached_search.cached_geo_search_term.search_term+'"'
-           @accuracies[cached_search.cached_geo_search_term.search_term] = cached_search.accuracy.name
-           @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
-            :title => cached_search.cached_geo_search_term.search_term,
-            :options => {:draggable => true},
-            :info_window =>info_text
-            ))
-            
-            w = cached_search.bbox_west
-            e = cached_search.bbox_east
-            s = cached_search.bbox_south
-            n = cached_search.bbox_north
-            
-            minx = [minx,w].min
-            maxx = [maxx,e].max
-            miny = [miny,s].min
-            maxy = [maxy,n].max
-            
-            fill_shade = SHADES[cached_search.accuracy.google_id].chr
-            fill_color  = "##{fill_shade}#{fill_shade}#{fill_shade}"
-            fill_alpha = cached_search.accuracy.google_id * 0.1
-            polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",2,1,fill_color, fill_alpha)
-            @map.overlay_init(polygon)
-         end
-       end
-     end
+
      
      
-     @info = "BOUNDED BY #{minx} => #{maxx}, #{miny} => #{maxy}"
-     bounds = GLatLngBounds.new([miny, minx], [maxy,maxx])
-     @zoom = @map.get_bounds_zoom_level(bounds)
-     @center = [(miny+maxy)*0.5, (minx+maxx)*0.5 ]
-     #page << @map.set_center(@center,@zoom)
-     #Add location markers
-=begin
-     for key in @locations.keys
-       cached_geo_seach_array = @locations[key]
-       for cached_search in cached_geo_seach_array
-         @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
-         :title => key.search_term, :info_window => cached_search.to_info_map_window(@submission)))
-       end
-     end
+
+
      
-     
-     
-=end
-    if !@submission.blank?
-      @stopped_words = @submission.filtered_by('stopped')
-      @removed_by_calais = @submission.filtered_by('filtered_by_calais')
-      @stopped = @submission.filtered_by('stopped')
-      @no_matches = @submission.filtered_by('no_geocoder_matches')
-      @too_short = @submission.filtered_by('too_short')
-      @geoparser_failed = @submission.filtered_by('geoparser_failed')
-      
-      @phrases = Phrase.find(:all, :conditions => ["words in (?)", @search_terms.keys])
-      pfs = @submission.phrase_frequencies
-      @phrases = pfs.map{|pf| pf.phrase.words}
-      
-      @phrase_frequencies = {}
-      for pf in pfs
-        @phrase_frequencies[pf.phrase.words] = pf.frequency
-      end
-    else
-      #FIXME
-    end
     
     @all_accuracies = Accuracy.find(:all, :order => :id)
     @inverted_accuracies = @accuracies.invert #Accuracy name => [geonames]
@@ -294,42 +289,17 @@ class NatlibMetadatasController < ApplicationController
   
   
   #Convert area to a size
-  def get_size_from_km_area(km_area)
-    
-    result = 15
-    result = case
-      when km_area == 0
-        13 #May be region
-      when km_area < 4
-        14
-      when km_area < 20
-        13
-      when km_area < 30
-        12 # e.g.http://localhost:3000/natlib_metadatas/66096/map
-      when km_area < 40
-        11
-      when km_area < 80
-        10 # e.g. http://localhost:3000/natlib_metadatas/12509/map
-      when km_area < 400
-        9 #e.g. http://localhost:3000/natlib_metadatas/1231515/map
-      when km_area < 800
-        8
-      when km_area < 3200
-        7
-      when km_area < 6400
-        6
-      when km_area < 25000
-        5
-      when km_area < 130000
-        4 #this is nz sized
-      when km_area < 250000
-        3
-      #Default to the whole wide world
-      else
-        1 #e.g. http://localhost:3000/natlib_metadatas/1328919/map
-    end
-
-     
-     result
+  def get_size_from_km_area miny, minx, maxy, maxx
+      area_lat_lon = (maxx-minx)*(maxy-miny)
+      pos = 0
+      for bound in ZOOM_BOUNDS
+         if area_lat_lon < bound
+             break
+        end 
+        pos = pos + 1
+      end
+      
+      zoom_level = 16 - pos
+      zoom_level
   end
 end
