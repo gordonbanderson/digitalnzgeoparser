@@ -36,7 +36,7 @@ module NatlibMetadatasHelper
       puts "N PAGES TO RETRIEVE:#{n_pages}"
       
       for page in 0..n_pages
-            puts "\nRETRIEVING PAGE #{page}"
+            puts "\nRETRIEVING PAGE #{page} of #{n_pages} for '#{query}'"
             facets = digital_nz_search_result.facets
             facet_fields = query_hash[:facets].split(',')
 
@@ -44,15 +44,24 @@ module NatlibMetadatasHelper
             #check metadata IDs
             new_metadata_results = []
             metadata_records = {}
-            for result in digital_nz_search_result.results
-                nl = NatlibMetadata.find_by_natlib_id(result.id)
+            
+            natlib_ids = digital_nz_search_result.results.map{|r| r.id}
+            natlib_records_existing = NatlibMetadata.find(:all, :conditions => [
+                "natlib_id in (?)",
+                natlib_ids
+            ]
+            )
+            
+            already_existing_ids = natlib_records_existing.map{|r|r.natlib_id.to_i}
 
-                if nl.blank?
-                   new_metadata_results << result if nl.blank?
-                   new_record_ctr = new_record_ctr+1              
-                else
+            for result in digital_nz_search_result.results
+                
+
+                if already_existing_ids.include? result.id.to_i
                     old_record_ctr = old_record_ctr + 1
-                    metadata_records[result.id] = nl
+                else    
+                    new_metadata_results << result
+                    new_record_ctr = new_record_ctr+1
                 end
             end
 
