@@ -309,6 +309,36 @@ class GeoParserHelperTest < Test::Unit::TestCase
     
   end
   
+  
+  def test_for_pencarrow_head
+     text = 'View of Pencarrow Head and lighthouse, Wellington'
+     result = possible_place_names(text)
+     keys = result.keys
+     puts  result.to_yaml
+     
+     check_for_place "Wellington", result
+     check_for_place "Pencarrow Head", result
+     check_for_place "View", result
+  end
+  
+  
+  def test_phrase_with_commas
+      check_text_for_places(
+        '19 September 2007 - Cobham Drive and Kilbirnie viewed from Truby King Park, Melrose',
+        ['Kilbirnie', 'Truby King Park, Melrose', 'Cobham Drive']
+        )
+  end
+  
+  def test_phrase_with_ampersand_between_names
+      check_text_for_places(
+        '19 September 2007 - Cobham Drive & Kilbirnie viewed from Truby King Park, Melrose',
+        ['Kilbirnie', 'Truby King Park, Melrose', 'Cobham Drive']
+        )
+  end
+  
+  #19 September 2007 - Cobham Drive & Kilbirnie viewed from Truby King Park, Melrose
+  
+  
   #Saw fail on the 88, being stripped to nothing
   def test_with_number_at_end_of_phrase
     text = "Something happened in 88, now what was it..."
@@ -329,14 +359,14 @@ class GeoParserHelperTest < Test::Unit::TestCase
   end
   
   def test_calais_mt_egmont
-     check_text_for_place("Mt. Egmont as seen from Stratford, Taranaki", "Mt. Egmont")
+     check_text_for_places("Mt. Egmont as seen from Stratford, Taranaki", "Mt. Egmont")
   end
   
   def test_calais_mt_egmont
 =begin     
-     check_text_for_place("Mt. Egmont as seen from Stratford, Taranaki", ["Mt. Egmont"])
+     check_text_for_places("Mt. Egmont as seen from Stratford, Taranaki", ["Mt. Egmont"])
 =end     
-     check_text_for_place("Mount Taranaki and the township of Stratford, circa 1900. Photograph taken by James McAllister.", 
+     check_text_for_places("Mount Taranaki and the township of Stratford, circa 1900. Photograph taken by James McAllister.", 
                           ["Mount Taranaki", "Stratford"])
      
   end
@@ -361,7 +391,7 @@ class GeoParserHelperTest < Test::Unit::TestCase
   
   
   def test_for_dashes
-    check_text_for_place("Harbours - New Zealand - Wellington Region",["New Zealand", "Wellington Region"])
+    check_text_for_places("Harbours - New Zealand - Wellington Region",["New Zealand", "Wellington Region"])
   end
   
   
@@ -379,23 +409,24 @@ class GeoParserHelperTest < Test::Unit::TestCase
   #Check a record for a place
   def check_record_for_place(natlib_record_id, places)
     nl = NatlibMetadata.find_by_natlib_id(natlib_record_id)
-    check_text_for_place(nl.geo_text, places)
+    check_text_for_places(nl.geo_text, places)
   end
   
-  def check_text_for_place(text, places)
+  def check_text_for_places(text, places)
     puts "== PLACE CHECK =="
-    result = possible_place_names(text)
+    result = possible_place_names(text)[:possible_place_names]
+    puts result.keys.to_yaml
    
-    puts "Checking for '#{places.join(',')}' in '#{text}'"
-     
-     for place in result[0].keys
-       puts "#{place} -> #{result[0][place]}"
-     end
+
       for place in places
-         assert result[0].include?(place)
+          puts "Checking for #{place} in '#{text}'"
+         assert !result[place].blank?
        end
   end
   
+  
+  
+
   
   
   
