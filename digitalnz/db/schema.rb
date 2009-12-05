@@ -199,6 +199,27 @@ ActiveRecord::Schema.define(:version => 20091201141636) do
     t.datetime "updated_at"
   end
 
+  create_table "geoparsed_locations", :id => false, :force => true do |t|
+    t.integer "submission_id",        :default => 0, :null => false
+    t.integer "natlib_metadata_id"
+    t.text    "title"
+    t.integer "cached_geo_search_id"
+    t.string  "search_term"
+    t.integer "accuracy_id"
+    t.string  "address"
+  end
+
+  create_table "geoparsed_records", :id => false, :force => true do |t|
+    t.text    "title"
+    t.text    "landing_url"
+    t.text    "thumbnail_url"
+    t.text    "description"
+    t.text    "content_partner"
+    t.boolean "pending",         :default => true
+    t.integer "natlib_id"
+    t.float   "area"
+  end
+
   create_table "identifiers", :force => true do |t|
     t.string   "name"
     t.integer  "natlib_metadata_id"
@@ -225,9 +246,9 @@ ActiveRecord::Schema.define(:version => 20091201141636) do
     t.boolean  "pending",         :default => true
   end
 
-  add_index "natlib_metadatas", ["content_partner"], :name => "index_natlib_metadatas_on_content_partner"
+  add_index "natlib_metadatas", ["content_partner"], :name => "natlib_content_partner_index"
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
-  add_index "natlib_metadatas", ["title"], :name => "index_natlib_metadatas_on_title"
+  add_index "natlib_metadatas", ["title"], :name => "natlib_title_index"
 
   create_table "natlib_metadatas_coverages", :force => true do |t|
     t.integer "coverage_id"
@@ -303,6 +324,11 @@ ActiveRecord::Schema.define(:version => 20091201141636) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "permalink"
+  end
+
+  create_table "search_term_tags", :id => false, :force => true do |t|
+    t.string  "search_text"
+    t.integer "c",           :limit => 8, :default => 0, :null => false
   end
 
   create_table "stop_words", :force => true do |t|
