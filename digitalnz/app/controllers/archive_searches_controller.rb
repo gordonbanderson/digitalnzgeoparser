@@ -15,10 +15,17 @@ class ArchiveSearchesController < ApplicationController
     
     
     if request.method == :post
-      redirect_to search_archive_searches_url(
-            :q=>params[:archive_search][:search_text],
-            :f=>params[:archive_search][:filter_ids].split(',')
-      )
+        filter_ids = params[:archive_search][:filter_ids]
+        if filter_ids.blank?
+            redirect_to search_archive_searches_url(
+                  :q=>params[:archive_search][:search_text]
+            )
+        else
+            redirect_to search_archive_searches_url(
+                  :q=>params[:archive_search][:search_text],
+                  :f=>params[:archive_search][:filter_ids].split(',')
+            )
+        end
       return
     end
     
