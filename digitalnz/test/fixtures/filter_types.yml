@@ -1,0 +1,31 @@
+--- 
+filter_types_006: 
+  name: geoparser_failed
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "6"
+filter_types_001: 
+  name: no_geocoder_matches
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "1"
+filter_types_002: 
+  name: filtered_by_calais
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "2"
+filter_types_003: 
+  name: outside_yahoo_bounding_box
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "3"
+filter_types_004: 
+  name: stopped
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "4"
+filter_types_005: 
+  name: too_short
+  created_at: 2009-12-02 09:03:32
+  updated_at: 2009-12-02 09:03:32
+  id: "5"
