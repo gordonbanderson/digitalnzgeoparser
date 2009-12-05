@@ -1,0 +1,60 @@
+<project name="Digital NZZ Geoparser">
+	
+	<property name="target.report.dir" value="/tmp/test_reports/"/>
+	<property name="svn.revision" value="0.0.1"/>
+
+	<!-- =================================
+          target: name              
+         ================================= -->
+	<target name="generate_test_reports" description="--> description">
+
+		<echo>${basedir}</echo>
+
+
+
+		  <exec executable="rake">
+		    <arg value="ci:setup:testunit"/>
+		    <arg value="test"/>
+		  </exec>
+		
+		
+		<echo>
+			***********************************************************
+			* Running tests to generate reports of coverage *
+			***********************************************************
+		</echo>
+
+	<!--
+		  <exec executable="rake">
+		    <arg value="test:test:rcov"/>
+		  </exec>
+	-->
+		<junitreport todir="./test/reports">
+			<fileset dir="./test/reports">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="./test/reports/html" />
+		</junitreport>
+		
+		
+		<echo>
+		Moving directories to ${target.report.dir}
+			
+		</echo>
+	
+                <mkdir dir="${target.report.dir}/${svn.revision}"/>	
+		<move file="test/reports/html" todir="${target.report.dir}/${svn.revision}/report_success"/>
+		<!--
+		<move file="coverage" todir="${target.report.dir}/${svn.revision}"/>
+-->
+	</target>
+
+<target name="reports">
+	<junitreport todir="./test/reports">
+		<fileset dir="./test/reports">
+			<include name="TEST-*.xml" />
+		</fileset>
+		<report format="frames" todir="./test/reports/html" />
+	</junitreport>
+</target>
+</project>
