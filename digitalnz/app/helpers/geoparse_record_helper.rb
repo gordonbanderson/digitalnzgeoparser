@@ -40,7 +40,7 @@ module GeoparseRecordHelper
       nl = NatlibMetadata.find_by_natlib_id(natlib_record_id)
 
       #Grab the metadata if so necessary
-      if nl.pending
+      if nl.blank? || nl.pending
          nl = NatlibMetadata.update_or_create_metadata_from_api(natlib_record_id)
       end
 
