@@ -110,6 +110,7 @@ http://localhost:3000/natlib_metadatas/99509/map << Wellington Four should not b
 http://localhost:3000/natlib_metadatas/1166989-photograph-swimming-pool-at-homewood/map << double dash needs to be a phrase splitter
 http://localhost:3000/natlib_metadatas/83599-birch-hill-station-farmhouse-garden-and-grounds/map << single dashes also
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1374202-looking-towards-baring-head/map << open calais being too aggressive?
+http://localhost:3000/natlib_metadatas/74845-swimming-bath-wairakei/map <, swimming pool deniston
 
 http://localhost:3000/natlib_metadatas/106854-wellington-girls-college-pupils-and-staff-thorndon/map << Says open calais ahs removed a term subsequently used
 
@@ -124,7 +125,7 @@ http://localhost:3000/natlib_metadatas/106854-wellington-girls-college-pupils-an
 N+1 showing:
 http://localhost:3000/natlib_metadatas/1166989-photograph-swimming-pool-at-homewood/map
 
-
+http://localhost:3000/natlib_metadatas/74498/map  Willis St :Grand << colon should split sentence
 
 Issue with dual content providers
 http://localhost:3000/natlib_metadatas/76092/map
