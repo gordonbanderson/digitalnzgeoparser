@@ -4,7 +4,9 @@
 <% form_for(@archive_search, :url => search_archive_searches_url,:html => {:method => :post}) do |f| %>
   <p>
     <%= f.text_field :search_text,  :size => 60 %>
+<%if !@filter_params.blank?%>
 	<%= f.hidden_field :filter_ids, :value => @filter_params.join(',')%>
+<%end%>
 	<%= f.submit "Search" %>
   </p>
 <% end %>
