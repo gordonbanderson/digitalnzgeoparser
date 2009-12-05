@@ -131,7 +131,7 @@ class NatlibMetadatasController < ApplicationController
                    fill_shade = SHADES[cached_search.accuracy.google_id].chr
                    fill_color  = "#000"
                    fill_alpha = cached_search.accuracy.google_id * 0.04
-                   polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",0,1,fill_color, fill_alpha)
+                   polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",1,1,fill_color, fill_alpha)
                    @map.overlay_init(polygon)
                 end
               end
