@@ -1,10 +1,12 @@
-
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/../../app/helpers/geoparse_record_helper'
+include GeoparseRecordHelper
 
-class GeoparseRecordHelperTest < Test::Unit::TestCase
 
-    include GeoparseRecordHelper
+class GeoparseRecordHelperTest < ActiveRecord::TestCase
+
+    fixtures :accuracies, :filter_types
+
     
     
     def test_calais_80282
