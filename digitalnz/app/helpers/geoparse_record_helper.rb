@@ -543,7 +543,15 @@ module GeoparseRecordHelper
           child_tags = calais_tags[parent_tag]
           for child_tag in child_tags
               puts "TAG: #{parent_tag} --> #{child_tag}"
-              child__cw = CalaisWord.find_or_create child_tag
+              
+              #Ignore blank children
+              if !child_tag.blank?
+                  child_cw = CalaisWord.find_or_create child_tag
+                  calais_entry = CalaisEntry::new
+                  calais_entry.parent_word = parent_cw
+                  calais_entry.child_word = child_cw
+                  calais_entry.save
+              end
           end
       end 
       
