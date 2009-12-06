@@ -108,7 +108,7 @@ module GeoparseRecordHelper
       
       
       #Create calais tags
-      create_calais_tags(original_calais_tags)
+      calais_entries = create_calais_tags(original_calais_tags)
 
 
 
@@ -327,6 +327,12 @@ module GeoparseRecordHelper
       submission.body_of_text = nl.geo_text
       submission.signature = Digest::MD5.hexdigest(nl.geo_text)
       #submission.save!
+      
+      
+      puts "CE CLASS IS #{calais_entries.class}"
+      puts calais_entries.to_yaml
+      #Save the calais entries
+      submission.calais_entries = calais_entries
 
       nl.submission = submission
       elapsed_time("Trace 18")
@@ -536,8 +542,9 @@ module GeoparseRecordHelper
       elapsed_time("Trace 31")
    end
 
-   # Create Open Calais tags to be associated with this record
+   # Create Open Calais tags to be associated with this record, and return an array of calais entries
    def create_calais_tags calais_tags
+       calais_entries = []
       for parent_tag in calais_tags.keys
           parent_cw = CalaisWord.find_or_create parent_tag
           child_tags = calais_tags[parent_tag]
@@ -547,13 +554,15 @@ module GeoparseRecordHelper
               #Ignore blank children
               if !child_tag.blank?
                   child_cw = CalaisWord.find_or_create child_tag
-                  calais_entry = CalaisEntry::new
-                  calais_entry.parent_word = parent_cw
-                  calais_entry.child_word = child_cw
-                  calais_entry.save
+                  
+                  calais_entry = CalaisEntry.find_or_create(parent_cw, child_cw)
+                  puts "CREATED CALAIS ENTRY:#{calais_entry.class}"
+                  calais_entries << calais_entry
               end
           end
-      end 
+      end
+      
+      calais_entries
       
       
    end
