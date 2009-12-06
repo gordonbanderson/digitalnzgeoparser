@@ -35,11 +35,26 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         assert !(cws.include? '')
         
         #Check calais entries
+        calais_hierachy = {}
         entries = CalaisEntry.find(:all)
         for entry in entries
+            calais_hierachy[entry.parent_word.word] = [] if calais_hierachy[entry.parent_word].blank?
+            calais_hierachy[entry.parent_word.word] << entry.child_word.word
            puts entry.pretty_print 
         end
         
+        puts calais_hierachy['Company'].to_yaml
+        
+        #FIXME add company checks
+        assert calais_hierachy['Person'] == ['Frank Arnold Coxhead']
+    end
+    
+    
+    #Test the creation of the content partner field, as a duplciate issue was occuring with record 76092
+    def test_no_multiple_creator
+        parse_natlib_record 76092
+        n = NatlibMetadata.find_by_natlib_id(76092)
+        assert_equal "Alexander Turnbull Library", n.content_partner
     end
     
 end
