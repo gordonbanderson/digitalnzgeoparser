@@ -105,7 +105,10 @@ module GeoparseRecordHelper
 
       original_calais_tags = geocoder_text[:calais_tags]
       removed_by_calais = geocoder_text[:removed]
-
+      
+      
+      #Create calais tags
+      create_calais_tags(original_calais_tags)
 
 
 
@@ -533,5 +536,17 @@ module GeoparseRecordHelper
       elapsed_time("Trace 31")
    end
 
-   # puts sanitize_yahoo_results.to_yaml
+   # Create Open Calais tags to be associated with this record
+   def create_calais_tags calais_tags
+      for parent_tag in calais_tags.keys
+          parent_cw = CalaisWord.find_or_create parent_tag
+          child_tags = calais_tags[parent_tag]
+          for child_tag in child_tags
+              puts "TAG: #{parent_tag} --> #{child_tag}"
+              child__cw = CalaisWord.find_or_create child_tag
+          end
+      end 
+      
+      
+   end
 end
