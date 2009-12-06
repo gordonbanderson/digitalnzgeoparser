@@ -17,7 +17,7 @@ CREATE TABLE `archive_searches` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `cached_geo_search_terms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -28,7 +28,7 @@ CREATE TABLE `cached_geo_search_terms` (
   `is_country` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_cached_geo_search_terms_on_search_term` (`search_term`)
-) ENGINE=InnoDB AUTO_INCREMENT=464 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `cached_geo_searches` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -50,34 +50,26 @@ CREATE TABLE `cached_geo_searches` (
   `bbox_north` float DEFAULT NULL,
   `bbox_south` float DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=994 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `cached_geo_searches_submissions` (
   `submission_id` int(11) DEFAULT NULL,
   `cached_geo_search_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `calais_child_words` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `calais_word_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 CREATE TABLE `calais_entries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `calais_child_word_id` int(11) DEFAULT NULL,
   `calais_parent_word_id` int(11) DEFAULT NULL,
-  `calais_submission_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `calais_parent_words` (
+CREATE TABLE `calais_entries_submissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `calais_word_id` int(11) DEFAULT NULL,
+  `calais_entry_id` int(11) DEFAULT NULL,
+  `submission_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -90,7 +82,7 @@ CREATE TABLE `calais_submissions` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_calais_submissions_on_signature` (`signature`)
-) ENGINE=InnoDB AUTO_INCREMENT=342 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `calais_words` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -100,7 +92,7 @@ CREATE TABLE `calais_words` (
   `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_calais_words_on_word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -121,7 +113,7 @@ CREATE TABLE `centroids` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `content_partners` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -148,7 +140,7 @@ CREATE TABLE `country_names` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=252 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `coverages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -158,7 +150,7 @@ CREATE TABLE `coverages` (
   `updated_at` datetime DEFAULT NULL,
   `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=366 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `extents` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -170,7 +162,7 @@ CREATE TABLE `extents` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `facet_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -179,7 +171,7 @@ CREATE TABLE `facet_fields` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2621 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=599 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `facet_fields_old` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -206,7 +198,7 @@ CREATE TABLE `filtered_phrases` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `filtered_phrases_submissions` (
   `submission_id` int(11) DEFAULT NULL,
@@ -220,7 +212,7 @@ CREATE TABLE `formats` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=258 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `identifiers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -229,7 +221,7 @@ CREATE TABLE `identifiers` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=515 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `natlib_metadatas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -253,7 +245,7 @@ CREATE TABLE `natlib_metadatas` (
   KEY `index_natlib_metadatas_on_natlib_id` (`natlib_id`),
   KEY `natlib_title_index` (`title`(255)),
   KEY `natlib_content_partner_index` (`content_partner`(255))
-) ENGINE=InnoDB AUTO_INCREMENT=4217 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=233 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `natlib_metadatas_coverages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -297,7 +289,7 @@ CREATE TABLE `phrase_frequencies` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1564 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `phrases` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -307,7 +299,7 @@ CREATE TABLE `phrases` (
   `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_phrases_on_words` (`words`)
-) ENGINE=InnoDB AUTO_INCREMENT=604 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `placenames` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -327,7 +319,7 @@ CREATE TABLE `record_dates` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `relations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -336,7 +328,7 @@ CREATE TABLE `relations` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `rights` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -370,7 +362,7 @@ CREATE TABLE `subjects` (
   `updated_at` datetime DEFAULT NULL,
   `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=833 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `submissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -384,7 +376,7 @@ CREATE TABLE `submissions` (
   `area` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_submissions_on_area` (`area`)
-) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `tipes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -393,7 +385,7 @@ CREATE TABLE `tipes` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_tipes_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO schema_migrations (version) VALUES ('20090518094137');
 
@@ -502,3 +494,5 @@ INSERT INTO schema_migrations (version) VALUES ('20091128035849');
 INSERT INTO schema_migrations (version) VALUES ('20091128055157');
 
 INSERT INTO schema_migrations (version) VALUES ('20091201141636');
+
+INSERT INTO schema_migrations (version) VALUES ('20091206042731');

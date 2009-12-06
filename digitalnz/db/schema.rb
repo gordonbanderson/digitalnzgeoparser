@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091201141636) do
+ActiveRecord::Schema.define(:version => 20091206042731) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -64,22 +64,16 @@ ActiveRecord::Schema.define(:version => 20091201141636) do
     t.integer "cached_geo_search_id"
   end
 
-  create_table "calais_child_words", :force => true do |t|
-    t.integer  "calais_word_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "calais_entries", :force => true do |t|
     t.integer  "calais_child_word_id"
     t.integer  "calais_parent_word_id"
-    t.integer  "calais_submission_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "calais_parent_words", :force => true do |t|
-    t.integer  "calais_word_id"
+  create_table "calais_entries_submissions", :id => false, :force => true do |t|
+    t.integer  "calais_entry_id"
+    t.integer  "submission_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
