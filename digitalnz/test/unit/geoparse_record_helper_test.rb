@@ -26,6 +26,14 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         
         #Second level
         assert cws.include? 'Tay Street'
+        assert cws.include? 'Frank Arnold Coxhead'
+        assert cws.include? 'New Zealand'
+        assert cws.include? 'Bank of New Zealand'
+        assert cws.include? 'Union Bank of Australia'
+        
+        #Blanks should not appear
+        assert !(cws.include? '')
+        
     end
     
 end
