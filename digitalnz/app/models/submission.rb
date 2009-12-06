@@ -5,6 +5,8 @@ include GeoParserHelper
 class Submission < ActiveRecord::Base
   has_and_belongs_to_many :cached_geo_searches, :include => [:cached_geo_search_term, :accuracy]
   has_and_belongs_to_many :filtered_phrases, :include => [:filter_type, :phrase]
+  has_and_belongs_to_many :calais_entries
+  
   
   has_one :extent
   has_one :centroid
