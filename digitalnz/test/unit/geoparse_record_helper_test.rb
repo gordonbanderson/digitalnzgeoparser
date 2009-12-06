@@ -13,12 +13,12 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         parse_natlib_record(80282)
         cws = CalaisWord.find(:all).map{|c|c.word}
         for cw in cws
-           puts "CALAIS_WORD:#{cw}"
+           puts "CALAIS_WORD:*#{cw}*"
         end
         
         #Top level calais words
         assert cws.include? 'Person'
-        assert cws.include? 'Position'
+        assert cws.include? 'Facility'
         assert cws.include? 'Relations'
         assert cws.include? 'Company'
         assert cws.include? 'Country'
@@ -33,6 +33,12 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         
         #Blanks should not appear
         assert !(cws.include? '')
+        
+        #Check calais entries
+        entries = CalaisEntry.find(:all)
+        for entry in entries
+           puts entry.pretty_print 
+        end
         
     end
     
