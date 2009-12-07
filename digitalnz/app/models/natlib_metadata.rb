@@ -23,6 +23,7 @@ class NatlibMetadata < ActiveRecord::Base
   
   has_and_belongs_to_many :content_partners
   has_and_belongs_to_many :creators
+  has_and_belongs_to_many :contributors
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -117,6 +118,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.natlib_id = record_number
       metadata.title = result['dc']['title']
       
+      #Deal with potentially habtm creators
       creators = []
       dnz_creators = result['dc']['creator']
       if !dnz_creators.blank?
@@ -128,7 +130,18 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.creators = creators
       
       
-      metadata.contributor = result['dc']['contributor']
+      #Deal with potentially habtm contributors
+      contributors = []
+      dnz_contributors = result['dc']['contributor']
+      if !dnz_contributors.blank?
+          for contributor_string in dnz_contributors
+              contributor = Contributor.find_or_create(contributor_string)
+              contributors << contributor
+          end
+      end
+      metadata.contributors = contributors
+      
+      
       metadata.language = result['dc']['language']
       metadata.description = result['dc']['description']
       metadata.publisher = result['dc']['publisher']
