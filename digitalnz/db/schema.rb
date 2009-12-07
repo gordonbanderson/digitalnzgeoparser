@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207094206) do
+ActiveRecord::Schema.define(:version => 20091207101119) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -250,6 +250,13 @@ ActiveRecord::Schema.define(:version => 20091207094206) do
 
   create_table "formats", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "permalink"
+  end
+
+  create_table "formats_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "format_id"
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
