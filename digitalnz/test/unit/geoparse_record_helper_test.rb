@@ -100,6 +100,20 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Test that publishers are stored correctly in an hatbm table
+    def test_collection
+       parse_natlib_record 1188492
+       n = NatlibMetadata.find_by_natlib_id 1188492
+       collections = n.collections
+       
+       puts Collection.find(:all).to_yaml
+       
+       assert_equal 1, collections.length
+       assert_equal "University of Canterbury Digital Library", collections[0].name
+       assert_equal "university-of-canterbury-digital-library", collections[0].permalink
+    end
+    
+    
     def test_nil_parsing_error
        #86556 
     end
