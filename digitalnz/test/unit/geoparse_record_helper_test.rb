@@ -114,6 +114,20 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Test that languages are stored correctly in an hatbm table
+    def test_language
+       parse_natlib_record 27718
+       n = NatlibMetadata.find_by_natlib_id 27718
+       languages = n.languages
+       
+       puts Language.find(:all).to_yaml
+       
+       assert_equal 1, languages.length
+       assert_equal "en", languages[0].name
+       assert_equal "en", languages[0].permalink
+    end
+    
+    
     def test_nil_parsing_error
        #86556 
     end
