@@ -16,15 +16,29 @@ class ArchiveSearchesController < ApplicationController
     
     if request.method == :post
         filter_ids = params[:archive_search][:filter_ids]
+        @q = params[:archive_search][:search_text]
         if filter_ids.blank?
-            redirect_to search_archive_searches_url(
-                  :q=>params[:archive_search][:search_text]
-            )
+            redirect_to "/search/#{@q}"
+TRACE1
         else
-            redirect_to search_archive_searches_url(
-                  :q=>params[:archive_search][:search_text],
-                  :f=>params[:archive_search][:filter_ids].split(',')
-            )
+            
+            filter_param = []
+            filter_ids.gsub!(' ','')
+            for f in filter_ids.split(',')
+                logger.debug "FPARAM:#{f}"
+                if !f.blank?
+                    fp = "f[]=#{f}"
+                    filter_param << fp if fp !='f[]='
+                end
+            end
+            
+            logger.debug "FILTER PARAM"
+            logger.debug filter_param.to_yaml
+            
+            
+            
+            redirect_to "/search/#{@q}?#{filter_param.join('&').gsub('f[]=f','')}"
+            
         end
       return
     end
@@ -58,7 +72,7 @@ class ArchiveSearchesController < ApplicationController
     #Form the basics of the current query for facetting purposes
     @previous_params = ""
     @query_term = params[:q]
-    @previous_params << "?q=#{params[:q]}"
+    #@previous_params << "?q=#{params[:q]}"
     @previous_params << "&page=#{@page}"
     
     #If we have any filters we need to expand the query
