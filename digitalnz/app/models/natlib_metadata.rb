@@ -8,10 +8,7 @@ class NatlibMetadata < ActiveRecord::Base
   PARA_BREAK="\n\n"
   
   
-  belongs_to :tipe
-  has_many :relations
-  has_and_belongs_to_many :rights
-  has_many :record_dates
+
   
   has_one :submission
   
@@ -28,7 +25,9 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :identifiers
   has_and_belongs_to_many :formats
   has_and_belongs_to_many :placenames
-  
+  has_and_belongs_to_many :rights
+  has_and_belongs_to_many :relations
+  has_many :record_dates
   
   
   
@@ -325,15 +324,18 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.formats = formats
 
       #Relations
+      relations = []
       things = result['dc']['relation']
       if !things.blank?
         for name in things
           o = Relation::new
           o.name = name
-          o.natlib_metadata = metadata
+          relations << o
           o.save!
         end
       end
+      
+      metadata.relations = relations
 
       #Identifiers
       things = result['dc']['identifier']
