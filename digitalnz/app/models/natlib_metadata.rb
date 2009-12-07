@@ -27,6 +27,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :publishers
   has_and_belongs_to_many :collections
   has_and_belongs_to_many :languages
+  has_and_belongs_to_many :tipes
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -227,16 +228,21 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
         end
       end
       
-      dc_type = result['dc']['type']
-      if !dc_type.blank?
-        tipe = Tipe.find_by_name(dc_type)
-        if tipe.blank?
-          tipe = Tipe::new
-          tipe.name = dc_type
-          tipe.save!
-        end
-        metadata.tipe = tipe
+      dc_types = result['dc']['type']
+      tipes = []
+      if !dc_types.blank?
+          for dc_type in dc_types
+              tipe = Tipe.find_by_name(dc_type)
+              if tipe.blank?
+                tipe = Tipe::new
+                tipe.name = dc_type
+                tipe.save!
+              end
+              tipes << tipe
+          end
+        
       end
+      metadata.tipes = tipes
 
       metadata.thumbnail_url = result['dnz']['thumbnail_url']
       metadata.landing_url = result['dnz']['landing_url']
