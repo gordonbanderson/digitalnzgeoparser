@@ -51,10 +51,28 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     
     
     #Test the creation of the content partner field, as a duplciate issue was occuring with record 76092
-    def test_no_multiple_creator
+    def test_no_multiple_content_partner
         parse_natlib_record 76092
         n = NatlibMetadata.find_by_natlib_id(76092)
-        assert_equal "Alexander Turnbull Library", n.content_partner
+        
+        puts ContentPartner.find(:all).to_yaml
+        
+        names = ContentPartner.find(:all).map{|c| c.name}
+        
+        assert  names.include? "Alexander Turnbull Library"
+        assert  names.include? "Matapihi"
+    end
+    
+    
+    #Test that creators are pulled in correctly
+    def test_creator
+       parse_natlib_record 273830
+       n = NatlibMetadata.find_by_natlib_id 273830
+       names = n.creators
+       puts names.to_yaml
+       assert_equal 1, names.length
+       assert_equal "Brake, Brian (photographer)", names[0].name
+       assert_equal "brake-brian-photographer", names[0].permalink
     end
     
 end
