@@ -58,7 +58,7 @@ map.purchase 'geoparsed/coverages', :controller => 'natlib_metadatas', :action =
 map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
 
 #Search URL - keep it short
-map.purchase 'search/:q', :controller => 'archive_search_controller', :action => 'q'
+map.purchase 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
 
 #Use 'collection' for methods that operate on the whole of the collection, in this case
 #a search of the digital nz api
