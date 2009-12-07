@@ -70,7 +70,9 @@
 	</ul>
 	<h4>Content Partner</h4>
 	<ul>
-	<li><%=@natlib_metadata.content_partner %></li>
+	<%for content_partner in @natlib_metadata.content_partners%>
+	<li><%=content_partner.name %></li>
+	<%end%>
 	</ul>
 	<h4>Collection</h4>
 	<ul>
