@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207091152) do
+ActiveRecord::Schema.define(:version => 20091207094206) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -97,10 +97,16 @@ ActiveRecord::Schema.define(:version => 20091207091152) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
-    t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "permalink"
+  end
+
+  create_table "categories_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "centroids", :force => true do |t|
@@ -249,28 +255,15 @@ ActiveRecord::Schema.define(:version => 20091207091152) do
     t.datetime "updated_at"
   end
 
-  create_table "geoparsed_locations", :id => false, :force => true do |t|
-    t.integer "submission_id",        :default => 0, :null => false
-    t.integer "natlib_metadata_id"
-    t.text    "title"
-    t.integer "cached_geo_search_id"
-    t.string  "search_term"
-    t.integer "accuracy_id"
-    t.string  "address"
-  end
-
-  create_table "geoparsed_records", :id => false, :force => true do |t|
-    t.text    "title"
-    t.text    "landing_url"
-    t.text    "thumbnail_url"
-    t.text    "description"
-    t.boolean "pending",       :default => true
-    t.integer "natlib_id"
-    t.float   "area"
-  end
-
   create_table "identifiers", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "permalink"
+  end
+
+  create_table "identifiers_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "identifier_id"
     t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -402,11 +395,6 @@ ActiveRecord::Schema.define(:version => 20091207091152) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "permalink"
-  end
-
-  create_table "search_term_tags", :id => false, :force => true do |t|
-    t.string  "search_text"
-    t.integer "c",           :limit => 8, :default => 0, :null => false
   end
 
   create_table "stop_words", :force => true do |t|
