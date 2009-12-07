@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207074122) do
+ActiveRecord::Schema.define(:version => 20091207084748) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -288,7 +288,6 @@ ActiveRecord::Schema.define(:version => 20091207074122) do
     t.text     "title"
     t.text     "landing_url"
     t.text     "thumbnail_url"
-    t.integer  "tipe_id"
     t.boolean  "circa_date"
     t.integer  "natlib_id"
     t.datetime "created_at"
@@ -332,6 +331,20 @@ ActiveRecord::Schema.define(:version => 20091207074122) do
   create_table "natlib_metadatas_rights", :force => true do |t|
     t.integer "right_id"
     t.integer "natlib_metadata_id"
+  end
+
+  create_table "natlib_metadatas_subjects", :id => false, :force => true do |t|
+    t.integer  "subject_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "natlib_metadatas_tipes", :id => false, :force => true do |t|
+    t.integer  "tipe_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "phrase_frequencies", :force => true do |t|
@@ -404,7 +417,6 @@ ActiveRecord::Schema.define(:version => 20091207074122) do
 
   create_table "subjects", :force => true do |t|
     t.string   "name"
-    t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "permalink"
