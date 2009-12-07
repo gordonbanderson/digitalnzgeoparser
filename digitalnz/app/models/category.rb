@@ -1,4 +1,5 @@
-class Categories < ActiveRecord::Base
-  belongs_to :natlib_metadata
+class Category < ActiveRecord::Base
+  has_and_belongs_to_many :natlib_metadatas
+  has_permalink :name, :update => true
   
 end
