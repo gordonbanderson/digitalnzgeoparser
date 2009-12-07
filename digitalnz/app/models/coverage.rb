@@ -1,6 +1,6 @@
 class Coverage < ActiveRecord::Base
     has_permalink :name, :update => true
-    belongs_to :natlib_metadata
+    has_and_belongs_to_many :natlib_metadatas
     
 
 end
