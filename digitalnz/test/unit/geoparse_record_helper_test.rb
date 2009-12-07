@@ -196,6 +196,19 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    def test_formats
+       parse_natlib_record 102375
+       n = NatlibMetadata.find_by_natlib_id 102375
+       items = n.formats
+       puts items.to_yaml 
+       names = items.map{|c| c.name}
+       perms = items.map{|i| i.permalink}
+       assert names.include? '1 b&w original negative(s). Cellulosic film negative..'
+       assert perms.include? '1-bw-original-negatives-cellulosic-film-negative'
+       
+    end
+    
+    
     def test_categories
        assert_equal "NOTE TO SELF", "USED??" 
     end
