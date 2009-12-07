@@ -13,8 +13,6 @@ class NatlibMetadata < ActiveRecord::Base
   has_many :formats
   has_many :relations
   has_and_belongs_to_many :rights
-  has_many :identifiers
-  has_many :categories
   has_many :record_dates
   
   has_one :submission
@@ -28,6 +26,10 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :tipes
   has_and_belongs_to_many :subjects
   has_and_belongs_to_many :coverages
+  has_and_belongs_to_many :categories
+  has_and_belongs_to_many :identifiers
+  
+  
   
   
   #This is text that will be checked for geo locations
@@ -325,14 +327,17 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
 
       #Identifiers
       things = result['dc']['identifier']
+      identifiers = []
       if !things.blank?
         for name in things
           o = Identifier::new
           o.name = name
-          o.natlib_metadata = metadata
+          identifiers << o
           o.save!
         end
       end
+      
+      metadata.identifiers = identifiers
 
       metadata.save!
       metadata
