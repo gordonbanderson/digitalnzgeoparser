@@ -9,7 +9,6 @@ class NatlibMetadata < ActiveRecord::Base
   
   
   belongs_to :tipe
-  has_many :subjects
   has_many :coverages
   has_many :placenames
   has_many :formats
@@ -28,6 +27,8 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :collections
   has_and_belongs_to_many :languages
   has_and_belongs_to_many :tipes
+  has_and_belongs_to_many :subjects
+  
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -262,15 +263,18 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.content_partners = content_partners
 
       #Subjects
-      subjects = result['dc']['subject']
-      if !subjects.blank?
-        for subject in subjects
+      subjects_dc = result['dc']['subject']
+      subjects = []
+      if !subjects_dc.blank?
+        for subject in subjects_dc
           s = Subject::new
           s.name = subject
-          s.natlib_metadata = metadata
           s.save!
+          subjects << s
         end
       end
+      
+      metadata.subjects = subjects
 
       #Coverages
       coverages = result['dc']['coverage']
