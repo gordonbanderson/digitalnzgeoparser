@@ -183,6 +183,23 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        assert coverages.map{|c|c.permalink}.include? 'basin-reserve'
     end
     
+    def test_identifiers
+       parse_natlib_record 85367
+       n = NatlibMetadata.find_by_natlib_id 85367
+       items = n.identifiers
+       puts items.to_yaml 
+       names = items.map{|c| c.name}
+       perms = items.map{|i| i.permalink}
+       assert names.include? 'timeframes:48156'
+       assert perms.include? 'timeframes48156'
+       
+    end
+    
+    
+    def test_categories
+       assert_equal "NOTE TO SELF", "USED??" 
+    end
+    
     
     def test_nil_parsing_error
        #86556 
