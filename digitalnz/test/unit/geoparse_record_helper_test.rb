@@ -170,6 +170,20 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Check coverages for habtm
+    def test_coverages
+       parse_natlib_record 85367
+       n = NatlibMetadata.find_by_natlib_id 85367
+       coverages = n.coverages
+       puts n.to_yaml 
+       names = coverages.map{|c| c.name}
+       assert names.include? '1950'
+       assert names.include? 'Basin Reserve'
+       
+       assert coverages.map{|c|c.permalink}.include? 'basin-reserve'
+    end
+    
+    
     def test_nil_parsing_error
        #86556 
     end
