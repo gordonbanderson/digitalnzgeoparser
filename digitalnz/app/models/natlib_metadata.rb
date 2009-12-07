@@ -25,6 +25,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :creators
   has_and_belongs_to_many :contributors
   has_and_belongs_to_many :publishers
+  has_and_belongs_to_many :collections
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -226,14 +227,19 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
 
       metadata.thumbnail_url = result['dnz']['thumbnail_url']
       metadata.landing_url = result['dnz']['landing_url']
-      metadata.collection = result['dnz']['collection']
+      
+      collections = []
+      for collection_string in result['dnz']['collection']
+          collection = Collection.find_or_create(collection_string)
+          collections << collection
+      end
+      metadata.collections = collections
       
       content_partners = []
       for content_partner_string in result['dnz']['content_partner']
           content_partner = ContentPartner.find_or_create(content_partner_string)
           content_partners << content_partner
       end
-      
       metadata.content_partners = content_partners
 
       #Subjects
