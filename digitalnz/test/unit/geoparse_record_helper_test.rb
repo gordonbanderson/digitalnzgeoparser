@@ -75,6 +75,20 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        assert_equal "brake-brian-photographer", names[0].permalink
     end
     
+    #Test that contributors are stored correctly in an hatbm table
+    def test_contributor
+       parse_natlib_record 1319589
+       n = NatlibMetadata.find_by_natlib_id 1319589
+       contributors = n.contributors
+       assert_equal 1, contributors.length
+       assert_equal "Women's Cricket Association.", contributors[0].name
+       assert_equal "womens-cricket-association", contributors[0].permalink
+    end
+    
+    
+    def test_nil_parsing_error
+       #86556 
+    end
 end
 
 =begin
