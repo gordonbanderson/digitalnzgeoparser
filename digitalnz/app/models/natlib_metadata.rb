@@ -9,7 +9,6 @@ class NatlibMetadata < ActiveRecord::Base
   
   
   belongs_to :tipe
-  has_many :coverages
   has_many :placenames
   has_many :formats
   has_many :relations
@@ -28,6 +27,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :languages
   has_and_belongs_to_many :tipes
   has_and_belongs_to_many :subjects
+  has_and_belongs_to_many :coverages
   
   
   #This is text that will be checked for geo locations
@@ -277,15 +277,17 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.subjects = subjects
 
       #Coverages
-      coverages = result['dc']['coverage']
-      if !coverages.blank?
-        for coverage in coverages 
+      coverages_dc = result['dc']['coverage']
+      coverages = []
+      if !coverages_dc.blank?
+        for coverage in coverages_dc
           c = Coverage::new
           c.name = coverage
-          c.natlib_metadata = metadata
+          coverages << c
           c.save!
         end
       end
+      metadata.coverages = coverages
 
       #Placenames
       placenames = result['dnz']['placename']
