@@ -76,7 +76,9 @@
 	</ul>
 	<h4>Collection</h4>
 	<ul>
-	<li><%=@natlib_metadata.collection%></li>
+		<%for collection in @natlib_metadata.collections%>
+			<li><%=collection.name%></li>
+		<%end%>
 	</ul>
 
 	<%if !@natlib_metadata.coverages.blank?%>
