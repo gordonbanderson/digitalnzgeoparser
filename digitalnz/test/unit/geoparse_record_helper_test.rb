@@ -196,6 +196,28 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    def test_placenames
+       
+        parse_natlib_record 14686
+        n = NatlibMetadata.find_by_natlib_id 14686
+        items = n.placenames
+        puts items.to_yaml 
+        names = items.map{|c| c.name}
+        perms = items.map{|i| i.permalink}
+        
+        assert_equal 5, names.length
+        assert names.include? 'Oceania'
+        assert names.include? 'Auckland City'
+        assert names.include? 'Auckland Region'
+        assert names.include? 'North Island'
+        assert names.include? 'New Zealand'
+
+        assert perms.include? 'new-zealand'
+        
+        
+    end
+    
+    
     def test_formats
        parse_natlib_record 102375
        n = NatlibMetadata.find_by_natlib_id 102375
