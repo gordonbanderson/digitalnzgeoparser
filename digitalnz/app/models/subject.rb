@@ -1,3 +1,5 @@
 class Subject < ActiveRecord::Base
-  belongs_to :natlib_metadata
+  has_permalink :name, :update => true
+  has_and_belongs_to_many :natlib_metadatas
+  
 end
