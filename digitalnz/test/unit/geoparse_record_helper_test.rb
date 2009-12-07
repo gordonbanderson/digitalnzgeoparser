@@ -144,6 +144,32 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Test the formats which were preivously getting mangled to yaml
+    def test_subjects
+       parse_natlib_record 102379 #This record has 4 types
+       n = NatlibMetadata.find_by_natlib_id 102379
+       subjects = n.subjects
+       puts subjects.to_yaml
+       subject_names = subjects.map{|s| s.name}
+       subject_perms = subjects.map{|s| s.permalink}
+       
+       assert_equal 6, subjects.length
+       assert subject_names.include? 'Wellington Cricket Club'
+       assert subject_names.include? 'Midland Cricket Club'
+       assert subject_names.include? 'Basin Reserve'
+       assert subject_names.include? 'Cricket matches'
+       assert subject_names.include? 'Cricket - New Zealand - Wellington Region'
+       assert subject_names.include? 'Cricket - Societies, etc.'
+       
+       assert subject_perms.include? 'basin-reserve'
+       assert subject_perms.include? 'midland-cricket-club'
+       assert subject_perms.include? 'wellington-cricket-club'
+       assert subject_perms.include? 'cricket-matches'
+       assert subject_perms.include? 'cricket-societies-etc'
+       assert subject_perms.include? 'cricket-new-zealand-wellington-region'
+    end
+    
+    
     def test_nil_parsing_error
        #86556 
     end
