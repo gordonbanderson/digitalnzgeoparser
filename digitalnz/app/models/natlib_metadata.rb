@@ -21,6 +21,9 @@ class NatlibMetadata < ActiveRecord::Base
   
   has_one :submission
   
+  has_and_belongs_to_many :content_partners
+  has_and_belongs_to_many :creators
+  
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
     if return_array
@@ -97,6 +100,11 @@ date: "2009-05-19T00:00:00.000Z"
 thumbnail_url: http://horowhenua.kete.net.nz/image_files/0000/0008/2572/bio_photo_medium.jpg
 description: ""
 display_url: http://horowhenua.kete.net.nz/site/images/show/15801-me-and-my-whanau
+
+
+http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a1161979b7
+
+
 =end
   
   
@@ -108,7 +116,18 @@ display_url: http://horowhenua.kete.net.nz/site/images/show/15801-me-and-my-whan
       metadata = NatlibMetadata::new if metadata.blank?
       metadata.natlib_id = record_number
       metadata.title = result['dc']['title']
-      metadata.creator = result['dc']['creator']
+      
+      creators = []
+      dnz_creators = result['dc']['creator']
+      if !dnz_creators.blank?
+          for creator_string in dnz_creators
+              creator = Creator.find_or_create(creator_string)
+              creators << creator
+          end
+      end
+      metadata.creators = creators
+      
+      
       metadata.contributor = result['dc']['contributor']
       metadata.language = result['dc']['language']
       metadata.description = result['dc']['description']
@@ -183,7 +202,14 @@ display_url: http://horowhenua.kete.net.nz/site/images/show/15801-me-and-my-whan
       metadata.thumbnail_url = result['dnz']['thumbnail_url']
       metadata.landing_url = result['dnz']['landing_url']
       metadata.collection = result['dnz']['collection']
-      metadata.content_partner = result['dnz']['content_partner']
+      
+      content_partners = []
+      for content_partner_string in result['dnz']['content_partner']
+          content_partner = ContentPartner.find_or_create(content_partner_string)
+          content_partners << content_partner
+      end
+      
+      metadata.content_partners = content_partners
 
       #Subjects
       subjects = result['dc']['subject']
