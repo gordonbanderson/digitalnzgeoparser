@@ -128,6 +128,22 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Test the formats which were preivously getting mangled to yaml
+    def test_types
+       parse_natlib_record 166667 #This record has 4 types
+       n = NatlibMetadata.find_by_natlib_id 166667
+       tipes = n.tipes
+       type_names = tipes.map{|t| t.name}
+
+       
+       assert type_names.include? 'PhysicalObject'
+       assert type_names.include? 'CulturalObject'
+       assert type_names.include? 'watercolours'
+       assert type_names.include? 'works of art'
+       assert_equal 4, tipes.length 
+    end
+    
+    
     def test_nil_parsing_error
        #86556 
     end
