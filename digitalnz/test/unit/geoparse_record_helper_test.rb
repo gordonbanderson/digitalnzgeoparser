@@ -211,6 +211,9 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
  
        assert perms.include? 'digitalnz'
        assert perms.include? 'httpcollectionstepapagovtnzdb_imagesdigitalnzthumbjpgwidth150height150irn88414'
+       
+       parse_natlib_record 272650
+       assert_equal 2, Relation.find(:all).length
     end
     
     
