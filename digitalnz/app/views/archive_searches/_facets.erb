@@ -7,7 +7,7 @@
     <%if facet_already_chosen
         child_facet = @filters[facet_parent_name]
         fparam = "&f[]=#{child_facet.id}"
-        link = '/archive_searches/search'+@previous_params
+        link = '/search/'+@archive_search.search_text+'/?'+@previous_params
         link << @facet_params_chosen.gsub(fparam,'')
         %>
         <h5><a href="<%=link%>"><%=facet_parent_name.camelize%></a></h5>
@@ -31,7 +31,7 @@
     <ul>
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
-        link = '/archive_searches/search'+@previous_params+'&f[]='+child_facet.id.to_s
+        link = '/search/'+@archive_search.search_text+'/?' + @previous_params+'&f[]='+child_facet.id.to_s
         link << @facet_params_chosen
         %>
         <li>
