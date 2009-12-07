@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207073232) do
+ActiveRecord::Schema.define(:version => 20091207074122) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -269,9 +269,22 @@ ActiveRecord::Schema.define(:version => 20091207073232) do
     t.datetime "updated_at"
   end
 
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.string   "permalink"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "languages_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "language_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "natlib_metadatas", :force => true do |t|
     t.text     "description"
-    t.text     "language"
     t.text     "title"
     t.text     "landing_url"
     t.text     "thumbnail_url"
