@@ -113,6 +113,22 @@ CREATE TABLE `centroids` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `collections` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `collections_natlib_metadatas` (
+  `collection_id` int(11) DEFAULT NULL,
+  `natlib_metadata_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `content_partners` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -265,7 +281,6 @@ CREATE TABLE `natlib_metadatas` (
   `description` text COLLATE utf8_bin,
   `language` text COLLATE utf8_bin,
   `title` text COLLATE utf8_bin,
-  `collection` text COLLATE utf8_bin,
   `landing_url` text COLLATE utf8_bin,
   `thumbnail_url` text COLLATE utf8_bin,
   `tipe_id` int(11) DEFAULT NULL,
@@ -552,3 +567,5 @@ INSERT INTO schema_migrations (version) VALUES ('20091207061557');
 INSERT INTO schema_migrations (version) VALUES ('20091207070143');
 
 INSERT INTO schema_migrations (version) VALUES ('20091207071252');
+
+INSERT INTO schema_migrations (version) VALUES ('20091207073232');

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207071252) do
+ActiveRecord::Schema.define(:version => 20091207073232) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -108,6 +108,20 @@ ActiveRecord::Schema.define(:version => 20091207071252) do
     t.float    "longitude"
     t.string   "extent_type"
     t.integer  "submission_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "collections", :force => true do |t|
+    t.string   "name"
+    t.string   "permalink"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "collections_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -259,7 +273,6 @@ ActiveRecord::Schema.define(:version => 20091207071252) do
     t.text     "description"
     t.text     "language"
     t.text     "title"
-    t.text     "collection"
     t.text     "landing_url"
     t.text     "thumbnail_url"
     t.integer  "tipe_id"
