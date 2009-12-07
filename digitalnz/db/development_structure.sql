@@ -129,6 +129,22 @@ CREATE TABLE `content_partners_natlib_metadatas` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `contributors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `permalink` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `contributors_natlib_metadatas` (
+  `contributor_id` int(11) DEFAULT NULL,
+  `natlib_metadata_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `abbreviation` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -246,7 +262,6 @@ CREATE TABLE `identifiers` (
 
 CREATE TABLE `natlib_metadatas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `contributor` text COLLATE utf8_bin,
   `description` text COLLATE utf8_bin,
   `language` text COLLATE utf8_bin,
   `publisher` text COLLATE utf8_bin,
@@ -518,3 +533,5 @@ INSERT INTO schema_migrations (version) VALUES ('20091206042731');
 INSERT INTO schema_migrations (version) VALUES ('20091206074241');
 
 INSERT INTO schema_migrations (version) VALUES ('20091207061557');
+
+INSERT INTO schema_migrations (version) VALUES ('20091207070143');
