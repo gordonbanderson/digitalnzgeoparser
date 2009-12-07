@@ -196,6 +196,24 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    def test_relations
+       #272650
+       parse_natlib_record 272650
+       n = NatlibMetadata.find_by_natlib_id 272650
+       items = n.relations
+       puts items.to_yaml 
+       names = items.map{|c| c.name}
+       perms = items.map{|i| i.permalink}
+       
+       assert_equal 2, names.length
+       assert names.include? 'DigitalNZ'
+       assert names.include? 'http://collections.tepapa.govt.nz/db_images/digitalnzthumb.jpg?width=150&height=150&irn=88414'
+ 
+       assert perms.include? 'digitalnz'
+       assert perms.include? 'httpcollectionstepapagovtnzdb_imagesdigitalnzthumbjpgwidth150height150irn88414'
+    end
+    
+    
     def test_placenames
        
         parse_natlib_record 14686
