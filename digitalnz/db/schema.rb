@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091207101119) do
+ActiveRecord::Schema.define(:version => 20091207102152) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -319,6 +319,13 @@ ActiveRecord::Schema.define(:version => 20091207101119) do
     t.string   "content_partner"
     t.boolean  "circa_date"
     t.integer  "natlib_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "natlib_metadatas_placenames", :id => false, :force => true do |t|
+    t.integer  "placename_id"
+    t.integer  "natlib_metadata_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
