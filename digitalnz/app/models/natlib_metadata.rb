@@ -26,6 +26,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :contributors
   has_and_belongs_to_many :publishers
   has_and_belongs_to_many :collections
+  has_and_belongs_to_many :languages
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -144,7 +145,19 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata.contributors = contributors
       
       
-      metadata.language = result['dc']['language']
+      
+      #Deal with potentially habtm languages
+      languages = []
+      dc_languages = result['dc']['language']
+      if !dc_languages.blank?
+          for language_string in dc_languages
+              language = Language.find_or_create(language_string)
+              languages << language
+          end
+      end
+      metadata.languages = languages
+      
+      
       metadata.description = result['dc']['description']
 
       #Deal with potentially habtm publishers
