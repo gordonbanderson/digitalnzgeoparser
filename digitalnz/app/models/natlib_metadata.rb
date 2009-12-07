@@ -24,6 +24,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :content_partners
   has_and_belongs_to_many :creators
   has_and_belongs_to_many :contributors
+  has_and_belongs_to_many :publishers
   
   #This is text that will be checked for geo locations
   def geo_text(return_array=false)
@@ -144,7 +145,18 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       
       metadata.language = result['dc']['language']
       metadata.description = result['dc']['description']
-      metadata.publisher = result['dc']['publisher']
+
+      #Deal with potentially habtm publishers
+      publishers = []
+      dnz_publishers = result['dc']['publisher']
+      if !dnz_publishers.blank?
+          for publisher_string in dnz_publishers
+              publisher = Publisher.find_or_create(publisher_string)
+              publishers << publisher
+          end
+      end
+      metadata.publishers = publishers
+      
       metadata.pending = false
       record_dates = result['dc']['date']
 
