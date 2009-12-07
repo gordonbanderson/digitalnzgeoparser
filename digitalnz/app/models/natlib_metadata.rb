@@ -10,7 +10,6 @@ class NatlibMetadata < ActiveRecord::Base
   
   belongs_to :tipe
   has_many :placenames
-  has_many :formats
   has_many :relations
   has_and_belongs_to_many :rights
   has_many :record_dates
@@ -28,6 +27,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :coverages
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :identifiers
+  has_and_belongs_to_many :formats
   
   
   
@@ -304,15 +304,21 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
 
 
       #Rights
-      formats = result['dc']['format']
-      if !formats.blank?
-        for format in formats
+      formats_dc = result['dc']['format']
+      puts formats_dc.to_yaml
+      
+      
+      formats = []
+      if !formats_dc.blank?
+        for format in formats_dc
           o = Format::new
           o.name = format
-          o.natlib_metadata = metadata
+          formats << o
           o.save!
         end
       end
+      
+      metadata.formats = formats
 
       #Relations
       things = result['dc']['relation']
