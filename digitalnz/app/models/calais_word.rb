@@ -12,9 +12,7 @@ class CalaisWord < ActiveRecord::Base
   
   def self.find_or_create word
     cw = CalaisWord.find_by_word(word)
-    if cw.blank?
-      cw = CalaisWord::create :word => word  
-    end
+    cw = CalaisWord::create :word => word   if cw.blank?
     cw  
   end
 end
