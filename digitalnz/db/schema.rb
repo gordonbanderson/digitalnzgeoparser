@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091206042731) do
+ActiveRecord::Schema.define(:version => 20091207061557) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -119,6 +119,13 @@ ActiveRecord::Schema.define(:version => 20091206042731) do
     t.datetime "updated_at"
   end
 
+  create_table "content_partners_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "content_partner_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "countries", :force => true do |t|
     t.string   "abbreviation"
     t.datetime "created_at"
@@ -140,6 +147,20 @@ ActiveRecord::Schema.define(:version => 20091206042731) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "permalink"
+  end
+
+  create_table "creators", :force => true do |t|
+    t.string   "name"
+    t.string   "permalink"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "creators_natlib_metadatas", :id => false, :force => true do |t|
+    t.integer  "creator_id"
+    t.integer  "natlib_metadata_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "extents", :force => true do |t|
@@ -208,8 +229,7 @@ ActiveRecord::Schema.define(:version => 20091206042731) do
     t.text    "landing_url"
     t.text    "thumbnail_url"
     t.text    "description"
-    t.text    "content_partner"
-    t.boolean "pending",         :default => true
+    t.boolean "pending",       :default => true
     t.integer "natlib_id"
     t.float   "area"
   end
@@ -222,7 +242,6 @@ ActiveRecord::Schema.define(:version => 20091206042731) do
   end
 
   create_table "natlib_metadatas", :force => true do |t|
-    t.text     "creator"
     t.text     "contributor"
     t.text     "description"
     t.text     "language"
@@ -232,15 +251,13 @@ ActiveRecord::Schema.define(:version => 20091206042731) do
     t.text     "landing_url"
     t.text     "thumbnail_url"
     t.integer  "tipe_id"
-    t.text     "content_partner"
     t.boolean  "circa_date"
     t.integer  "natlib_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "pending",         :default => true
+    t.boolean  "pending",       :default => true
   end
 
-  add_index "natlib_metadatas", ["content_partner"], :name => "natlib_content_partner_index"
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
   add_index "natlib_metadatas", ["title"], :name => "natlib_title_index"
 
