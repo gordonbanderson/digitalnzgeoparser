@@ -1,4 +1,4 @@
 class Placename < ActiveRecord::Base
-  belongs_to :natlib_metadata
-  
+    has_and_belongs_to_many :natlib_metadatas
+    has_permalink :name, :update => true  
 end
