@@ -170,6 +170,36 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Subject numbers - 71,75,391
+    #71 is 2025,
+    #75 is 2024
+    #391 is 9695
+    #+------+-----------+
+    #| id   | natlib_id |
+    #+------+-----------+
+    #| 2024 |     93865 |
+    #| 2025 |     93867 |
+    #| 9695 |    105255 |
+    def test_duplicate_subjects
+        parse_natlib_record 105255
+        n1 = NatlibMetadata.find_by_natlib_id 105255
+        puts "TRACE1"
+        puts Subject.find(:all).to_yaml
+        
+        
+        parse_natlib_record 93867
+        n2 = NatlibMetadata.find_by_natlib_id 93867
+        puts Subject.find(:all).to_yaml
+        
+        puts "T1:"+n1.subjects.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.subjects.map{|s|s.name}.join(', ')
+        puts "T3"+Subject.find(:all).map{|s|s.name}.join(', ')
+        
+        tramping_subjects = Subject.find_all_by_name('Tramping')
+        assert_equal 1, tramping_subjects.length
+        
+    end
+    
     #Check coverages for habtm
     def test_coverages
        parse_natlib_record 85367
