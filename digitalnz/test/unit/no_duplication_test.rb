@@ -23,11 +23,13 @@ has_and_belongs_to_many :relations
     #Check several classes for non duplication of names
     def test_no_duplicate_names
         for class_name in [
+            'Coverage',
+            
+            'Collection',
+            
             'Category',
             'ContentPartner',
             'Contributor',
-            'Coverage',
-            'Collection',
             'Format',
             'Identifier',
             
@@ -44,12 +46,17 @@ has_and_belongs_to_many :relations
             
             clazz = class_name.constantize
             c1 = clazz.send('create', {:name => 'Test Duplication'})
+            
+            
+
             begin
+                #This should fail
+                puts "Checking:#{class_name}"
                 c2 = clazz.send('create', {:name => 'Test Duplication'})
                 fail "Duplication should not happen"
-                #This should fail
             rescue
-                assert_equal nil, c2
+                #Invalid due to uniqueness check
+                assert_equal false, c2.valid?
             end
         end
     end
