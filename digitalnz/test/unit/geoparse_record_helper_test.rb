@@ -234,6 +234,8 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
 
         coverages = Coverage.find_all_by_name('South Island')
         assert_equal 1, coverages.length
+        
+        assert_equal 2, coverages[0].natlib_metadatas.length
     end
     
     
