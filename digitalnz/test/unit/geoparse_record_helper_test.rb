@@ -442,6 +442,26 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #| en      |               26377 |
+    #| en      |               26376 |
+    def test_duplicate_placenames
+        parse_natlib_record 26377
+        n1 = NatlibMetadata.find_by_natlib_id 26377
+        parse_natlib_record 26376
+        n2 = NatlibMetadata.find_by_natlib_id 26376
+        
+        puts "T1:"+n1.placenames.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.placenames.map{|s|s.name}.join(', ')
+        puts "T3"+Placename.find(:all).map{|s|s.name}.join(', ')
+        
+        things = Placename.find_all_by_name('Auckland Region (N.Z.)')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+        
+    end
+    
+    
     def test_formats
        parse_natlib_record 102375
        n = NatlibMetadata.find_by_natlib_id 102375
