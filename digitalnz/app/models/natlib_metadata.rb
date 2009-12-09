@@ -14,7 +14,7 @@ class NatlibMetadata < ActiveRecord::Base
   
   has_and_belongs_to_many :content_partners
   has_and_belongs_to_many :creators
-  has_and_belongs_to_many :contributors
+  has_and_belongs_to_many :contributors #Duplicate tested
   has_and_belongs_to_many :publishers
   has_and_belongs_to_many :collections
   has_and_belongs_to_many :languages
@@ -23,7 +23,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :coverages #Duplicate Tested
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :identifiers #All unique?
-  has_and_belongs_to_many :formats
+  has_and_belongs_to_many :formats #Duplication tested
   has_and_belongs_to_many :placenames
   has_and_belongs_to_many :rights
   has_and_belongs_to_many :relations
