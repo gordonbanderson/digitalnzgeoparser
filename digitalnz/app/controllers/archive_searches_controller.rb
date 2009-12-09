@@ -19,7 +19,6 @@ class ArchiveSearchesController < ApplicationController
         @q = params[:archive_search][:search_text]
         if filter_ids.blank?
             redirect_to "/search/#{@q}"
-TRACE1
         else
             
             filter_param = []
