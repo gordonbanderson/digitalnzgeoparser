@@ -27,7 +27,7 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :identifiers #All unique?
   has_and_belongs_to_many :formats #Duplication tested
   has_and_belongs_to_many :rights #NO SAMPLES IN DEV DB - FIXME CHECK PASTIE
-  has_and_belongs_to_many :relations
+  has_and_belongs_to_many :relations #Duplication tested
  
   has_many :record_dates
   
