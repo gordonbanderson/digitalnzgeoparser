@@ -19,10 +19,10 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :collections
   has_and_belongs_to_many :languages
   has_and_belongs_to_many :tipes
-  has_and_belongs_to_many :subjects
-  has_and_belongs_to_many :coverages
+  has_and_belongs_to_many :subjects #Duplicate Tested
+  has_and_belongs_to_many :coverages #Duplicate Tested
   has_and_belongs_to_many :categories
-  has_and_belongs_to_many :identifiers
+  has_and_belongs_to_many :identifiers #All unique?
   has_and_belongs_to_many :formats
   has_and_belongs_to_many :placenames
   has_and_belongs_to_many :rights
@@ -312,8 +312,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       formats = []
       if !formats_dc.blank?
         for format in formats_dc
-          o = Format::new
-          o.name = format
+          o = Format.find_or_create format
           formats << o
           o.save!
         end
