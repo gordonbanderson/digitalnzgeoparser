@@ -245,6 +245,24 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        assert_equal 4, tipes.length 
     end
     
+    #| Albumen photoprints |               89747 |
+    #| Albumen photoprints |               76103 |
+    def test_duplicate_types
+        parse_natlib_record 89747
+        n1 = NatlibMetadata.find_by_natlib_id 89747
+        parse_natlib_record 76103
+        n2 = NatlibMetadata.find_by_natlib_id 76103
+        
+        puts "T1:"+n1.content_partners.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.content_partners.map{|s|s.name}.join(', ')
+        puts "T3"+Tipe.find(:all).map{|s|s.name}.join(', ')
+        
+        things = Tipe.find_all_by_name('Albumen photoprints')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+    end
+    
     
     #Test the formats which were preivously getting mangled to yaml
     def test_subjects
