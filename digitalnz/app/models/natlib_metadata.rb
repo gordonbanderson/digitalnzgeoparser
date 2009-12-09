@@ -269,8 +269,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       subjects = []
       if !subjects_dc.blank?
         for subject in subjects_dc
-          s = Subject::new
-          s.name = subject
+          s = Subject.find_or_create subject
           s.save!
           subjects << s
         end
