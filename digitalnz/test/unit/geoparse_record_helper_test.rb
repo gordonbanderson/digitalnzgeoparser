@@ -64,6 +64,25 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #| Alexander Turnbull Library |               81797 |
+    #| Alexander Turnbull Library |               97680 |
+    def test_duplicate_content_partners
+        parse_natlib_record 81797
+        n1 = NatlibMetadata.find_by_natlib_id 81797
+        parse_natlib_record 97680
+        n2 = NatlibMetadata.find_by_natlib_id 97680
+        
+        puts "T1:"+n1.content_partners.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.content_partners.map{|s|s.name}.join(', ')
+        puts "T3"+ContentPartner.find(:all).map{|s|s.name}.join(', ')
+        
+        things = ContentPartner.find_all_by_name('Alexander Turnbull Library')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+        
+    end   
+    
     #Test that creators are pulled in correctly
     def test_creator
        parse_natlib_record 273830
