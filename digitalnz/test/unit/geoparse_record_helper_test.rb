@@ -94,6 +94,26 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        assert_equal "brake-brian-photographer", names[0].permalink
     end
     
+    
+    #| American Photo Company, fl 1870s-1890s             |               89766 |
+    #| American Photo Company, fl 1870s-1890s             |               89765 |
+    def test_duplicate_creators
+        parse_natlib_record 89766
+        n1 = NatlibMetadata.find_by_natlib_id 89766
+        parse_natlib_record 89765
+        n2 = NatlibMetadata.find_by_natlib_id 89765
+        
+        puts "T1:"+n1.content_partners.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.content_partners.map{|s|s.name}.join(', ')
+        puts "T3"+Creator.find(:all).map{|s|s.name}.join(', ')
+        
+        things = Creator.find_all_by_name('American Photo Company, fl 1870s-1890s')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+        
+    end
+    
     #Test that contributors are stored correctly in an hatbm table
     def test_contributor
        parse_natlib_record 1319589
