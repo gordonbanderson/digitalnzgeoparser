@@ -252,18 +252,18 @@ class NatlibMetadatasController < ApplicationController
     @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
 
     #Default ordering if none provied
-    @order = 'content_partner, title'
+    @order = 'title'
     
     #Alter order above depending on parameters
     @order_requested = params[:order]
     conditions = []
     
     if @order_requested == 'lowest-area'
-        @order = 'area,content_partner, title'
+        @order = 'area,title'
         conditions = ["area is not ?", nil]
         
     elsif @order_requested == 'highest-area'
-        @order = 'area desc,content_partner, title'
+        @order = 'area desc, title'
         conditions = ["area is not ?", nil]
         
     elsif @order_requested == 'no-places-found'
