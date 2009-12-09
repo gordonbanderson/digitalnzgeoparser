@@ -304,7 +304,31 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        perms = items.map{|i| i.permalink}
        assert names.include? '1 b&w original negative(s). Cellulosic film negative..'
        assert perms.include? '1-bw-original-negatives-cellulosic-film-negative'
-       
+    end
+    
+    
+    #Check that 2 different natlib records with the same format only create one format record
+    #| 1 b&w original negative(s). Glass negative.. Horizontal image.|              112354 |
+    #| 1 b&w original negative(s). Glass negative.. Horizontal image.|              114796 |
+    def test_duplicate_formats
+        parse_natlib_record 112354
+        n1 = NatlibMetadata.find_by_natlib_id 112354
+        puts "TRACE1"
+        puts Coverage.find(:all).to_yaml
+
+
+        parse_natlib_record 114796
+        n2 = NatlibMetadata.find_by_natlib_id 114796
+        puts Format.find(:all).to_yaml
+
+        puts "T1:"+n1.formats.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.formats.map{|s|s.name}.join(', ')
+        puts "T3"+Format.find(:all).map{|s|s.name}.join(', ')
+
+        formats = Format.find_all_by_name('1 b&w original negative(s). Glass negative.. Horizontal image.')
+        assert_equal 1, formats.length
+        
+        assert_equal 2, formats[0].natlib_metadatas.length
     end
     
     
