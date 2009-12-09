@@ -212,6 +212,30 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        
        assert coverages.map{|c|c.permalink}.include? 'basin-reserve'
     end
+
+
+
+    #| South Island             |              110229 |
+    #| South Island             |              111933 |
+    def test_duplicate_coverages
+        parse_natlib_record 110229
+        n1 = NatlibMetadata.find_by_natlib_id 110229
+        puts "TRACE1"
+        puts Coverage.find(:all).to_yaml
+
+
+        parse_natlib_record 111933
+        n2 = NatlibMetadata.find_by_natlib_id 111933
+        puts Coverage.find(:all).to_yaml
+
+        puts "T1:"+n1.coverages.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.coverages.map{|s|s.name}.join(', ')
+        puts "T3"+Coverage.find(:all).map{|s|s.name}.join(', ')
+
+        coverages = Coverage.find_all_by_name('South Island')
+        assert_equal 1, coverages.length
+    end
+    
     
     def test_identifiers
        parse_natlib_record 85367
