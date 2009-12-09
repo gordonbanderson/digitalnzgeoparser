@@ -12,21 +12,23 @@ class NatlibMetadata < ActiveRecord::Base
   
   has_one :submission
   
-  has_and_belongs_to_many :content_partners
-  has_and_belongs_to_many :creators
+  has_and_belongs_to_many :content_partners #Duplicate tested
+  has_and_belongs_to_many :creators #Duplicate tested
   has_and_belongs_to_many :contributors #Duplicate tested
-  has_and_belongs_to_many :publishers
-  has_and_belongs_to_many :collections
-  has_and_belongs_to_many :languages
+  has_and_belongs_to_many :publishers #NO SAMPLES IN DEV DB
+  has_and_belongs_to_many :collections #Duplicate tested
+  has_and_belongs_to_many :languages #FAILS ON PLACENAMES
+  has_and_belongs_to_many :placenames
+  
   has_and_belongs_to_many :tipes
   has_and_belongs_to_many :subjects #Duplicate Tested
   has_and_belongs_to_many :coverages #Duplicate Tested
-  has_and_belongs_to_many :categories
+  has_and_belongs_to_many :categories #NO SAMPLES IN DEV DB - FIXME CHECK PASTIE, should be likes of Images etc
   has_and_belongs_to_many :identifiers #All unique?
   has_and_belongs_to_many :formats #Duplication tested
-  has_and_belongs_to_many :placenames
-  has_and_belongs_to_many :rights
+  has_and_belongs_to_many :rights #NO SAMPLES IN DEV DB - FIXME CHECK PASTIE
   has_and_belongs_to_many :relations
+ 
   has_many :record_dates
   
   
@@ -325,8 +327,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       things = result['dc']['relation']
       if !things.blank?
         for name in things
-          o = Relation::new
-          o.name = name
+          o = Relation.find_or_create name
           relations << o
           o.save!
         end
