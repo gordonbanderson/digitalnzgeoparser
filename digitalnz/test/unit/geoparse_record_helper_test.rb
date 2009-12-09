@@ -197,6 +197,25 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #| en      |               26377 |
+    #| en      |               26376 |
+    def test_duplicate_languages
+        parse_natlib_record 26377
+        n1 = NatlibMetadata.find_by_natlib_id 26377
+        parse_natlib_record 26376
+        n2 = NatlibMetadata.find_by_natlib_id 26376
+        
+        puts "T1:"+n1.content_partners.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.content_partners.map{|s|s.name}.join(', ')
+        puts "T3"+Language.find(:all).map{|s|s.name}.join(', ')
+        
+        things = Language.find_all_by_name('en')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+        
+    end
+    
     #Test that languages are stored correctly in an hatbm table
     def test_language
        parse_natlib_record 27718
@@ -354,6 +373,33 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        parse_natlib_record 272650
        assert_equal 2, Relation.find(:all).length
     end
+    
+    
+    #| DC-Group-0006 |              111933 |
+    #| DC-Group-0006 |              112651 |
+    def test_duplicate_relations
+        parse_natlib_record 111933
+        n1 = NatlibMetadata.find_by_natlib_id 111933
+        puts "TRACE1"
+        puts Relation.find(:all).to_yaml
+
+
+        parse_natlib_record 112651
+        n2 = NatlibMetadata.find_by_natlib_id 112651
+        puts Relation.find(:all).to_yaml
+
+        puts "T1:"+n1.relations.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.relations.map{|s|s.name}.join(', ')
+        puts "T3"+Relation.find(:all).map{|s|s.name}.join(', ')
+
+        things = Relation.find_all_by_name('DC-Group-0006')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+    end
+    
+    
+    
     
     
     def test_placenames
