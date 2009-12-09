@@ -1,5 +1,5 @@
 class Tipe < ActiveRecord::Base
-  has_many :natlib_metadatas
+  has_and_belongs_to_many :natlib_metadatas
   
   validates_uniqueness_of :name
   
