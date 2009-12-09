@@ -177,6 +177,25 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        assert_equal "university-of-canterbury-digital-library", collections[0].permalink
     end
     
+    # Flickr                                             |             1303912 |
+    #| Flickr                                             |             1302466 |
+    def test_duplicate_collections
+        parse_natlib_record 1303912
+        n1 = NatlibMetadata.find_by_natlib_id 1303912
+        parse_natlib_record 1302466
+        n2 = NatlibMetadata.find_by_natlib_id 1302466
+        
+        puts "T1:"+n1.content_partners.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.content_partners.map{|s|s.name}.join(', ')
+        puts "T3"+Collection.find(:all).map{|s|s.name}.join(', ')
+        
+        things = Collection.find_all_by_name('Flickr')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+        
+    end
+    
     
     #Test that languages are stored correctly in an hatbm table
     def test_language
