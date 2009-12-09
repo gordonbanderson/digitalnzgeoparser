@@ -282,8 +282,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       coverages = []
       if !coverages_dc.blank?
         for coverage in coverages_dc
-          c = Coverage::new
-          c.name = coverage
+          c = Coverage.find_or_create coverage
           coverages << c
           c.save!
         end
