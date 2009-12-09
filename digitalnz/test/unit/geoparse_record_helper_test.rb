@@ -86,6 +86,31 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Check that 2 different natlib records with the same format only create one format record
+    # | Adams, E L, fl 1972                             |               81902 |
+    # | Adams, E L, fl 1972                             |              108309 |
+    def test_duplicate_contributors
+        parse_natlib_record 81902
+        n1 = NatlibMetadata.find_by_natlib_id 81902
+        puts "TRACE1"
+        puts Contributor.find(:all).to_yaml
+
+
+        parse_natlib_record 108309
+        n2 = NatlibMetadata.find_by_natlib_id 108309
+        puts Contributor.find(:all).to_yaml
+
+        puts "T1:"+n1.formats.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.formats.map{|s|s.name}.join(', ')
+        puts "T3"+Contributor.find(:all).map{|s|s.name}.join(', ')
+
+        contributors = Contributor.find_all_by_name('Adams, E L, fl 1972')
+        assert_equal 1, contributors.length
+        
+        assert_equal 2, contributors[0].natlib_metadatas.length
+    end
+    
+    
     #Test that publishers are stored correctly in an hatbm table
     def test_publisher
        parse_natlib_record 1188492
