@@ -417,6 +417,17 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    
+    def test_categories
+        parse_natlib_record 14687
+        n = NatlibMetadata.find_by_natlib_id 14687
+        cats = n.categories 
+        puts cats.to_yaml
+        assert_equal 'Images', cats[0].name
+        assert_equal 'images', cats[0].permalink
+    end
+    
+    
     def test_rights
         parse_natlib_record 14687
         n = NatlibMetadata.find_by_natlib_id 14687
@@ -524,11 +535,7 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
-    def test_categories
-       assert_equal "NOTE TO SELF", "USED??" 
-    end
-    
-    
+
     def test_nil_parsing_error
        #86556 
     end
