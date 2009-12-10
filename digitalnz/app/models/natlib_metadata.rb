@@ -15,10 +15,10 @@ class NatlibMetadata < ActiveRecord::Base
   has_and_belongs_to_many :content_partners #Duplicate tested
   has_and_belongs_to_many :creators #Duplicate tested
   has_and_belongs_to_many :contributors #Duplicate tested
-  has_and_belongs_to_many :publishers #NO SAMPLES IN DEV DB
+  has_and_belongs_to_many :publishers #NO SAMPLES IN DEV DB (has singularity check though)
   has_and_belongs_to_many :collections #Duplicate tested
-  has_and_belongs_to_many :languages #FAILS ON PLACENAMES
-  has_and_belongs_to_many :placenames
+  has_and_belongs_to_many :languages #Duplicate tested
+  has_and_belongs_to_many :placenames #Duplicate tested
   
   has_and_belongs_to_many :tipes #Duplicate tested
   has_and_belongs_to_many :subjects #Duplicate Tested
@@ -137,6 +137,19 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
           end
       end
       metadata.creators = creators
+      
+      #Deal with rights
+      rights = []
+      dc_rights = result['dc']['rights']
+      if !dc_rights.blank?
+          for right in dc_rights
+              r = Right.find_or_create(right)
+              rights << r
+          end
+      end
+      metadata.rights = rights
+      
+      
       
       
       #Deal with potentially habtm contributors
