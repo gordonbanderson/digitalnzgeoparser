@@ -417,7 +417,32 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    def test_rights
+        parse_natlib_record 14687
+        n = NatlibMetadata.find_by_natlib_id 14687
+        rights = n.rights 
+        puts rights.to_yaml
+        assert_equal 'http://www.library.auckland.ac.nz/dbtw-wpd/gummer/about.htm', rights[0].name
+        assert_equal 'httpwwwlibraryaucklandacnzdbtw-wpdgummerabouthtm', rights[0].permalink
+    end
     
+    
+    def test_duplicate_rights
+        parse_natlib_record 14686
+        n1 = NatlibMetadata.find_by_natlib_id 14686
+
+        parse_natlib_record 14687
+        n2 = NatlibMetadata.find_by_natlib_id 14687
+
+        puts "T1:"+n1.relations.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.relations.map{|s|s.name}.join(', ')
+        puts "T3"+Right.find(:all).map{|s|s.name}.join(', ')
+
+        things = Right.find_all_by_name('http://www.library.auckland.ac.nz/dbtw-wpd/gummer/about.htm')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+    end
     
     
     def test_placenames
