@@ -64,6 +64,9 @@ map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => '
 #Search URL - keep it short
 map.purchase 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
 
+#Facetted search URL - build up a nice URL the likes of search/fred/category/images/type/lithograph/year/1900/to/1910
+map.purchase 'search/:q/*facets', :controller => 'archive_searches', :action => 'faceted_search', :id => 'q'
+
 #Use 'collection' for methods that operate on the whole of the collection, in this case
 #a search of the digital nz api
   map.resources :archive_searches, :collection => { :search => :post, :search => :get}
