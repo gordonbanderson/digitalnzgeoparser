@@ -207,14 +207,16 @@ class NatlibMetadatasController < ApplicationController
 =end
 
     #Display a list of addresses
-    def subjects
-        natlib_properties 'subject'
+    def generic_properties
+        property = params[:property_plural].singularize
+        natlib_properties property
     end
     
     
     #Display a list of natlib results for said address
-    def subject
-       natlib_property 'subject'
+    def generic_property
+        property = params[:property_single]
+        natlib_property property
     end
 
     #Display a list of all coverages
@@ -292,7 +294,7 @@ class NatlibMetadatasController < ApplicationController
   #Display a list of all coverages
   #@param propertyname - name of a property, e.g. coverage
   def natlib_properties(property_name)
-        @clazz = property_name.titleize.constantize
+        @clazz = property_name.camelize.constantize
         @page = 1
         @page = params[:page] if !params[:page].blank?
         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
@@ -303,7 +305,7 @@ class NatlibMetadatasController < ApplicationController
   
   #Render a single property, e.g. a coverage of 'Wellington' or a subject of 'Trains'
   def natlib_property(property_name)
-        @clazz = property_name.titleize.constantize
+        @clazz = property_name.camelize.constantize
         @page = 1
         @page = params[:page] if !params[:page].blank?
         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
