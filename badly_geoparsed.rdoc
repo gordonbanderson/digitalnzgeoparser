@@ -111,8 +111,21 @@ http://localhost:3000/natlib_metadatas/1166989-photograph-swimming-pool-at-homew
 http://localhost:3000/natlib_metadatas/83599-birch-hill-station-farmhouse-garden-and-grounds/map << single dashes also
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1374202-looking-towards-baring-head/map << open calais being too aggressive?
 http://localhost:3000/natlib_metadatas/74845-swimming-bath-wairakei/map <, swimming pool deniston
-
+http://localhost:3000/natlib_metadatas/59393-h-bainbridge-fruit-confectionery-store-takapuna/map << check horsedrawn
 http://localhost:3000/natlib_metadatas/106854-wellington-girls-college-pupils-and-staff-thorndon/map << Says open calais ahs removed a term subsequently used
+http://localhost:3000/natlib_metadatas/105372-skippers-saddle-queenstown-n-z-colourchrome/map << The Remarkables should appear twice in the tag cloud - spacing issue between sentences?
+http://localhost:3000/natlib_metadatas/75156-oriental-bay-wellington-from-15-grass-street/map << should we be getting 15 Grass St, instead of Grass St?
+http://localhost:3000/natlib_metadatas/48785-group-portrait-of-canterbury-caledonian-society/map << another example with a number
+http://localhost:3000/natlib_metadatas/84566-fleet-week-sailors-marching-down-queen-street/map << Thames Hotel in AKL?
+http://localhost:3000/natlib_metadatas/79313-ashworth-edward-1814-1896-orakei-bay-near-auckland/map << Rangitoto island should be separate
+
+http://localhost:3000/natlib_metadatas/48275-samoa-a-party-of-sailors-ready-for-bush-work/map << why no Dunedin?
+
+http://localhost:3000/natlib_metadatas/1246861/map << how to deal with lowercase?
+
+http://localhost:3000/natlib_metadatas/256137-steam-train/map << Hawke's Bay case, the apostrophe
+
+
 
  <td></td>
     <td><%=@accuracies[search_term]%></td>
