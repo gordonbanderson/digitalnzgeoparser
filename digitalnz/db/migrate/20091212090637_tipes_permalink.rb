@@ -7,6 +7,6 @@ class TipesPermalink < ActiveRecord::Migration
   end
 
   def self.down
-      remove_colum :tipes, :permalink
+      remove_column :tipes, :permalink
   end
 end
