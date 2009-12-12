@@ -411,7 +411,7 @@ ActiveRecord::Schema.define(:version => 20091208152031) do
     t.datetime "updated_at"
   end
 
-  create_table "natlib_metadatas_rights", :force => true do |t|
+  create_table "natlib_metadatas_rights", :id => false, :force => true do |t|
     t.integer "right_id"
     t.integer "natlib_metadata_id"
   end
