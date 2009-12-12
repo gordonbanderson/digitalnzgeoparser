@@ -9,7 +9,7 @@
 		<ul id="natlibPropertyList">
 			
 		<%for property in @properties%>
-			<li><a href="/geoparsed/metadata/<%=@clazz.to_s.tableize.singularize%>/<%=property.permalink%>"><%=property.name%></span></li>
+			<li><a href="/geoparsed/metadata/<%=@clazz.to_s.tableize.singularize%>/<%=property.permalink%>"><%=property.name%></a></li>
 		<%end%>
 			
 		</ul>

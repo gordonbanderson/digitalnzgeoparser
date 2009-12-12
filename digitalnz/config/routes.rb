@@ -56,8 +56,8 @@ map.purchase 'geoparsed/address/:name', :controller => 'natlib_metadatas', :acti
 map.purchase 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
 map.purchase 'geoparsed/coverages', :controller => 'natlib_metadatas', :action => 'coverages'
 
-map.purchase 'geoparsed/metadata/subjects', :controller => 'natlib_metadatas', :action => 'subjects'
-map.purchase 'geoparsed/metadata/subject/:name', :controller => 'natlib_metadatas', :action => 'subject'
+map.purchase 'geoparsed/metadata/:property_plural', :controller => 'natlib_metadatas', :action => 'generic_properties'
+map.purchase 'geoparsed/metadata/:property_single/:name', :controller => 'natlib_metadatas', :action => 'generic_property'
 
 map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
 
