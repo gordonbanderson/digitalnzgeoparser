@@ -207,25 +207,14 @@ class NatlibMetadatasController < ApplicationController
 =end
 
     #Display a list of addresses
-    def addresses
-        @page = 1
-        @page = params[:page] if !params[:page].blank?
-        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-        @addresses = GeoparsedLocation.paginate :select => 'distinct address', :page => @page,
-        :per_page => PAGE_SIZE
-        render :layout => 'archive_search_results'
+    def subjects
+        natlib_properties 'subject'
     end
     
     
     #Display a list of natlib results for said address
-    def address
-       @page = 1
-       @page = params[:page] if !params[:page].blank?
-       @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-       address_name = params[:name]
-       @results = GeoparsedLocation.paginate :conditions => ["address = ?", address_name],
-        :page => @page, :per_page => PAGE_SIZE
-       render :layout => 'archive_search_results'
+    def subject
+       natlib_property 'subject'
     end
 
     #Display a list of all coverages
