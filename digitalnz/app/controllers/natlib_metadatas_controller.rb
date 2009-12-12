@@ -152,10 +152,22 @@ class NatlibMetadatasController < ApplicationController
             
             @info = "BOUNDED BY #{minx} => #{maxx}, #{miny} => #{maxy}"
             @bounds = GLatLngBounds.new([miny, minx], [maxy,maxx])
-            @area_lat_lon = (maxx-minx)*(maxy-miny)
-            @size = get_size_from_km_area miny, minx, maxy, maxx
-            @center = [(miny+maxy)*0.5, (minx+maxx)*0.5 ]
-            @map.center_zoom_init(@center, @size)
+            
+            if @maxx.blank? && maxy.blank?
+                logger.debug "TRACE: Defaulting to the whole world as both yahoo and google cannot provide info"
+                @size = 4
+                @map.center_zoom_init([0,0], @size)
+                @accuracies = {}
+                @phrases = []
+            else
+                @area_lat_lon = (maxx-minx)*(maxy-miny)
+
+                 @size = get_size_from_km_area miny, minx, maxy, maxx
+                 @center = [(miny+maxy)*0.5, (minx+maxx)*0.5 ]
+                 @map.center_zoom_init(@center, @size)
+            end
+            
+ 
 
        else
         logger.debug "TRACE:no places found, using yahoo"
