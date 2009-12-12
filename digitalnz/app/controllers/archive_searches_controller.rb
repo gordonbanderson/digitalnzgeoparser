@@ -17,8 +17,10 @@ class ArchiveSearchesController < ApplicationController
     if request.method == :post
         filter_ids = params[:archive_search][:filter_ids]
         @q = params[:archive_search][:search_text]
+        @q = URI::unescape(@q) if !@q.blank?
+    
         if filter_ids.blank?
-            redirect_to "/search/#{@q}"
+            redirect_to "/search/#{URI::escape(@q)}"
         else
             
             filter_param = []
@@ -36,13 +38,14 @@ class ArchiveSearchesController < ApplicationController
             
             
             
-            redirect_to "/search/#{@q}?#{filter_param.join('&').gsub('f[]=f','')}"
+            redirect_to "/search/#{URI::escape(@q)}/?#{filter_param.join('&').gsub('f[]=f','')}"
             
         end
       return
     end
     
     @archive_search = ArchiveSearch.new(params[:archive_search])
+    @archive_search.search_text = @q
     
     @page=1
     @page = params[:page] if !params[:page].blank?
