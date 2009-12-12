@@ -55,6 +55,10 @@ map.purchase 'geoparsed/addresses', :controller => 'natlib_metadatas', :action =
 map.purchase 'geoparsed/address/:name', :controller => 'natlib_metadatas', :action => 'address'
 map.purchase 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
 map.purchase 'geoparsed/coverages', :controller => 'natlib_metadatas', :action => 'coverages'
+
+map.purchase 'geoparsed/metadata/subjects', :controller => 'natlib_metadatas', :action => 'subjects'
+map.purchase 'geoparsed/metadata/subject/:name', :controller => 'natlib_metadatas', :action => 'subject'
+
 map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
 
 #Search URL - keep it short
