@@ -1,0 +1,32 @@
+<% content_for :header do %>
+<%set_title "#{@clazz.to_s.pluralize}: #{@property.name}, page #{@page} of #{@n_pages} - Geoparsed Records"%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<div id="searchMetaInformation">
+<p>
+
+	
+	
+  Results <%=@start_count%> to <%=@finish_count%> of <%=@total_count%>
+</p>
+</div>
+<%end%>
+
+<% content_for :col2 do%>
+<%=render :partial => 'shared/geoparsedinfo/'+@clazz.to_s.tableize.singularize%>
+</ul>
+<%end%>
+
+<% content_for :col1 do %>
+<div class="content">
+	<h1><%=@clazz.to_s.tableize.camelize%> - <%=@property.name%></h1>
+<ul>
+<%for nl in @natlib_metadatas
+%>
+<li class="searchResult">
+<%= render :partial => 'shared/standard_natlib_result', :locals => {:record => nl}%>
+</li>
+<%end%>
+</ul>
+</div>
+<%= will_paginate @coverages %>
+<%end%>
