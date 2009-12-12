@@ -13,4 +13,9 @@ module ApplicationHelper
         result[-1]='' if result[-1]='-'
         result
     end
+    
+    #Set the title from a view
+    def set_title(new_title)
+       @title = "DigitalNZ Geoparser:#{new_title}" 
+    end
 end
