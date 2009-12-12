@@ -18,7 +18,7 @@
 
 <% content_for :col1 do %>
 <div class="content">
-	<h1><%=@clazz.to_s.tableize.singularize.titleize%> - <%=@property.name%></h1>
+	<h1><%=@single_name%> - <%=@property.name%></h1>
 <ul>
 <%for nl in @natlib_metadatas
 %>
