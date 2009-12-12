@@ -1,16 +1,15 @@
 <% content_for :header do%>
+<%set_title "Coverages page #{@page} of #{@n_pages} - Geoparsed Records"%>
 <%= render :partial => 'archive_searches/search_form_small' %>
 <%end%>
 
 <% content_for :col1 do%>
 	<div id="content">
 		<h1>Coverages</h1>
-		<ul>
+		<ul id="natlibPropertyList">
 			
-		<%for coverage in @coverages
-			id_string = coverage.name.downcase
-			%>
-			<li><a href="/geoparsed/coverage/<%=id_string%>"><%=coverage.name%></span></li>
+		<%for coverage in @coverages%>
+			<li><a href="/geoparsed/coverage/<%=coverage.permalink%>"><%=coverage.name%></span></li>
 		<%end%>
 			
 		</ul>
