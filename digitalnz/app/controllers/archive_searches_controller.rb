@@ -2,6 +2,10 @@ class ArchiveSearchesController < ApplicationController
   
   require 'digitalnz'
   require 'will_paginate'
+  require 'facet_fields_helper'
+  
+  include FacetFieldsHelper
+  
   DigitalNZ.api_key = DIGITAL_NZ_KEY
   
   #Page size for any search that is not images only
@@ -9,6 +13,15 @@ class ArchiveSearchesController < ApplicationController
   
   #Page size for images only
   IMAGE_PAGE_SIZE=40
+  
+  #Parse a list of paramters in name value pairs and search the relevant facets
+  # URLs can be of the form
+  # * /search/fish/category/images
+  # * /search/category/images/year/1920-1940
+  def faceted_search
+      @facet_hash = parse_facet_params params[:facets]
+      
+  end
 
   def search
     start_time = Time.now
