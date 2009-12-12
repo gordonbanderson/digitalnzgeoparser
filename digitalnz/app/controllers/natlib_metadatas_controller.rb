@@ -235,16 +235,7 @@ class NatlibMetadatasController < ApplicationController
     
     #Display a paged set of natlib records for a given coverage
     def coverage
-         @page = 1
-         @page = params[:page] if !params[:page].blank?
-         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-        coverage_permalink = params[:name]
-        @coverage = Coverage.find_by_permalink(coverage_permalink)
-        @natlib_metadatas = @coverage.natlib_metadatas.paginate :page => @page, :order => 'title', :per_page => PAGE_SIZE
-        @n_pages = 1+@natlib_metadatas.total_entries/TEXT_LISTPAGE_SIZE
-        
-        render :layout => 'archive_search_results'
-        
+        natlib_property 'coverage'
     end
 
   #Render those records already geoparsed
@@ -312,12 +303,26 @@ class NatlibMetadatasController < ApplicationController
   #Display a list of all coverages
   #@param propertyname - name of a property, e.g. coverage
   def natlib_properties(property_name)
-      @clazz = property_name.titleize.constantize
-      @page = 1
-      @page = params[:page] if !params[:page].blank?
-      @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-      @properties = @clazz.paginate :select => 'name,permalink', :page => @page, :order => 'name', :per_page => TEXT_LISTPAGE_SIZE
-      @n_pages = 1+@properties.total_entries/TEXT_LISTPAGE_SIZE
+        @clazz = property_name.titleize.constantize
+        @page = 1
+        @page = params[:page] if !params[:page].blank?
+        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+        @properties = @clazz.paginate :select => 'name,permalink', :page => @page, :order => 'name', :per_page => TEXT_LISTPAGE_SIZE
+        @n_pages = 1+@properties.total_entries/TEXT_LISTPAGE_SIZE
       render :template => 'shared/properties', :layout => 'archive_search_results'
+  end
+  
+  #Render a single property, e.g. a coverage of 'Wellington' or a subject of 'Trains'
+  def natlib_property(property_name)
+        @clazz = property_name.titleize.constantize
+        @page = 1
+        @page = params[:page] if !params[:page].blank?
+        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+        permalink = params[:name]
+        @property = @clazz.find_by_permalink(permalink)
+        @natlib_metadatas = @property.natlib_metadatas.paginate :page => @page, :order => 'title', :per_page => PAGE_SIZE
+        @n_pages = 1+@natlib_metadatas.total_entries/TEXT_LISTPAGE_SIZE
+
+        render :template => 'shared/property', :layout => 'archive_search_results' 
   end
 end
