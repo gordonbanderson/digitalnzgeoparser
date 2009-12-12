@@ -19,7 +19,10 @@ class ArchiveSearchesController < ApplicationController
   # * /search/fish/category/images
   # * /search/category/images/year/1920-1940
   def faceted_search
-      @facet_hash = parse_facet_params params[:facets]
+      @facets = parse_facet_params params[:facets]
+      
+
+      
       
   end
 
