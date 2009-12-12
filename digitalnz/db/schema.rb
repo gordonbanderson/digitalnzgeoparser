@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091212090637) do
+ActiveRecord::Schema.define(:version => 20091212120733) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(:version => 20091212090637) do
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   add_index "facet_fields", ["parent_id"], :name => "facet_fields_parent_id_fk"
