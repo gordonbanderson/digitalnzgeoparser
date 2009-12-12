@@ -368,7 +368,7 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       identifiers = []
       if !things.blank?
         for name in things
-          o = Identifier::new
+          o = Identifier.find_or_create name
           o.name = name
           identifiers << o
           o.save!
