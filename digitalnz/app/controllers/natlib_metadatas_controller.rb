@@ -300,12 +300,17 @@ class NatlibMetadatasController < ApplicationController
         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
         @properties = @clazz.paginate :select => 'name,permalink', :page => @page, :order => 'name', :per_page => TEXT_LISTPAGE_SIZE
         @n_pages = 1+@properties.total_entries/TEXT_LISTPAGE_SIZE
+        
+        @single_name = single_name property_name
+        @plural_name = plural_name property_name
       render :template => 'shared/properties', :layout => 'archive_search_results'
   end
   
   #Render a single property, e.g. a coverage of 'Wellington' or a subject of 'Trains'
   def natlib_property(property_name)
         @clazz = property_name.camelize.constantize
+        @single_name = single_name property_name
+        @plural_name = plural_name property_name
         @page = 1
         @page = params[:page] if !params[:page].blank?
         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
@@ -315,5 +320,15 @@ class NatlibMetadatasController < ApplicationController
         @n_pages = 1+@natlib_metadatas.total_entries/TEXT_LISTPAGE_SIZE
 
         render :template => 'shared/property', :layout => 'archive_search_results' 
+  end
+  
+  def single_name property
+      result = property.titleize.singularize
+      result.gsub! 'Tipe', 'Type'
+      result
+  end
+  
+  def plural_name property
+      single_name(property).pluralize
   end
 end
