@@ -3,6 +3,10 @@ class NatlibMetadatasController < ApplicationController
   
   ZOOM_BOUNDS = [0.00001, 0.00005, 0.0002, 0.002, 0.02, 0.2,0.5,1,2,4,32,64,128,256,512]
   
+  #Page size for plain text results, e.g. coverages
+  TEXT_LISTPAGE_SIZE=100
+  
+  #Page size for natlib results
   PAGE_SIZE=20
   
   SHADES='fedcba9876543210'
@@ -229,7 +233,8 @@ class NatlibMetadatasController < ApplicationController
        @page = 1
        @page = params[:page] if !params[:page].blank?
        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-       @coverages = Coverage.paginate :select => 'distinct name', :page => @page, :order => 'name', :per_page => PAGE_SIZE
+       @coverages = Coverage.paginate :select => 'name,permalink', :page => @page, :order => 'name', :per_page => TEXT_LISTPAGE_SIZE
+       @n_pages = 1+@coverages.total_entries/TEXT_LISTPAGE_SIZE
        render :layout => 'archive_search_results'
     end
     
@@ -238,8 +243,11 @@ class NatlibMetadatasController < ApplicationController
          @page = 1
          @page = params[:page] if !params[:page].blank?
          @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-        coverage_name = params[:name]
-        @coverages = Coverage.paginate :conditions => ["lower(name) = ?", coverage_name], :page => @page, :order => 'name', :per_page => PAGE_SIZE
+        coverage_permalink = params[:name]
+        @coverage = Coverage.find_by_permalink(coverage_permalink)
+        @natlib_metadatas = @coverage.natlib_metadatas.paginate :page => @page, :order => 'title', :per_page => PAGE_SIZE
+        @n_pages = 1+@natlib_metadatas.total_entries/TEXT_LISTPAGE_SIZE
+        
         render :layout => 'archive_search_results'
         
     end
