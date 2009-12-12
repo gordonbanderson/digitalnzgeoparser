@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091208152031) do
+ActiveRecord::Schema.define(:version => 20091212090637) do
 
   create_table "accuracies", :force => true do |t|
     t.string   "name"
@@ -548,6 +548,7 @@ ActiveRecord::Schema.define(:version => 20091208152031) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "permalink"
   end
 
   add_index "tipes", ["name"], :name => "index_tipes_on_name"
