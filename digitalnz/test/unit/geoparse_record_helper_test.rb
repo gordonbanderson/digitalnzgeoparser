@@ -372,6 +372,29 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    
+    def test_duplicate_identifiers
+        parse_natlib_record 112168
+        n1 = NatlibMetadata.find_by_natlib_id 112168
+        puts "TRACE1"
+        puts Identifier.find(:all).to_yaml
+
+
+        parse_natlib_record 120263
+        n2 = NatlibMetadata.find_by_natlib_id 120263
+        puts Identifier.find(:all).to_yaml
+
+        puts "T1:"+n1.identifiers.map{|s|s.name}.join(', ')
+        puts "T2:"+n2.identifiers.map{|s|s.name}.join(', ')
+        puts "T3"+Identifier.find(:all).map{|s|s.name}.join(', ')
+
+        things = Identifier.find_all_by_name('C-025-023')
+        assert_equal 1, things.length
+        
+        assert_equal 2, things[0].natlib_metadatas.length
+    end
+    
+    
     def test_relations
        #272650
        parse_natlib_record 272650
