@@ -1,5 +1,5 @@
 class Category < ActiveRecord::Base
-  has_and_belongs_to_many :natlib_metadatas
+    has_and_belongs_to_many :natlib_metadatas, :include => [:contributors, :categories, :record_dates, :submission]
   has_permalink :name, :update => true
   
   validates_uniqueness_of :name
