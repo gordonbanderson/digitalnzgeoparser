@@ -15,16 +15,9 @@
 
         <%if !@map.blank?%>
          <%= @map.div(:width => 600, :height => 300) %>
-<hr/>SCRIPT<hr/>
-
         <%else%>
         No map available
         <%end%>
-<pre>
-	<%=@info%>
-	zoom is <%=@size%>
-	area is <%=@area_lat_lon%>
-	</pre>
 <div id="geonameFrequencies">
 		<%for words in @phrases
 			freak = @phrase_frequencies[words]
