@@ -1,5 +1,5 @@
 <% content_for :header do%>
-<%set_title "Coverages page #{@page} of #{@n_pages} - Geoparsed Records"%>
+<%set_title "#{@clazz.to_s.pluralize},  page #{@page} of #{@n_pages} - Geoparsed Records"%>
 <%= render :partial => 'archive_searches/search_form_small' %>
 <%end%>
 
@@ -9,7 +9,7 @@
 		<ul id="natlibPropertyList">
 			
 		<%for property in @properties%>
-			<li><a href="/geoparsed/<%=@clazz.to_s.tableize.singularize%>/<%=property.permalink%>"><%=property.name%></span></li>
+			<li><a href="/geoparsed/metadata/<%=@clazz.to_s.tableize.singularize%>/<%=property.permalink%>"><%=property.name%></span></li>
 		<%end%>
 			
 		</ul>
@@ -20,5 +20,5 @@
 <%end%>
 
 <% content_for :col2 do%>
-	Coverages are included in the metadata provided by the Digital NZ service
+<%= render :partial => 'shared/geoparsedinfo/'+@clazz.to_s.tableize.singularize+'.erb'%>
 <%end%>
