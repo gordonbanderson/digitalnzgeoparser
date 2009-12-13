@@ -19,10 +19,38 @@ class ArchiveSearchesController < ApplicationController
   # * /search/fish/category/images
   # * /search/category/images/year/1920-1940
   def faceted_search
-      @facets = parse_facet_params params[:facets]
+      start_time = Time.now
+      
+      @facets_array = parse_facet_params params[:facets]
       
 
-      
+      #This is the case of a GET url
+      prime_search_term
+
+      process_facet_params
+
+      #Search digitalnz, and prime the page number, results count etc
+      search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
+
+      #Process facets for display purposes
+      @facets = @digital_nz_search_result.facets    
+      process_facet_fields(@facets)
+
+      #Render results
+
+      respond_to do |format|
+        if @archive_search.save
+          flash[:archive_search] = 'Search was successfully created.'
+          format.html { 
+            @elapsed_time = (Time.now-start_time)*100.round.to_f / 100
+            render :layout => 'archive_search_results', :template => 'archive_searches/search'
+          }
+          #format.xml  { render :xml => @country, :status => :created, :location => @country }
+        else
+          format.html { render :action => "index" }
+          format.xml  { render :xml => @archive_search.errors, :status => :unprocessable_entity }
+        end
+      end
       
   end
 
@@ -71,44 +99,7 @@ class ArchiveSearchesController < ApplicationController
     #This is the case of a GET url
     prime_search_term
     
-    @filters = {}
-    
-    @filter_params = params[:f]
-    @filter_params = [] if @filter_params.blank?
-    
-    if !@filter_params.blank?
-      for filter_id in @filter_params
-        f = FacetField.find(filter_id)
-        @filters[f.parent.name] = f
-      end
-    end
-    
-    #Form the basics of the current query for facetting purposes
-    @previous_params = ""
-    @query_term = params[:q]
-    #@previous_params << "?q=#{params[:q]}"
-    @previous_params << "&page=#{@page}"
-    
-    #If we have any filters we need to expand the query
-    @filter_query = ""
-    
-    #Also create URL params to append to facet links to drill down
-    @facet_params_chosen=''
-    @images_category = false  # True if images category selected
-    for filter in @filters.values
-      filter_parent_name = filter.parent.name
-      filter_name = filter.name
-      @filter_query << ' '
-      @filter_query << "#{filter_parent_name}:\"#{filter_name}\""
-      @facet_params_chosen << "&f[]=#{filter.id}"
-      @images_category = true if filter_name == 'Images'
-    end
-    
-    #Do the search
-    @result_page_size = PAGE_SIZE
-    if @images_category
-      @result_page_size = IMAGE_PAGE_SIZE
-    end
+    process_facet_params
  
     #Search digitalnz, and prime the page number, results count etc
     search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
@@ -117,13 +108,8 @@ class ArchiveSearchesController < ApplicationController
     @facets = @digital_nz_search_result.facets    
     process_facet_fields(@facets)
 
+    #Render results
 
-    
-
-    
-    
-
-    
     respond_to do |format|
       if @archive_search.save
         flash[:archive_search] = 'Search was successfully created.'
@@ -270,5 +256,49 @@ class ArchiveSearchesController < ApplicationController
         start = (@page.to_i-1)*@result_page_size
       end
       
+  end
+  
+  
+  
+  #Process the facet params
+  def process_facet_params
+      @filters = {}
+
+      @filter_params = params[:f]
+      @filter_params = [] if @filter_params.blank?
+
+      if !@filter_params.blank?
+        for filter_id in @filter_params
+          f = FacetField.find(filter_id)
+          @filters[f.parent.name] = f
+        end
+      end
+
+      #Form the basics of the current query for facetting purposes
+      @previous_params = ""
+      @query_term = params[:q]
+      #@previous_params << "?q=#{params[:q]}"
+      @previous_params << "&page=#{@page}"
+
+      #If we have any filters we need to expand the query
+      @filter_query = ""
+
+      #Also create URL params to append to facet links to drill down
+      @facet_params_chosen=''
+      @images_category = false  # True if images category selected
+      for filter in @filters.values
+        filter_parent_name = filter.parent.name
+        filter_name = filter.name
+        @filter_query << ' '
+        @filter_query << "#{filter_parent_name}:\"#{filter_name}\""
+        @facet_params_chosen << "&f[]=#{filter.id}"
+        @images_category = true if filter_name == 'Images'
+      end
+
+      #Do the search
+      @result_page_size = PAGE_SIZE
+      if @images_category
+        @result_page_size = IMAGE_PAGE_SIZE
+      end
   end
 end
