@@ -29,14 +29,20 @@ class ArchiveSearchesController < ApplicationController
   def search
     start_time = Time.now
     
-    
+    #This is the case where a search is submitted using the submit button
+    #Facet fields are under the f[] param by facet field id
     if request.method == :post
         filter_ids = params[:archive_search][:filter_ids]
         @q = params[:archive_search][:search_text]
         @q = URI::unescape(@q) if !@q.blank?
-    
+        
+        #Redirect, no facets
         if filter_ids.blank?
             redirect_to "/search/#{URI::escape(@q)}"
+        
+        #TODO - redir to nice url
+        
+        #Redirect to GETtable url
         else
             
             filter_param = []
@@ -60,7 +66,9 @@ class ArchiveSearchesController < ApplicationController
       return
     end
     
-    @archive_search = ArchiveSearch.new(params[:archive_search])
+    
+    #This is the case of a GET url
+    @archive_search = ArchiveSearch.new(@q)
     @archive_search.search_text = @q
     
     @page=1
@@ -131,47 +139,7 @@ class ArchiveSearchesController < ApplicationController
     @nresult_on_page = @digital_nz_search_result.count if @digital_nz_search_result.count < @nresult_on_page
     @n_last_result_on_page = [@digital_nz_search_result.count, @result_page_size*@page.to_i].min
     
-    @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', @facet_fields])
-    @child_facet_fields = {}
-=begin
-<%for facet in @facets%>
-  <div class="facetField">
-  <h5><%=facet['facet_field'].camelize%></h5>
-  <ul>
-      <%for value in facet['values']%>
-      <li>
-          <%=value['name']%> (<%=value['num_results']%>)
-
-=end
-    #FIXME - make this more efficient
-    for f in @facets
-      parent_name = f['facet_field']
-      parent_facet_field = FacetField.find_by_name(parent_name)
-      logger.debug "PARENT FACET:#{parent_facet_field}"
-      for child_facet_name_value in f['values']
-        child_facet_name = child_facet_name_value['name']
-        sql_conditions = "parent_id = ? and name = ?"
-        logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
-
-        #FIXME - check for correct error conditino
-        
-          child_facet_field = FacetField.find(:first, 
-            :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
-          )
-          
-        #Create this if it does not exist
-        
-          if child_facet_field.blank?
-            child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
-            child_facet_field.save!
-          end
-        
-
-        @child_facet_fields[child_facet_name] = child_facet_field
-        
-        
-      end
-    end
+    process_facet_fields(@facets)
     
     @num_pages = 1+@digital_nz_search_result.count/@result_page_size
     
@@ -241,5 +209,46 @@ class ArchiveSearchesController < ApplicationController
     for tag in @search_term_tags
        @search_term_hash[tag.search_text] = tag 
     end
+  end
+  
+  
+  #-- helper methods repeated in controller methods
+  private
+  
+  #@param digitalnz_facets - facets returned from the digitalnz search
+  #Sets up @child_facet_fields
+  def process_facet_fields digitalnz_facets
+      @parent_facets = FacetField.find(:all, :conditions =>['parent_id is null and name in (?)', digitalnz_facets])
+      @child_facet_fields = {}
+
+      #FIXME - make this more efficient
+      for f in digitalnz_facets
+        parent_name = f['facet_field']
+        parent_facet_field = FacetField.find_by_name(parent_name)
+        logger.debug "PARENT FACET:#{parent_facet_field}"
+        for child_facet_name_value in f['values']
+          child_facet_name = child_facet_name_value['name']
+          sql_conditions = "parent_id = ? and name = ?"
+          logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
+
+          #FIXME - check for correct error conditino
+
+            child_facet_field = FacetField.find(:first, 
+              :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
+            )
+
+          #Create this if it does not exist
+
+            if child_facet_field.blank?
+              child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
+              child_facet_field.save!
+            end
+
+
+          @child_facet_fields[child_facet_name] = child_facet_field
+
+
+        end
+      end 
   end
 end
