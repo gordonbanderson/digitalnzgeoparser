@@ -123,7 +123,7 @@ class ArchiveSearchesController < ApplicationController
     end
     
     
-    
+=begin    
     query_hash = {}
     @full_solr_query = @archive_search.search_text+@filter_query
     query_hash[:search_text] = @full_solr_query
@@ -132,14 +132,20 @@ class ArchiveSearchesController < ApplicationController
     query_hash[:facet_num_results]='200' #Have emailed list suggesting further facets in content creator / provider categories
     query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
     @digital_nz_search_result = DigitalNZ.search(query_hash)
-    @facets = @digital_nz_search_result.facets
-    @facet_fields = query_hash[:facets].split(',')
+=end    
+    @digital_nz_search_result = search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
+    
+
     
     @nresult_on_page = @page.to_i*@digital_nz_search_result.num_results_requested.to_i
     @nresult_on_page = @digital_nz_search_result.count if @digital_nz_search_result.count < @nresult_on_page
     @n_last_result_on_page = [@digital_nz_search_result.count, @result_page_size*@page.to_i].min
     
+    #@facet_fields = query_hash[:facets].split(',')
+    @facets = @digital_nz_search_result.facets    
     process_facet_fields(@facets)
+
+
     
     @num_pages = 1+@digital_nz_search_result.count/@result_page_size
     
@@ -250,5 +256,19 @@ class ArchiveSearchesController < ApplicationController
 
         end
       end 
+  end
+  
+  
+  
+  #Search digitalnz with a search term and facet filter query
+  def search_digitalnz(search_term, facet_filter_query,page,results_per_page)
+      query_hash = {}
+      @full_solr_query = search_term+facet_filter_query
+      query_hash[:search_text] = @full_solr_query
+      query_hash[:num_results] = "#{results_per_page}"
+      query_hash[:start] = "#{results_per_page*(page.to_i-1)}"
+      query_hash[:facet_num_results]='200' #Have emailed list suggesting further facets in content creator / provider categories
+      query_hash[:facets] = 'category,content_partner,creator,language,rights,century,decade,year'
+      DigitalNZ.search(query_hash) 
   end
 end
