@@ -21,13 +21,28 @@ class ArchiveSearchesController < ApplicationController
   def faceted_search
       start_time = Time.now
       
-      @facets_array = parse_facet_params params[:facets]
       
 
       #This is the case of a GET url
       prime_search_term
 
-      process_facet_params
+      @facets_hash = parse_facet_params_array params[:facets]
+      
+      logger.debug @facets_array.to_yaml
+      
+      leaf_facets = []
+      for facet_field in @facets_hash
+          logger.debug "FACET FIELD CLASS:#{facet_field.class}"
+          leaf_facets << facet_field if !facet_field.parent.blank?
+      end
+      
+      logger.debug "==================="
+      logger.debug leaf_facets.to_yaml
+      
+      asdfsfsdf
+      
+      #FIXME - db access duplicated
+      process_facet_params @facets_array.map{|f|f.id}
 
       #Search digitalnz, and prime the page number, results count etc
       search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
@@ -99,7 +114,7 @@ class ArchiveSearchesController < ApplicationController
     #This is the case of a GET url
     prime_search_term
     
-    process_facet_params
+    process_facet_params params[:f]
  
     #Search digitalnz, and prime the page number, results count etc
     search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
@@ -260,11 +275,12 @@ class ArchiveSearchesController < ApplicationController
   
   
   
+  
   #Process the facet params
-  def process_facet_params
+  def process_facet_params(facet_field_filter_ids)
       @filters = {}
 
-      @filter_params = params[:f]
+      @filter_params = facet_field_filter_ids
       @filter_params = [] if @filter_params.blank?
 
       if !@filter_params.blank?
