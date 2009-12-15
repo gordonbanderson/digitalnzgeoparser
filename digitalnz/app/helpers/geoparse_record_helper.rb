@@ -538,7 +538,7 @@ module GeoparseRecordHelper
 
       elapsed_time = Time.now-start_time
       puts "BREIF:#{submission.natlib_metadata.natlib_id} - #{submission.natlib_metadata.title}"
-      puts "BRIEF:\t#{submission.id} - #{submission.natlib_metadata.natlib_id}  #{submission.cached_geo_searches.length} locations, area = #{submission.area} TIME=#{elapsed_time}"
+      puts "BRIEF:\t#{submission.id} - #{submission.natlib_metadata.natlib_id} [#{submission.natlib_metadata.title}]  #{submission.cached_geo_searches.length} locations, area = #{submission.area} TIME=#{elapsed_time}"
       elapsed_time("Trace 31")
    end
 
