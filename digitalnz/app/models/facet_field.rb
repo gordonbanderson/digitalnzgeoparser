@@ -10,4 +10,10 @@ class FacetField < ActiveRecord::Base
     o  
   end
   
+  def self.find_or_create_with_parent parent_id, the_name
+    o = FacetField.find(:first, :conditions =>["parent_id = ? and name = ?", parent_id, the_name])
+    o = FacetField::create :name => the_name, :parent_id => parent_id   if o.blank?
+    o  
+  end
+  
 end
