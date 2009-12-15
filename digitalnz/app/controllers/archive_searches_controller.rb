@@ -188,11 +188,12 @@ class ArchiveSearchesController < ApplicationController
             child_facet_fields = FacetField.find(:all, 
               :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
             )
+            
+            RAILS_DEFAULT_LOGGER.debug "Child facets...#{child_facet_fields.to_yaml}"
 
           #Create this if it does not exist
 
             if child_facet_fields.length == 0
-                child_facet_field = FacetField.find(:)
               child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
               child_facet_field.save!
             else
