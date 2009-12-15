@@ -184,23 +184,9 @@ class ArchiveSearchesController < ApplicationController
           logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
 
           #FIXME - check for correct error conditino
-
-            child_facet_fields = FacetField.find(:all, 
-              :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
-            )
-            
-            RAILS_DEFAULT_LOGGER.debug "Child facets...#{child_facet_fields.to_yaml}"
-
-          #Create this if it does not exist
-
-            if child_facet_fields.length == 0
-              child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
-              child_facet_field.save!
-            else
-                child_facet_field = child_facet_fields[0]
-            end
-
-
+          
+          
+          child_facet = find_or_create_with_parent(parent_facet_field.id, child_facet_name)
           @child_facet_fields[child_facet_name] = child_facet_field
 
 
