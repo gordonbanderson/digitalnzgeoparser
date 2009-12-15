@@ -8,11 +8,11 @@ class Submission < ActiveRecord::Base
   has_and_belongs_to_many :calais_entries
   
   
-  has_one :extent
-  has_one :centroid
+  has_one :extent, :dependent => :destroy
+  has_one :centroid, :dependent => :destroy
   belongs_to :natlib_metadata
   has_many :phrases
-  has_many :phrase_frequencies, :include => [:phrase]
+  has_many :phrase_frequencies, :include => [:phrase], :dependent => :destroy
   
   
   #Return a decent description of the location found from the text submitted
