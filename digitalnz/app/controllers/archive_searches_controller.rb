@@ -185,15 +185,18 @@ class ArchiveSearchesController < ApplicationController
 
           #FIXME - check for correct error conditino
 
-            child_facet_field = FacetField.find(:first, 
+            child_facet_fields = FacetField.find(:all, 
               :conditions => [sql_conditions, parent_facet_field.id, child_facet_name]
             )
 
           #Create this if it does not exist
 
-            if child_facet_field.blank?
+            if child_facet_fields.length == 0
+                child_facet_field = FacetField.find(:)
               child_facet_field = FacetField::create :parent_id => parent_facet_field.id, :name => child_facet_name
               child_facet_field.save!
+            else
+                child_facet_field = child_facet_fields[0]
             end
 
 
