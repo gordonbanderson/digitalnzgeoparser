@@ -143,6 +143,52 @@ class ArchiveSearchesController < ApplicationController
   end
   
   
+  
+  #Find similar pages by forming a query from the provided record
+  def similar
+      start_time = Time.now
+      
+      natlib_permalink = params[:id]
+      @natlib_metadata = NatlibMetadata.find_by_permalink natlib_permalink
+      ors = @natlib_metadata.title.split(' ').join(' AND ')
+      phrase = "(#{@natlib_metadata.title})"
+      @q = "\"#{@natlib_metadata.title}\"^2 OR (#{ors})"
+      
+        @archive_search = ArchiveSearch.new
+        @archive_search.search_text = @q
+
+        @page=1
+        @page = params[:page] if !params[:page].blank?
+
+
+        @archive_search.search_text = '' if @archive_search.search_text.blank?
+
+        @title = "Digital NZ - Similar to #{params[:q]}"
+
+        #Should be none??
+        process_facet_params params[:f]
+
+        #Search digitalnz, and prime the page number, results count etc
+        search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
+
+        #Process facets for display purposes
+        @facets = @digital_nz_search_result.facets    
+        process_facet_fields(@facets)
+
+        #Render results
+
+        respond_to do |format|
+            flash[:archive_search] = 'Search was successfully created.'
+            format.html { 
+                @elapsed_time = (Time.now-start_time)*100.round.to_f / 100
+                render :layout => 'archive_search_results', :template => 'archive_searches/search'
+            }
+        end
+
+
+      end
+  
+  
   def show
     @q = params[:q]
     @search_params = {:search_text => @q}
