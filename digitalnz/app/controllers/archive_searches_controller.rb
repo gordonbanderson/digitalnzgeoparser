@@ -186,8 +186,8 @@ class ArchiveSearchesController < ApplicationController
           #FIXME - check for correct error conditino
           
           
-          child_facet = find_or_create_with_parent(parent_facet_field.id, child_facet_name)
-          @child_facet_fields[child_facet_name] = child_facet_field
+          child_facet = FacetField.find_or_create_with_parent(parent_facet_field.id, child_facet_name)
+          @child_facet_fields[child_facet_name] = child_facet
 
 
         end
