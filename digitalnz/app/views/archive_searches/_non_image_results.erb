@@ -10,7 +10,7 @@ metarecord = @metadata_records[result.id]
 
 <p><%=metarecord.description%></p>
 <div class="searchByLine">
-    <%=hostof(result.display_url)%> - <%=result.content_provider%> - <%=result.category%> - <%=metarecord.dateinfo%> - <%=link_to "Similar Pages", search_archive_searches_url(:q=>result.title)%> -
+    <%=hostof(result.display_url)%> - <%=result.content_provider%> - <%=result.category%> - <%=metarecord.dateinfo%> - <%=link_to "Similar Pages", similar_archive_searches_url(:id=>metarecord.permalink)%> -
 <%if metarecord.pending %>
 Not Geoparsed
 <%elsif !metarecord.submission.blank?
