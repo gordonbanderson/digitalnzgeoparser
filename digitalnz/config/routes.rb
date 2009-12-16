@@ -69,7 +69,7 @@ map.purchase 'search/:q/*facets', :controller => 'archive_searches', :action => 
 
 #Use 'collection' for methods that operate on the whole of the collection, in this case
 #a search of the digital nz api
-  map.resources :archive_searches, :collection => { :search => :post, :search => :get}
+  map.resources :archive_searches, :collection => { :search => :post, :search => :get, :similar => :get}
 
   # The priority is based upon order of creation: first created -> highest priority.
 
