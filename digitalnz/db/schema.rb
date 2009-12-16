@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091214013529) do
+ActiveRecord::Schema.define(:version => 20091212120733) do
 
   create_table "accuracies", :force => true do |t|
     t.column "name", :string
@@ -370,6 +370,7 @@ ActiveRecord::Schema.define(:version => 20091214013529) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
     t.column "pending", :boolean, :default => true
+    t.column "permalink", :string
   end
 
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
