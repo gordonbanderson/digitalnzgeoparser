@@ -8,6 +8,7 @@ class NatlibMetadata < ActiveRecord::Base
   PARA_BREAK="\n\n"
   
   
+  has_permalink :title, :update => true
 
   
   has_one :submission
