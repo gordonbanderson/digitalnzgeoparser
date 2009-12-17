@@ -47,13 +47,25 @@ h1,h2,h3,h4,h5,h6 {
 	
 }
 
+.cancelFacet {
+	color: white;
+	background: red;
+	padding: 3px 6px 3px 6px;
+	text-decoration: none;
+	margin-right: 4px;
+}
+
 .facetFilter {
 	background: blue;
 	color: white;
-	font-weight: bold;
-	padding: 2px 6px 2px 20px;
+	font-weight: normal;
+	font-size: 0.75em;
+	padding: 3px 6px 3px 0px;
+	margin-left:0px;
 	text-decoration: none;
 	font-family: Arial, Helvetica, Sans-serif;
+	font-size: 0.7em;
+	
 }
 
 #facetsColumn ul {
