@@ -10,7 +10,7 @@
         link = '/search/'+@archive_search.search_text+'/?'+@previous_params
         link << @facet_params_chosen.gsub(fparam,'')
         %>
-        <h5><a href="<%=link%>"><%=facet_parent_name.camelize%></a></h5>
+        <h5><%=FacetFieldsHelper.parent_facet_name(facet_parent_name)%></h5>
         <ul>
             <%for value in facet['values']
             child_facet_result = @child_facet_fields[value['name']]
