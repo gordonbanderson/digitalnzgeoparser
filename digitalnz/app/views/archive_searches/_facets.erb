@@ -24,10 +24,11 @@
             end%>
         </ul>
     </div>
-    <%else%>
-    <h5><%=facet_parent_name.camelize%>
-        
-    </h5>
+    <%else
+		n_facets_found = facet['values'].length
+		if n_facets_found > 0
+%>
+    <h5><%=facet_parent_name.camelize%> (<%=n_facets_found%>)</h5>
     <ul>
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
@@ -39,6 +40,7 @@
         </li>
         <%end%>
     </ul>
+	<%end%>
     </div>
     <%end%>
     <%end%>
