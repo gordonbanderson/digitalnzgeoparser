@@ -36,11 +36,15 @@
 			if !visibility
 				hidden_html = 'style="display:none;"' if !visibility
 				#onclick = "onclick=\"alert('#{css_id}');\""
-				onclick = "onclick=\"document.getElementById('#{css_id}').style.display='block';\""
+				onclick = "onclick=\"document.getElementById('#{css_id}').style.display='block'; document.getElementById('expander_#{css_id}').style.display='none';\""
 				padding='style="padding-bottom:10px;"'
 			end
 %>
-    <h5 <%=onclick%> <%=padding%>><%=facet_parent_name.camelize%> (<%=n_facets_found%>)</h5>
+    <h5><%=facet_parent_name.camelize%> (<%=n_facets_found%>)</h5>
+	<%if !visibility%>
+	<ul id="expander_<%=css_id%>"><li><a href="#" <%=onclick%>>+Show all</a></li></ul>
+	<%end%>
+	
     <ul <%=hidden_html%> id="<%=css_id%>">
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
