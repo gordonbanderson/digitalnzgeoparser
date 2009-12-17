@@ -26,10 +26,22 @@
     </div>
     <%else
 		n_facets_found = facet['values'].length
+		css_id = "facet_panel_#{facet_parent_name}"
+		
 		if n_facets_found > 0
+			visibility = n_facets_found <= 10
+			hidden_html = ''
+			onclick = ''
+			padding =  ''
+			if !visibility
+				hidden_html = 'style="display:none;"' if !visibility
+				#onclick = "onclick=\"alert('#{css_id}');\""
+				onclick = "onclick=\"document.getElementById('#{css_id}').style.display='block';\""
+				padding='style="padding-bottom:10px;"'
+			end
 %>
-    <h5><%=facet_parent_name.camelize%> (<%=n_facets_found%>)</h5>
-    <ul>
+    <h5 <%=onclick%> <%=padding%>><%=facet_parent_name.camelize%> (<%=n_facets_found%>)</h5>
+    <ul <%=hidden_html%> id="<%=css_id%>">
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
         link = '/search/'+@archive_search.search_text+'/?' + @previous_params+'&f[]='+child_facet.id.to_s
