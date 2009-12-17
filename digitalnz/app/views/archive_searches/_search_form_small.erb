@@ -11,4 +11,22 @@
   </p>
 <% end %>
 </div>
+<div id="facetFilters">
+<%
+for facet in @facets
+facet_parent_name = facet['facet_field']
+facet_already_chosen = !@filters[facet_parent_name].blank?
+if facet_already_chosen
+    child_facet = @filters[facet_parent_name]
+    fparam = "&f[]=#{child_facet.id}"
+    link = '/search/'+@archive_search.search_text+'/?'+@previous_params
+    link << @facet_params_chosen.gsub(fparam,'')
+    
+%>
+<a href="<%=link%>" class="facetFilter">x&nbsp;<%=child_facet.name%></a>
+<%
+end
+end
+%>	
+</div>
 </div>
