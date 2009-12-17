@@ -11,6 +11,7 @@
   </p>
 <% end %>
 </div>
+<%if !@facets.blank?%>
 <div id="facetFilters">
 <%
 for facet in @facets
@@ -31,4 +32,5 @@ end
 end
 %>	
 </div>
+<%end%>
 </div>
