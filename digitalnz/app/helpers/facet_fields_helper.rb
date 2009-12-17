@@ -30,4 +30,12 @@ module FacetFieldsHelper
 
         facets
     end
+    
+    
+    #Convert the facet name into singular or plural
+    def self.parent_facet_name(lower_case, pluralize=false)
+       result = lower_case.camelize
+       result.gsub!('ContentPartner', 'Content Partner')
+       result 
+    end
 end
