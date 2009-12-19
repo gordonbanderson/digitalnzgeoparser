@@ -17,6 +17,11 @@ class CalaisEntry < ActiveRecord::Base
       calais_entry
   end
   
+  
+  def name
+     pretty_print 
+  end
+  
   #Print out for debug purposes
   def pretty_print
      "#{parent_word.word} ==> #{child_word.word}" 
