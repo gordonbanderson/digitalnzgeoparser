@@ -64,13 +64,12 @@
 	<h4>Content Partner</h4>
 	<ul>
 	<%for content_partner in @natlib_metadata.content_partners%>
-	<li><%=content_partner.name %></li>
-	<%end%>
+<li><%=link_to content_partner.name, geo_property_single_url(:property_name=>'content_partner', :permalink => content_partner.permalink)%></li>	<%end%>
 	</ul>
 	<h4>Collection</h4>
 	<ul>
 		<%for collection in @natlib_metadata.collections%>
-			<li><%=collection.name%></li>
+			<li><%=link_to collection.name, geo_property_single_url(:property_name=>'collection', :permalink => collection.permalink)%></li>
 		<%end%>
 	</ul>
 
@@ -78,7 +77,7 @@
 	<h4>Coverages</h4>
 	<ul>
 	<%for item in @natlib_metadata.coverages%>
-	<li><%=item.name%></li>
+	<li><%=link_to item.name, geo_property_single_url(:property_name=>'coverage', :permalink => item.permalink)%></li>
 	<%end%>
 	</ul>
 	<%end%>
@@ -87,7 +86,8 @@
 	<h4>Subjects</h4>
 	<ul>
 	<%for item in @natlib_metadata.subjects%>
-	<li><%=item.name%></li>
+	<li>
+		<li><%=link_to item.name, geo_property_single_url(:property_name=>'subject', :permalink => item.permalink)%></li>
 	<%end%>
 	</ul>
 	<%end%>
@@ -96,8 +96,7 @@
 	<h4>Placenames</h4>
 	<ul>
 	<%for item in @natlib_metadata.placenames%>
-	<li><%=item.name%></li>
-	<%end%>
+<li><%=link_to item.name, geo_property_single_url(:property_name=>'placename', :permalink => item.permalink)%></li>	<%end%>
 	</ul>
 	<%end%>
 	
@@ -181,7 +180,10 @@
 			<h4><%=key.word%></h4>
 			<ul>
 			<%for child in @calais_hash[key]%>
-				<li><%=child.word%></li>
+				<li><%=link_to child.word, 
+					  calais_child_url(:child_permalink => child.permalink,
+					:parent_permalink => key.permalink
+						)%></li>
 			<%end%>
 			</ul>
 		<%end%>
