@@ -280,14 +280,16 @@ class NatlibMetadatasController < ApplicationController
     end
 
     
-    
-    @natlib_records = GeoparsedRecord.paginate :page => @page, :order => @order, :conditions => conditions, :per_page => PAGE_SIZE
-     
+    #These are the ids that are on the current page
+    @paged_natlib_records = GeoparsedRecord.paginate :page => @page, :order => @order, :conditions => conditions, :per_page => PAGE_SIZE
+    @the_ids = @paged_natlib_records.map{|p|p.natlib_id.to_i}
+    @natlib_metadatas = NatlibMetadata.find(:all, :conditions => ["natlib_id in (?)", @the_ids])
+
     #Work out page metainfo
-	@start_count = 1+(@natlib_records.current_page-1) * PAGE_SIZE
-	@finish_count = PAGE_SIZE * @natlib_records.current_page
-	@finish_count = @natlib_records.total_entries if @natlib_records.total_entries < @finish_count
-	@total_count = @natlib_records.total_entries
+	@start_count = 1+(@paged_natlib_records.current_page-1) * PAGE_SIZE
+	@finish_count = PAGE_SIZE * @paged_natlib_records.current_page
+	@finish_count = @paged_natlib_records.total_entries if @paged_natlib_records.total_entries < @finish_count
+	@total_count = @paged_natlib_records.total_entries
 	
 	render :layout => 'archive_search_results'
     
