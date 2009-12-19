@@ -68,6 +68,7 @@ class NatlibMetadatasController < ApplicationController
        # from the google search results
        @n_places_found = @submission.cached_geo_searches.length
        logger.debug "TRACE:#{@n_places_found} found"
+       @calais_hash = {}
        if @n_places_found > 0
          # if the submission area is small, zoom in more
   
@@ -235,7 +236,9 @@ class NatlibMetadatasController < ApplicationController
     
     #Display a list of natlib results for said address
     def generic_property
-        property = params[:property_single]
+        property = params[:property_name]
+        logger.debug "PROP:#{property}"
+        logger.debug params.to_yaml
         natlib_property property
     end
 
@@ -307,6 +310,71 @@ class NatlibMetadatasController < ApplicationController
       zoom_level = 16 - pos
       zoom_level
   end
+ 
+ 
+=begin
+select  n.id, ces.calais_entry_id
+from submissions s
+inner join natlib_metadatas n
+on (s.natlib_metadata_id = n.id)
+inner join calais_entries_submissions ces
+on (ces.submission_id = s.id)
+where ces.calais_entry_id = 480
+order by n.title;
+
+=end
+  
+  def calais_child
+    @page = 1
+    @page = params[:page] if !params[:page].blank?
+    parent_perm = params[:parent_permalink]
+    child_perm = params[:child_permalink]
+    @calais_parent_word = CalaisWord.find_by_permalink parent_perm
+    @calais_child_word = CalaisWord.find_by_permalink child_perm
+    @calais_entry = CalaisEntry.find(:first, :conditions =>
+        ["calais_parent_word_id = ? and calais_child_word_id = ?",
+            @calais_parent_word.id, @calais_child_word.id
+        ]
+    )
+    
+    @property = @calais_entry
+    @clazz = CalaisEntry
+
+    sql_find = sql=<<-EOF
+      select  n.*
+      from submissions s
+      inner join natlib_metadatas n
+      on (s.natlib_metadata_id = n.id)
+      inner join calais_entries_submissions ces
+      on (ces.submission_id = s.id)
+      where ces.calais_entry_id = ?
+      order by n.title
+     EOF
+     
+    sql << " limit #{PAGE_SIZE} offset #{(@page-1)*PAGE_SIZE} "
+    
+    @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+    @natlib_metadatas = NatlibMetadata.find_by_sql(sql.gsub('?', @calais_entry.id.to_s))
+
+    @total_count = 217
+    
+    @n_pages = 1+@total_count/PAGE_SIZE
+
+
+    @single_name =  'Open Calais Word'
+    @plural_name = 'Open Calais Words'
+
+  
+    
+    #Deal with pagination
+    @page_results = WillPaginate::Collection.create(
+      @page, 
+      PAGE_SIZE, 
+      @total_count) do |pager|
+      start = (@page.to_i-1)*PAGE_SIZE
+    end
+    render :template => 'shared/property', :layout => 'archive_search_results' 
+  end
   
   
   
@@ -334,7 +402,7 @@ class NatlibMetadatasController < ApplicationController
         @page = 1
         @page = params[:page] if !params[:page].blank?
         @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-        permalink = params[:name]
+        permalink = params[:permalink]
         @property = @clazz.find_by_permalink(permalink)
         @natlib_metadatas = @property.natlib_metadatas.paginate :page => @page, :order => 'title', :per_page => PAGE_SIZE
         @n_pages = 1+@natlib_metadatas.total_entries/TEXT_LISTPAGE_SIZE
