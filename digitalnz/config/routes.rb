@@ -64,6 +64,7 @@ map.geo_order 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 
 #Open calais
 map.calais_child 'opencalais/:parent_permalink/:child_permalink', :controller => 'natlib_metadatas', :action => 'calais_child'
 map.calais_parent 'opencalais/:parent_permalink', :controller => 'natlib_metadatas', :action => 'calais_parent'
+map.calais_all_parents 'opencalais', :controller => 'natlib_metadatas', :action => 'calais_all_parents'
 
 #Search URL - keep it short
 map.purchase 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
