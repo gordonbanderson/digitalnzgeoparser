@@ -9,6 +9,10 @@ class CalaisWord < ActiveRecord::Base
     validates_presence_of :word
     validates_uniqueness_of :word
   
+  #This is used in the properties page listings
+  def name
+     word 
+  end
   
   def self.find_or_create word
     cw = CalaisWord.find_by_word(word)
