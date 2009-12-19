@@ -340,7 +340,17 @@ order by n.title;
     @property = @calais_entry
     @clazz = CalaisEntry
 
-    sql_find = sql=<<-EOF
+    sql_count = <<-EOF
+    select  count(n.id)
+      from submissions s
+      inner join natlib_metadatas n
+      on (s.natlib_metadata_id = n.id)
+      inner join calais_entries_submissions ces
+      on (ces.submission_id = s.id)
+      where ces.calais_entry_id = ?    
+    EOF
+    
+    sql_find = <<-EOF
       select  n.*
       from submissions s
       inner join natlib_metadatas n
@@ -351,18 +361,20 @@ order by n.title;
       order by n.title
      EOF
      
-    sql << " limit #{PAGE_SIZE} offset #{(@page-1)*PAGE_SIZE} "
+    sql_find << " limit #{PAGE_SIZE} offset #{(@page.to_i-1)*PAGE_SIZE} "
     
     @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
-    @natlib_metadatas = NatlibMetadata.find_by_sql(sql.gsub('?', @calais_entry.id.to_s))
-
-    @total_count = 217
     
+    #FIXME - any risk of SQL injection here?
+    @natlib_metadatas = NatlibMetadata.find_by_sql(sql_find.gsub('?', @calais_entry.id.to_s))
+
+    @total_count = NatlibMetadata.count_by_sql sql_count.gsub('?', @calais_entry.id.to_s)
+    @debug = sql_count.gsub('?', @calais_entry.id.to_s)
     @n_pages = 1+@total_count/PAGE_SIZE
 
 
-    @single_name =  'Open Calais Word'
-    @plural_name = 'Open Calais Words'
+    @single_name =  'Open Calais'
+    @plural_name = 'Open Calais'
 
   
     
