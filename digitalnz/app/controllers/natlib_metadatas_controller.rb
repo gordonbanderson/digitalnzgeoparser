@@ -389,6 +389,67 @@ order by n.title;
   end
   
   
+  def calais_parent
+        @clazz = CalaisEntry
+        @page = 1
+        @page = params[:page] if !params[:page].blank?
+        @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+        parent_perm = params[:parent_permalink]
+        @calais_parent_word = CalaisWord.find_by_permalink parent_perm
+
+        sql_find = <<-EOF
+          select cw.id, cw.word,cw.permalink from
+          calais_entries ce
+          inner join calais_words cw
+          on (cw.id = ce.calais_child_word_id)
+          where ce.calais_parent_word_id = ?
+          order by cw.word
+        EOF
+        sql_find << " limit #{TEXT_LISTPAGE_SIZE} offset #{(@page.to_i-1)*TEXT_LISTPAGE_SIZE} "
+ 
+        sql_count = <<-EOF
+        select  count(cw.id) from
+          calais_entries ce
+          inner join calais_words cw
+          on (cw.id = ce.calais_child_word_id)
+          where ce.calais_parent_word_id = ?  
+        EOF
+        
+        
+        @properties = CalaisWord.find_by_sql(sql_find.gsub('?', @calais_parent_word.id.to_s))
+        
+        @total_count = CalaisWord.count_by_sql sql_count.gsub('?', @calais_parent_word.id.to_s)
+               
+        @page_results = WillPaginate::Collection.create(
+             @page, 
+             TEXT_LISTPAGE_SIZE, 
+             @total_count) do |pager|
+             start = (@page.to_i-1)*TEXT_LISTPAGE_SIZE
+           end
+           
+        @n_pages = 1+@total_count/TEXT_LISTPAGE_SIZE
+        
+        @single_name = 'Open Calais'
+        @plural_name = 'Open Calais'
+      render :template => 'shared/open_calais_parent_known', :layout => 'archive_search_results'
+  end
+  
+  
+  def calais_all_parents
+      sql = <<-EOF
+        select distinct calais_parent_word_id, cw.word, cw.permalink from calais_entries
+        inner join calais_words cw
+        on (calais_parent_word_id = cw.id)
+        order by cw.word
+      EOF
+      @archive_search = ArchiveSearch::new #maintain a happy empty search form at the top of the page
+      
+      @calais_parent_words = CalaisWord.find_by_sql(sql)
+      render :template => 'shared/open_calais_all_parents', :layout => 'archive_search_results'
+      
+  end
+  
+  
   
   #Helper methods for the controller, made private so they cannot be called directly
   #Display a list of all coverages
