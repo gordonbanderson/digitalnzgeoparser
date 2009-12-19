@@ -1,0 +1,25 @@
+<% content_for :header do%>
+<%set_title "#{@clazz.to_s.pluralize},  page #{@page} of #{@n_pages} - Geoparsed Records"%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
+
+<% content_for :col1 do%>
+	<div id="content">
+		<h1>Open Calais - Parent Categories</h1>
+		<ul id="natlibPropertyList">
+			
+		<%for property in @calais_parent_words%>
+			<li>
+				<%= link_to property.name, calais_parent_url(:parent_permalink => property.permalink)%>
+</li>
+		<%end%>
+			
+		</ul>
+	</div>
+	
+	
+<%end%>
+
+<% content_for :col2 do%>
+<%= render :partial => 'shared/geoparsedinfo/calais_entry.erb'%>
+<%end%>
