@@ -51,15 +51,19 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :natlib_metadatas, :member => { :map => :get },
                 :collection => {:geoparsed, :get}
                 
-map.purchase 'geoparsed/addresses', :controller => 'natlib_metadatas', :action => 'addresses'
-map.purchase 'geoparsed/address/:name', :controller => 'natlib_metadatas', :action => 'address'
-map.purchase 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
-map.purchase 'geoparsed/coverages', :controller => 'natlib_metadatas', :action => 'coverages'
+map.geo_addresses 'geoparsed/addresses', :controller => 'natlib_metadatas', :action => 'addresses'
+map.geo_address 'geoparsed/address/:name', :controller => 'natlib_metadatas', :action => 'address'
+map.coverage 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
+map.coverages 'geoparsed/coverages', :controller => 'natlib_metadatas', :action => 'coverages'
 
-map.purchase 'geoparsed/metadata/:property_plural', :controller => 'natlib_metadatas', :action => 'generic_properties'
-map.purchase 'geoparsed/metadata/:property_single/:name', :controller => 'natlib_metadatas', :action => 'generic_property'
+map.geo_property_single 'geoparsed/metadata/:property_name/:permalink', :controller => 'natlib_metadatas', :action => 'generic_property'
+map.geo_property_plural 'geoparsed/metadata/:property_plural', :controller => 'natlib_metadatas', :action => 'generic_properties'
 
-map.purchase 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
+map.geo_order 'geoparsed/:order', :controller => 'natlib_metadatas', :action => 'geoparsed'
+
+#Open calais
+map.calais_child 'opencalais/:parent_permalink/:child_permalink', :controller => 'natlib_metadatas', :action => 'calais_child'
+map.calais_parent 'opencalais/:parent_permalink', :controller => 'natlib_metadatas', :action => 'calais_parent'
 
 #Search URL - keep it short
 map.purchase 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
