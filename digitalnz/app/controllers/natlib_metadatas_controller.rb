@@ -90,6 +90,14 @@ class NatlibMetadatasController < ApplicationController
             @no_matches = @submission.filtered_by('no_geocoder_matches')
             @too_short = @submission.filtered_by('too_short')
             @geoparser_failed = @submission.filtered_by('geoparser_failed')
+            
+            #Form a hash of calais parent to calais_child
+            @calais_hash = {}
+            for entry in @submission.calais_entries
+                @calais_hash[entry.parent_word]=[] if @calais_hash[entry.parent_word].blank?
+                @calais_hash[entry.parent_word] << entry.child_word
+            end
+            
 
             @phrases = Phrase.find(:all, :conditions => ["words in (?)", @search_terms.keys])
             pfs = @submission.phrase_frequencies
