@@ -19,7 +19,7 @@ class CalaisEntry < ActiveRecord::Base
   
   
   def name
-     pretty_print 
+      "#{parent_word.word} | #{child_word.word}" 
   end
   
   #Print out for debug purposes
