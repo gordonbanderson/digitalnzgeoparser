@@ -1,7 +1,7 @@
 class NatlibmetaPermalink < ActiveRecord::Migration
   def self.up
       ctr = 0
-      #add_column :natlib_metadatas, :permalink, :string
+      add_column :natlib_metadatas, :permalink, :string
       
       total = NatlibMetadata.count
       page_size = 100
