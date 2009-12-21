@@ -534,8 +534,8 @@ Organization:
     removed = []
     
     #Remove text that might mislead the geoparsing process
-    result.gsub!('Horowhenua Historical Society Inc.', '')
-    result.gsub!('Alexander Turnbull Library,', '')
+#    result.gsub!('Horowhenua Historical Society Inc.', '')
+#    result.gsub!('Alexander Turnbull Library,', '')
     
     
     puts "FILTERING\n========"
@@ -544,8 +544,9 @@ Organization:
     calais_tags = get_cached_tags(result)
     puts "CALAIS TAGS:"
     puts calais_tags.to_yaml
-
     
+
+    #Remove non geographical keys from the text, e.g. we do not want to parse "Sydney Charles Smyth" when he is a person
     for key_non_geo in ['Person', 'Organization']
       #puts "NON GEO KEY:#{key_non_geo}"
       items = calais_tags[key_non_geo]
