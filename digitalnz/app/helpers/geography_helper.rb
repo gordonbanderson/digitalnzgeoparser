@@ -77,7 +77,8 @@ module GeographyHelper
           cached.cached_geo_search_term = cached_search_term
         
 
-  
+            #FIXME - attached coordinates otherwise save fails...
+            #FIXME - write test for this
         
         
           begin
