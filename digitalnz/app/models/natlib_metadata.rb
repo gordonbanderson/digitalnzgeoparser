@@ -36,28 +36,49 @@ class NatlibMetadata < ActiveRecord::Base
   
   
   #This is text that will be checked for geo locations
-  def geo_text(return_array=false)
+  def geo_text(return_array=false, append_dots = false)
+      if append_dots
+          dot = '.'
+      else
+          dot = ''
+      end
     if return_array
        result = [] 
     else
         result = ""
     end
+    
+    puts "TITLE class:#{title.class}"
+    puts title.to_yaml
+    
+    title << '.' if !title.ends_with? dot
     result << title
     result << PARA_BREAK
-    result << description if !description.blank?
-    result << PARA_BREAK
+
+    if !description.blank?
+        description << dot if !description.ends_with? dot
+        result << description
+        result << PARA_BREAK
+    end
+    
     for p in placenames
-      result << p.name
-      result << PARA_BREAK
+        name = p.name
+        name << dot if !name.ends_with? dot
+        result << name
+        result << PARA_BREAK
     end
     
     for c in coverages
-      result << c.name
+      name = c.name
+      name << dot if !name.ends_with? dot
+      result << name
       result << PARA_BREAK
     end
     
     for s in subjects
-      result << s.name
+      name = s.name
+      name << dot if !name.ends_with? dot
+      result << name
       result << PARA_BREAK
     end
     
@@ -126,7 +147,14 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       metadata = NatlibMetadata.find_by_natlib_id(record_number)
       metadata = NatlibMetadata::new if metadata.blank?
       metadata.natlib_id = record_number
-      metadata.title = result['dc']['title']
+      
+      #Record 24614 shows this
+      the_title = result['dc']['title']
+      if the_title.class == Array
+          metadata.title = the_title.join('  ')
+      else
+          metadata.title = the_title #Assume string
+      end
       
       #Deal with potentially habtm creators
       creators = []
