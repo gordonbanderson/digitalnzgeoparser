@@ -55,8 +55,6 @@ module NatlibMetadatasHelper
             already_existing_ids = natlib_records_existing.map{|r|r.natlib_id.to_i}
 
             for result in digital_nz_search_result.results
-                
-
                 if already_existing_ids.include? result.id.to_i
                     old_record_ctr = old_record_ctr + 1
                 else    
