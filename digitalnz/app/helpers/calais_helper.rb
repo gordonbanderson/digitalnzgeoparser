@@ -12,6 +12,10 @@ PARAMS = "&paramsXML=" + CGI.escape('<c:params xmlns:c="http://s.opencalais.com/
 require 'digest/sha2'
 
 
+class ParsingException < Exception
+    
+end
+
 =begin
 coordinates = CACHE["mb_#{code}"]
 
@@ -94,7 +98,6 @@ puts tags.to_yaml
       puts "UNCACHED"
       http = SimpleHttp.new "http://api.opencalais.com/enlighten/calais.asmx/Enlighten"
       response = CGI.unescapeHTML(http.post(data+PARAMS))
-      CACHE[memcache_key] = response
     else
       puts "CACHED"
     end
@@ -103,8 +106,17 @@ puts tags.to_yaml
     
     if response.include?('<Error Method="ProcessText"')
       puts "Error parsing at Calais end"
+      puts "======="
+      puts response
+      puts "/======"
+      puts 
+      raise ParsingException::create (:message => "An error occurred with Calais - #{response}")
+        
+      
     else
-  
+        #Do not cache if broken response, only save valid
+        CACHE[memcache_key] = response
+        
       index1 = response.index('terms of service.-->')
       index1 = response.index('<!--', index1)
       index2 = response.index('-->', index1)
