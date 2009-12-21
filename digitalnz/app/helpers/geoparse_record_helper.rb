@@ -7,6 +7,9 @@ include GeoParserHelper
 require 'memcache'
 
 
+
+
+
 module GeoparseRecordHelper
 
 
@@ -46,9 +49,10 @@ module GeoparseRecordHelper
 
       elapsed_time("Trace 1")
 
-
+      geographical_text = nl.geo_text(false, true)
+      
       puts "========"
-      puts nl.geo_text
+      puts geographical_text
       puts "========"
 
 =begin
@@ -82,7 +86,7 @@ module GeoparseRecordHelper
       puts "BRIEF:#{nl.natlib_id} - #{nl.title}"
       puts nl.geo_text
 
-      geocoder_text = remove_non_geo_items_for_geocoders(nl.geo_text)
+      geocoder_text = remove_non_geo_items_for_geocoders(geographical_text)
       elapsed_time("Trace 2")
 
 
@@ -322,10 +326,10 @@ module GeoparseRecordHelper
       elapsed_time("Trace 17b - removed any previous submission")
       new_filtered_phrases = []
 
-      puts nl.geo_text
+      puts geographical_text
       submission = Submission::new
-      submission.body_of_text = nl.geo_text
-      submission.signature = Digest::MD5.hexdigest(nl.geo_text)
+      submission.body_of_text = geographical_text
+      submission.signature = Digest::MD5.hexdigest(geographical_text)
       #submission.save!
       
       
