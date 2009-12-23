@@ -48,6 +48,9 @@ class ArchiveSearchesController < ApplicationController
       #Process facets for display purposes
       @facets = @digital_nz_search_result.facets    
       process_facet_fields(@facets)
+      
+      #Ensure hidden fields enumerate to maintain current facet
+      @filter_params = leaf_facets.map{|l| l.id}
 
       #Render results
 
