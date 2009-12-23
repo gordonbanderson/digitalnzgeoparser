@@ -30,19 +30,17 @@ class ArchiveSearchesController < ApplicationController
       
       logger.debug @facets_array.to_yaml
       
-      leaf_facets = []
-      for facet_field in @facets_hash
-          logger.debug "FACET FIELD CLASS:#{facet_field.class}"
-          leaf_facets << facet_field if !facet_field.parent.blank?
-      end
+
+      
+      leaf_facets = @facets_hash.values
       
       logger.debug "==================="
       logger.debug leaf_facets.to_yaml
       
-      asdfsfsdf
+      
       
       #FIXME - db access duplicated
-      process_facet_params @facets_array.map{|f|f.id}
+      process_facet_params leaf_facets.map{|f|f.id}
 
       #Search digitalnz, and prime the page number, results count etc
       search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
