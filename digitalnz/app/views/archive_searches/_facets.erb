@@ -48,7 +48,7 @@
     <ul <%=hidden_html%> id="<%=css_id%>">
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
-        link = '/search/'+@archive_search.search_text+'/?' + @previous_params+'&f[]='+child_facet.id.to_s
+        link = '/search/'+@archive_search.search_text+'/?' + @previous_params+'f[]='+child_facet.id.to_s
         link << @facet_params_chosen
         %>
         <li>
