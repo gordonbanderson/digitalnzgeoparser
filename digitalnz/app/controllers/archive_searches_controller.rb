@@ -331,7 +331,7 @@ class ArchiveSearchesController < ApplicationController
       @previous_params = ""
       @query_term = params[:q]
       #@previous_params << "?q=#{params[:q]}"
-      @previous_params << "page=#{@page}" if @page>1
+      # PAGE NOT REQUIRED - FACETS GO BACK TO PAGE 1 @previous_params << "page=#{@page}" if @page.to_i > 1
       @previous_params << '&' if !@previous_params.blank? #This will be extended with further facets
 
       #If we have any filters we need to expand the query
