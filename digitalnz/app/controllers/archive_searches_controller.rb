@@ -22,14 +22,21 @@ class ArchiveSearchesController < ApplicationController
       start_time = Time.now
       
       
-
+      facets_params_array = params[:facets]
+      
       #This is the case of a GET url
       prime_search_term
+  
+      if (facets_params_array.length % 2) == 1
+          facets_params_array = [@archive_search.search_text] + facets_params_array
+          
+         @archive_search.search_text = ''
+         facets_params_array.flatten! 
+      end
 
-      @facets_hash = parse_facet_params_array params[:facets]
-      
-      logger.debug @facets_array.to_yaml
-      
+      logger.debug facets_params_array.to_yaml
+
+      @facets_hash = parse_facet_params_array facets_params_array
 
       
       leaf_facets = @facets_hash.values
