@@ -1,16 +1,20 @@
 <% content_for :header do %>
 <%= render :partial => 'search_form_small' %>
+<%if @error_message.blank?%>
 <div id="searchMetaInformation">
 <p>
    Results <%=1+@digital_nz_search_result.start%> - <%=@n_last_result_on_page%> of about <%=@digital_nz_search_result.count%><%if !@archive_search.search_text.blank?%> for '<%=@archive_search.search_text%>'<%end%>. (<%=@elapsed_time%> seconds) 
 </p>
 </div>
 <%end%>
+<%end%>
 
 
 
 
 <% content_for :col1 do %>
+<%if @error_message.blank?%>
+
     <div id="searchResultsColumn">
     <%if !@images_category%>
         <%= render :partial => 'non_image_results'%>
@@ -20,10 +24,15 @@
     
     </div>
     <%=render :partial => 'page_links'%>
+	<%else%>
+	An error occurred contacting the Digital NZ servers: <%=@error_message%>
+	<%end%>
 <%end%>
 
 <% content_for :col2 do %>
+<%if @error_message.blank?%>
 <%=render :partial => 'facets'%>
+<%end%>
 <% end %>
 
 
