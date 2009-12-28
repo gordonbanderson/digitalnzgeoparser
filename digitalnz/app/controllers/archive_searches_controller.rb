@@ -125,27 +125,34 @@ class ArchiveSearchesController < ApplicationController
     process_facet_params params[:f]
  
     #Search digitalnz, and prime the page number, results count etc
-    search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
+    begin
+        search_digitalnz(@archive_search.search_text, @filter_query, @page, @result_page_size)
+
+        #Process facets for display purposes
+        @facets = @digital_nz_search_result.facets    
+        process_facet_fields(@facets)
+        
+    rescue Exception => e
+        @error_message = e.message
+    end
     
-    #Process facets for display purposes
-    @facets = @digital_nz_search_result.facets    
-    process_facet_fields(@facets)
+
 
     #Render results
-
     respond_to do |format|
-      if @archive_search.save
-        flash[:archive_search] = 'Search was successfully created.'
-        format.html { 
-          @elapsed_time = (Time.now-start_time)*100.round.to_f / 100
-          render :layout => 'archive_search_results'
-        }
-        #format.xml  { render :xml => @country, :status => :created, :location => @country }
-      else
-        format.html { render :action => "index" }
-        format.xml  { render :xml => @archive_search.errors, :status => :unprocessable_entity }
-      end
-    end
+         if @archive_search.save && @error_message.blank?
+           flash[:archive_search] = 'Search was successfully created.'
+           format.html { 
+             @elapsed_time = (Time.now-start_time)*100.round.to_f / 100
+             render :layout => 'archive_search_results'
+           }
+           #format.xml  { render :xml => @country, :status => :created, :location => @country }
+         else
+           format.html { render :layout => 'archive_search_results' }
+           format.xml  { render :xml => @archive_search.errors, :status => :unprocessable_entity }
+         end
+       end
+   
     
 
   end
