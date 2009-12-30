@@ -20,9 +20,9 @@ for result in @digital_nz_search_result.results
             <%elsif !metarecord.submission.blank?
 			id_string = seo_id(metarecord.natlib_id, metarecord.title)
 			%>
-            <%=link_to 'Map', map_natlib_metadata_url(:id=>id_string)%>
+			<%=link_to 'Map', natlib_map_url(:permalink=>metarecord.permalink)%>
             <%else%>
-            <%=link_to 'Metadata', map_natlib_metadata_url(:id=>id_string)%>
+			<%=link_to 'Metadata', natlib_map_url(:permalink=>metarecord.permalink)%>
             <%end%>    
         <br/>
         <%=hostof(result.display_url)%>
