@@ -40,10 +40,15 @@ class NatlibMetadatasController < ApplicationController
     where area is not null
     order by area desc;
 =end    
-    
-    id_string = params[:id].split('-')[0]
-    @natlib_metadata = NatlibMetadata.find_by_natlib_id(id_string)
-    
+    permalink = params[:permalink]
+    if !permalink.blank?
+        @natlib_metadata = NatlibMetadata.find_by_permalink(permalink)
+    else
+        id_string = params[:id].split('-')[0]
+        @natlib_metadata = NatlibMetadata.find_by_natlib_id(id_string)
+    end
+
+
     @title = 'Digital NZ:'+@natlib_metadata.title
     
     #Filter by accuracy - show all if this is blank
