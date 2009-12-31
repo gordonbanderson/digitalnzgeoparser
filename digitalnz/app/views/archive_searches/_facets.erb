@@ -51,6 +51,7 @@
 		facet_path = FacetFieldsHelper.facets_to_seo_url(@filters, child_facet)
 		
         link = '/search/'+@archive_search.search_text+facet_path
+		link.gsub!('//', '/')  #Empty search case
         %>
         <li>
             <a href="<%=link%>"><%=value['name']%></a> (<%=value['num_results']%>)
