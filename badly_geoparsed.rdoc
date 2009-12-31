@@ -124,8 +124,42 @@ http://localhost:3000/natlib_metadatas/48275-samoa-a-party-of-sailors-ready-for-
 http://localhost:3000/natlib_metadatas/1246861/map << how to deal with lowercase?
 
 http://localhost:3000/natlib_metadatas/256137-steam-train/map << Hawke's Bay case, the apostrophe
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/77944-tait-brothers-hokitika-dunedin-and-greymouth/map << more bracket issues
+
+http://localhost:3000/natlib_metadatas/1380086/map << place names missing
+http://localhost:3000/natlib_metadatas/149082/map << lots of place names missing...
+http://localhost:3000/natlib_metadatas/149009/map << can we infer more names?
+
+http://localhost:3000/natlib_metadatas/148531/map << lots of placenames missing
+
+http://localhost:3000/natlib_metadatas/62243-island-bay-wellington-photograph-taken-by-muir/map << tweak to tst for clyde st in wellington, ie look for inclusion?
+
+http://localhost:3000/natlib_metadatas/73525-duke-of-cornwall-and-york-presenting-war-medals/map
+Hagley Park has Open Calais Facility and Google Premises match
+
+http://localhost:3001/natlib_metadatas/69269/map << 'Lyall Bay beach' should not be in the list
+
+http://localhost:3000/natlib_metadatas/99413-hill-mabel-1872-1956-rivermouth-dunedin-or-waitaki/map << weird open calaisnaessm why the join?  Oh, Open Calais parsing error...
+
+http://localhost:3000/natlib_metadatas/50297-dipping-sheep-at-the-mendip-hills-sheep-run/map << Open calais not respecting line breaks?
+
+http://localhost:3000/natlib_metadatas/230277-waikare-s-galley-cook/map << why no Dusky sound
+http://localhost:3000/natlib_metadatas/50090-stacking-hay-into-thatched-circular-haystacks/map << geo hierarchy here from Open Calais?
+
+http://localhost:3000/natlib_metadatas/1268017-wellington-town-hall-during-the-influenza-pandemic/map << wellington town hall missing
 
 
+http://localhost:3000/natlib_metadatas/24615/map - title appears to be an array
+
+
+http://localhost:3000/map/their-royal-highnesses-leave-auckland-for-rotorua-the-royal-train-on-the-parnell-bank-auckland
+WHy no Rotorua?  Last word of sentence perhaps?
+
+http://localhost:3000/map/the-auckland-wellington-express-passing-campbells-point-near-auckland
+Auckland-Wellington << dash is incorrect
+
+
+20913 << full address not geoparsed - try comma splits thing?
 
  <td></td>
     <td><%=@accuracies[search_term]%></td>
@@ -143,4 +177,4 @@ http://localhost:3000/natlib_metadatas/74498/map  Willis St :Grand << colon shou
 Issue with dual content providers
 http://localhost:3000/natlib_metadatas/76092/map
 
-
+http://localhost:3000/natlib_metadatas/42232-thai-royals-aboard-the-rangatira/map << why is Lyttleton not found?
