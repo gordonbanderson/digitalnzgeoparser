@@ -35,11 +35,11 @@ module FacetFieldsHelper
     #Convert a list of facet ids to the nice url format, e.g. /category/images/collection/flickr
     #@param facets mapping of filtername -> facet object
     #@param new_filter_facet the extra filter being applied
-    def self.facets_to_seo_url(facets, new_filter_facet)
+    def self.facets_to_seo_url(facets, new_filter_facet=nil)
         result = ''
         
         keys = facets.keys
-        keys << new_filter_facet.permalink
+        keys << new_filter_facet.permalink if !new_filter_facet.blank?
         
         for key in keys.sort
             facet = facets[key]
