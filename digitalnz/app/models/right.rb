@@ -6,9 +6,11 @@ class Right < ActiveRecord::Base
   
   
   def self.find_or_create the_name
-    o = Right.find_by_name the_name
-    o = Right::create :name => the_name   if o.blank?
-    o  
+        search_name = the_name.clone
+        search_name = the_name[0,250]
+        o = Right.find_by_name search_name
+        o = Right::create :name => search_name   if o.blank?
+        o  
   end
   
 end
