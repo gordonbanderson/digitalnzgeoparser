@@ -41,15 +41,30 @@ module FacetFieldsHelper
         keys = facets.keys
         keys << new_filter_facet.permalink if !new_filter_facet.blank?
         
+        
+        #This will hold parent -> child permalinks, which will be sorted for URL purposes
+        permalinks = {}
+        
         for key in keys.sort
             facet = facets[key]
             if facet.blank?
                facet = new_filter_facet 
             end
             if !facet.parent.blank?
-                result << "/#{facet.parent.permalink}/#{facet.permalink}"  
+                permalinks[facet.parent.permalink] = facet.permalink
             end
         end
+        
+        RAILS_DEFAULT_LOGGER.debug permalinks.to_yaml
+        for parent_permalink in permalinks.keys.sort
+            child_permalink = permalinks[parent_permalink]
+            result << "/#{parent_permalink}/#{child_permalink}"  
+            
+        end
+        
+        
+        
+        
         result
     end
     
