@@ -48,8 +48,9 @@
     <ul <%=hidden_html%> id="<%=css_id%>">
         <%for value in facet['values']
         child_facet = @child_facet_fields[value['name']]
-        link = '/search/'+@archive_search.search_text+'/?' + @previous_params+'f[]='+child_facet.id.to_s
-        link << @facet_params_chosen
+		facet_path = FacetFieldsHelper.facets_to_seo_url(@filters, child_facet)
+		
+        link = '/search/'+@archive_search.search_text+facet_path
         %>
         <li>
             <a href="<%=link%>"><%=value['name']%></a> (<%=value['num_results']%>)
