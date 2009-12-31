@@ -109,9 +109,15 @@ class ArchiveSearchesController < ApplicationController
             logger.debug "FILTER PARAM"
             logger.debug filter_param.to_yaml
             
+            filters = {}
+            for filter in FacetField.find(:all, :conditions => ["id in (?)", filter_ids.split(',')])
+                filters[filter.permalink] = filter
+            end
             
             
-            redirect_to "/search/#{URI::escape(@q)}/?#{filter_param.join('&').gsub('f[]=f','')}"
+            
+            
+            redirect_to "/search/#{URI::escape(@q)}"+FacetFieldsHelper.facets_to_seo_url(filters)
             
         end
       return
