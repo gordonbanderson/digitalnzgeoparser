@@ -26,7 +26,11 @@ if facet_already_chosen
 	end
 	
     fparam = "&f[]=#{child_facet.id}"
-    link = '/search/'+@archive_search.search_text+FacetFieldsHelper.facets_to_seo_url(facets_to_filter)
+	if !@archive_search.search_text.blank?
+		link = '/search/'+@archive_search.search_text+FacetFieldsHelper.facets_to_seo_url(facets_to_filter)
+	else
+		link = '/search'+FacetFieldsHelper.facets_to_seo_url(facets_to_filter)
+	end
     tooltip_cancel = "Remove #{facet_parent_name} filter '#{child_facet.name}' from current search"
 	tooltip_current = "Your search is currently filtered by #{facet_parent_name}:#{child_facet.name}"
 %>
