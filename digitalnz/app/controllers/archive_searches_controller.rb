@@ -14,7 +14,7 @@ class ArchiveSearchesController < ApplicationController
   #Page size for images only
   IMAGE_PAGE_SIZE=40
   
-  #Parse a list of paramters in name value pairs and search the relevant facets
+  #Parse a list of parameters in name value pairs and search the relevant facets
   # URLs can be of the form
   # * /search/fish/category/images
   # * /search/category/images/year/1920-1940
