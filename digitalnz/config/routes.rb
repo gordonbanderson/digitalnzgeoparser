@@ -50,7 +50,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :natlib_metadatas, :member => { :map => :get },
                 :collection => {:geoparsed, :get}
-                
+
+
+map.natlib_map 'map/:permalink', :controller => 'natlib_metadatas', :action => 'map'
+
+
 map.geo_addresses 'geoparsed/addresses', :controller => 'natlib_metadatas', :action => 'addresses'
 map.geo_address 'geoparsed/address/:name', :controller => 'natlib_metadatas', :action => 'address'
 map.coverage 'geoparsed/coverage/:name', :controller => 'natlib_metadatas', :action => 'coverage'
