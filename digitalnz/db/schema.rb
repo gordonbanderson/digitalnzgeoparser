@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091216144359) do
+ActiveRecord::Schema.define(:version => 20091216145952) do
 
   create_table "accuracies", :force => true do |t|
     t.column "name", :string
@@ -57,13 +57,11 @@ ActiveRecord::Schema.define(:version => 20091216144359) do
     t.column "bbox_east", :float
     t.column "bbox_north", :float
     t.column "bbox_south", :float
-    t.column "geom", :point, :null => false
   end
 
   add_index "cached_geo_searches", ["permalink"], :name => "index_cached_geo_searches_on_permalink", :unique => true
   add_index "cached_geo_searches", ["cached_geo_search_term_id"], :name => "cached_geo_searches_cached_geo_search_term_id_fk"
   add_index "cached_geo_searches", ["accuracy_id"], :name => "cached_geo_searches_accuracy_id_fk"
-  add_index "cached_geo_searches", ["geom"], :name => "index_cached_geo_searches_on_geom"
 
   create_table "cached_geo_searches_submissions", :id => false, :force => true do |t|
     t.column "submission_id", :integer
@@ -373,6 +371,7 @@ ActiveRecord::Schema.define(:version => 20091216144359) do
     t.column "permalink", :string
   end
 
+  add_index "natlib_metadatas", ["permalink"], :name => "index_natlib_metadatas_on_permalink", :unique => true
   add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
   add_index "natlib_metadatas", ["title"], :name => "natlib_title_index"
 
