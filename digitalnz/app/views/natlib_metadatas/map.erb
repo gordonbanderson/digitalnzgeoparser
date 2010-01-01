@@ -11,8 +11,11 @@
 <%=@natlib_metadata.description%>
 </div>
 
-<%if !@submission.blank?%>
 
+<%if !@submission.blank?%>
+<pre>
+	<%=@n_places_for_terms.to_yaml%>
+</pre>
         <%if !@map.blank?%>
          <%= @map.div(:width => 600, :height => 300) %>
         <%else%>
@@ -22,17 +25,24 @@
 		<%for words in @phrases
 			freak = @phrase_frequencies[words]
 			tooltip = "#{freak} occurences found in source text"
-			
+			n_results_color = '0';
 			the_size = 7+1.5*freak.to_f
 			non_geo_string = ''
 			if @accuracies[words].blank?
 				non_geo_string = ' nongeo'
 				tooltip << "\nNo location found"
+				n_results_color='red';
 			else
-				tooltip << "\nLocation found"
+				n_places = @n_places_for_terms[words]
+				tooltip << "\nLocation found #{n_places}"
+				if n_places <= 14
+					n_results_color = '0123456789abcdef'[n_places]
+				else
+					n_results_color = 'e' #Faded enough
+				end
 			end
 		%>
-		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt;" title="<%=tooltip%>"><%=words%></span>
+		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt; color:#<%=n_results_color%><%=n_results_color%><%=n_results_color%>;" title="<%=tooltip%>"><%=words%></span>
 		<%
 		end%>
 </div>
