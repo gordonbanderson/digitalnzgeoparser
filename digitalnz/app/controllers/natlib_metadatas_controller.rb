@@ -121,8 +121,13 @@ class NatlibMetadatasController < ApplicationController
               maxx=-180
               miny=+90
               maxy=-90
+              
+              @n_places_for_terms = {}
 
               for cached_search in @submission.cached_geo_searches
+                  search_term = cached_search.cached_geo_search_term.search_term
+                  @n_places_for_terms[search_term] = 0 if @n_places_for_terms[search_term].blank?
+                  @n_places_for_terms[search_term] = @n_places_for_terms[search_term] + 1
                 if cached_search.accuracy.google_id < @filter.to_i
                   info_text = cached_search.address
                   info_text << '<br/>'
