@@ -1,5 +1,7 @@
+require 'digest/sha2'
+
 class CachedGeoSearch < ActiveRecord::Base
-  belongs_to :cached_geo_search_term
+  has_and_belongs_to_many :cached_geo_search_terms
   belongs_to :accuracy
   
   acts_as_mappable :lat_column_name => :latitude,
@@ -41,6 +43,12 @@ class CachedGeoSearch < ActiveRecord::Base
 	EOF
     result = template.result(binding)
 	return "\n"+result.strip
+  end
+  
+  #Save a dig sig of some of the parameters in an attempt to identify duplicates
+  def before_validation
+      sigstring = "#{address}:#{latitude}:#{longitude}:#{bbox_west}:#{bbox_east}:#{bbox_south}:#{bbox_north}"
+      signature = Digest::SHA256.hexdigest(sigstring)
   end
   
 end
