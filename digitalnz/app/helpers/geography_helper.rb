@@ -74,7 +74,8 @@ module GeographyHelper
           cached.accuracy = accuracy
           cached.address = location.address
         
-          cached.cached_geo_search_term = cached_search_term
+          current_terms = cached.cached_geo_search_terms
+          cached.cached_geo_search_terms << cached_search_term if !current_terms.include? cached_search_term
         
 
             #FIXME - attached coordinates otherwise save fails...
@@ -83,13 +84,14 @@ module GeographyHelper
         
         
           begin
-            puts "Search term object is #{cached.cached_geo_search_term}"
+            puts "Search term object is #{cached.cached_geo_search_terms}"
             #puts cached.to_yaml
             cached.save!
           rescue Exception => e
              puts "TRACE1 - #{search_term}"
              puts "Unable to save #{search_term}, db issue?"
              puts "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+             raise "Error saving"
              puts "========="
           end
  
