@@ -1,6 +1,6 @@
 require 'erb'
 class CachedGeoSearchTerm < ActiveRecord::Base
-  has_many :cached_geo_searches
+  has_and_belongs_to_many :cached_geo_searches
   has_many :search_term_frequencies
   has_many :submissions, :through => :search_term_frequencies
   
