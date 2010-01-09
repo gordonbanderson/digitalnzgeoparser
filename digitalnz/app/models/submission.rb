@@ -3,7 +3,7 @@ require 'geo_parser_helper'
 include GeoParserHelper
 
 class Submission < ActiveRecord::Base
-  has_and_belongs_to_many :cached_geo_searches, :include => [:cached_geo_search_term, :accuracy]
+  has_and_belongs_to_many :cached_geo_searches, :include => [:cached_geo_search_terms, :accuracy]
   has_and_belongs_to_many :filtered_phrases, :include => [:filter_type, :phrase]
   has_and_belongs_to_many :calais_entries, :include => [:parent_word, :child_word]
   
@@ -74,7 +74,7 @@ class Submission < ActiveRecord::Base
       for location in x
         lat = location.latitude
         lon = location.longitude
-        puts "CHECKING:#{location.cached_geo_search_term.search_term} #{lon}, #{lat}"
+        puts "CHECKING:#{location.address} #{lon}, #{lat}"
         east = lon if lon > east
         west = lon if lon < west
         north = lat if lat > north
