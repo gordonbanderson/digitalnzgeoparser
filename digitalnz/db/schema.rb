@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091216145952) do
+ActiveRecord::Schema.define(:version => 20100107075202) do
 
   create_table "accuracies", :force => true do |t|
     t.column "name", :string
@@ -39,12 +39,17 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
 
   add_index "cached_geo_search_terms", ["search_term"], :name => "index_cached_geo_search_terms_on_search_term"
 
+  create_table "cached_geo_search_terms_cached_geo_searches", :force => true do |t|
+    t.column "cached_geo_search_id", :integer
+    t.column "cached_geo_search_term_id", :integer
+  end
+
+  add_index "cached_geo_search_terms_cached_geo_searches", ["cached_geo_search_id"], :name => "index_cgs_join21_id"
+  add_index "cached_geo_search_terms_cached_geo_searches", ["cached_geo_search_term_id"], :name => "index_cgs_join22_id"
+
   create_table "cached_geo_searches", :force => true do |t|
-    t.column "latitude", :float
-    t.column "longitude", :float
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
-    t.column "cached_geo_search_term_id", :integer
     t.column "admin_area", :string
     t.column "subadmin_area", :string
     t.column "dependent_locality", :string
@@ -53,20 +58,25 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "country", :string
     t.column "address", :string
     t.column "permalink", :string
-    t.column "bbox_west", :float
-    t.column "bbox_east", :float
-    t.column "bbox_north", :float
-    t.column "bbox_south", :float
+    t.column "signature", :string
+    t.column "latitude", :decimal, :precision => 15, :scale => 10
+    t.column "longitude", :decimal, :precision => 15, :scale => 10
+    t.column "bbox_west", :decimal, :precision => 15, :scale => 10
+    t.column "bbox_south", :decimal, :precision => 15, :scale => 10
+    t.column "bbox_north", :decimal, :precision => 15, :scale => 10
+    t.column "bbox_east", :decimal, :precision => 15, :scale => 10
   end
 
   add_index "cached_geo_searches", ["permalink"], :name => "index_cached_geo_searches_on_permalink", :unique => true
-  add_index "cached_geo_searches", ["cached_geo_search_term_id"], :name => "cached_geo_searches_cached_geo_search_term_id_fk"
   add_index "cached_geo_searches", ["accuracy_id"], :name => "cached_geo_searches_accuracy_id_fk"
 
   create_table "cached_geo_searches_submissions", :id => false, :force => true do |t|
     t.column "submission_id", :integer
     t.column "cached_geo_search_id", :integer
   end
+
+  add_index "cached_geo_searches_submissions", ["cached_geo_search_id"], :name => "index_cached_geo_searches_submissions_on_cached_geo_search_id"
+  add_index "cached_geo_searches_submissions", ["submission_id"], :name => "index_cached_geo_searches_submissions_on_submission_id"
 
   create_table "calais_entries", :force => true do |t|
     t.column "calais_child_word_id", :integer
@@ -84,6 +94,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
+
+  add_index "calais_entries_submissions", ["calais_entry_id"], :name => "calais_entries_submissions_calais_entry_id_fk"
+  add_index "calais_entries_submissions", ["submission_id"], :name => "calais_entries_submissions_submission_id_fk"
 
   create_table "calais_submissions", :force => true do |t|
     t.column "signature", :string
@@ -120,6 +133,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "updated_at", :datetime
   end
 
+  add_index "categories_natlib_metadatas", ["category_id"], :name => "index_categories_natlib_metadatas_on_category_id"
+  add_index "categories_natlib_metadatas", ["natlib_metadata_id"], :name => "index_categories_natlib_metadatas_on_natlib_metadata_id"
+
   create_table "centroids", :force => true do |t|
     t.column "latitude", :float
     t.column "longitude", :float
@@ -148,6 +164,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "updated_at", :datetime
   end
 
+  add_index "collections_natlib_metadatas", ["collection_id"], :name => "index_collections_natlib_metadatas_on_collection_id"
+  add_index "collections_natlib_metadatas", ["natlib_metadata_id"], :name => "index_collections_natlib_metadatas_on_natlib_metadata_id"
+
   create_table "content_partners", :force => true do |t|
     t.column "name", :string
     t.column "permalink", :string
@@ -165,6 +184,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "updated_at", :datetime
   end
 
+  add_index "content_partners_natlib_metadatas", ["content_partner_id"], :name => "index_content_partners_natlib_metadatas_on_content_partner_id"
+  add_index "content_partners_natlib_metadatas", ["natlib_metadata_id"], :name => "index_content_partners_natlib_metadatas_on_natlib_metadata_id"
+
   create_table "contributors", :force => true do |t|
     t.column "name", :string
     t.column "permalink", :string
@@ -181,6 +203,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
+
+  add_index "contributors_natlib_metadatas", ["contributor_id"], :name => "index_contributors_natlib_metadatas_on_contributor_id"
+  add_index "contributors_natlib_metadatas", ["natlib_metadata_id"], :name => "index_contributors_natlib_metadatas_on_natlib_metadata_id"
 
   create_table "countries", :force => true do |t|
     t.column "abbreviation", :string
@@ -218,6 +243,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "updated_at", :datetime
   end
 
+  add_index "coverages_natlib_metadatas", ["coverage_id"], :name => "index_coverages_natlib_metadatas_on_coverage_id"
+  add_index "coverages_natlib_metadatas", ["natlib_metadata_id"], :name => "index_coverages_natlib_metadatas_on_natlib_metadata_id"
+
   create_table "creators", :force => true do |t|
     t.column "name", :string
     t.column "permalink", :string
@@ -234,6 +262,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
+
+  add_index "creators_natlib_metadatas", ["creator_id"], :name => "index_creators_natlib_metadatas_on_creator_id"
+  add_index "creators_natlib_metadatas", ["natlib_metadata_id"], :name => "index_creators_natlib_metadatas_on_natlib_metadata_id"
 
   create_table "extents", :force => true do |t|
     t.column "south", :float
@@ -287,6 +318,9 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "filtered_phrase_id", :integer
   end
 
+  add_index "filtered_phrases_submissions", ["filtered_phrase_id"], :name => "index_filtered_phrases_submissions_on_filtered_phrase_id"
+  add_index "filtered_phrases_submissions", ["submission_id"], :name => "index_filtered_phrases_submissions_on_submission_id"
+
   create_table "formats", :force => true do |t|
     t.column "name", :string
     t.column "created_at", :datetime
@@ -304,288 +338,6 @@ ActiveRecord::Schema.define(:version => 20091216145952) do
     t.column "updated_at", :datetime
   end
 
-  create_table "geoparsed_locations", :id => false, :options=>'ENGINE=', :force => true do |t|
-    t.column "submission_id", :integer, :default => 0, :null => false
-    t.column "natlib_metadata_id", :integer
-    t.column "title", :text
-    t.column "cached_geo_search_id", :integer
-    t.column "search_term", :string
-    t.column "accuracy_id", :integer
-    t.column "address", :string
-  end
+  add_index "formats_natlib_metadatas", ["format_id"], :name => "index_formats_natlib_metadatas_on_format_id"
+  add_index "formats_natlib_metadatas", ["natlib_metadata_id"], :name => "index_formats_natlib_metadatas_on_natlib_metadata_id"
 
-  create_table "geoparsed_records", :id => false, :options=>'ENGINE=', :force => true do |t|
-    t.column "title", :text
-    t.column "landing_url", :text
-    t.column "thumbnail_url", :text
-    t.column "description", :text
-    t.column "pending", :boolean, :default => true
-    t.column "natlib_id", :integer
-    t.column "area", :float
-  end
-
-  create_table "identifiers", :force => true do |t|
-    t.column "name", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "identifiers", ["permalink"], :name => "index_identifiers_on_permalink", :unique => true
-  add_index "identifiers", ["name"], :name => "index_identifiers_on_name", :unique => true
-
-  create_table "identifiers_natlib_metadatas", :id => false, :force => true do |t|
-    t.column "identifier_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "languages", :force => true do |t|
-    t.column "name", :string
-    t.column "permalink", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  add_index "languages", ["permalink"], :name => "index_languages_on_permalink", :unique => true
-  add_index "languages", ["name"], :name => "index_languages_on_name", :unique => true
-
-  create_table "languages_natlib_metadatas", :id => false, :force => true do |t|
-    t.column "language_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas", :force => true do |t|
-    t.column "description", :text
-    t.column "title", :text
-    t.column "landing_url", :text
-    t.column "thumbnail_url", :text
-    t.column "circa_date", :boolean
-    t.column "natlib_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "pending", :boolean, :default => true
-    t.column "permalink", :string
-  end
-
-  add_index "natlib_metadatas", ["permalink"], :name => "index_natlib_metadatas_on_permalink", :unique => true
-  add_index "natlib_metadatas", ["natlib_id"], :name => "index_natlib_metadatas_on_natlib_id"
-  add_index "natlib_metadatas", ["title"], :name => "natlib_title_index"
-
-  create_table "natlib_metadatas_old", :force => true do |t|
-    t.column "creator", :string
-    t.column "contributor", :string
-    t.column "description", :text
-    t.column "language", :string
-    t.column "publisher", :string
-    t.column "title", :text
-    t.column "collection", :string
-    t.column "landing_url", :string
-    t.column "thumbnail_url", :string
-    t.column "tipe_id", :integer
-    t.column "content_partner", :string
-    t.column "circa_date", :boolean
-    t.column "natlib_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas_placenames", :id => false, :force => true do |t|
-    t.column "placename_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas_publishers", :id => false, :force => true do |t|
-    t.column "publisher_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas_relations", :id => false, :force => true do |t|
-    t.column "relation_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas_rights", :id => false, :force => true do |t|
-    t.column "right_id", :integer
-    t.column "natlib_metadata_id", :integer
-  end
-
-  create_table "natlib_metadatas_subjects", :id => false, :force => true do |t|
-    t.column "subject_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "natlib_metadatas_tipes", :id => false, :force => true do |t|
-    t.column "tipe_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  create_table "phrase_frequencies", :force => true do |t|
-    t.column "submission_id", :integer
-    t.column "frequency", :integer
-    t.column "phrase_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  add_index "phrase_frequencies", ["submission_id"], :name => "phrase_frequencies_submission_id_fk"
-  add_index "phrase_frequencies", ["phrase_id"], :name => "phrase_frequencies_phrase_id_fk"
-
-  create_table "phrases", :force => true do |t|
-    t.column "words", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "phrases", ["permalink"], :name => "index_phrases_on_permalink", :unique => true
-  add_index "phrases", ["words"], :name => "index_phrases_on_words"
-
-  create_table "placenames", :force => true do |t|
-    t.column "name", :string
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "placenames", ["permalink"], :name => "index_placenames_on_permalink", :unique => true
-  add_index "placenames", ["name"], :name => "index_placenames_on_name", :unique => true
-  add_index "placenames", ["natlib_metadata_id"], :name => "placenames_natlib_metadata_id_fk"
-
-  create_table "publishers", :force => true do |t|
-    t.column "name", :string
-    t.column "permalink", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  add_index "publishers", ["permalink"], :name => "index_publishers_on_permalink", :unique => true
-  add_index "publishers", ["name"], :name => "index_publishers_on_name", :unique => true
-
-  create_table "record_dates", :force => true do |t|
-    t.column "start_date", :date
-    t.column "end_date", :date
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  add_index "record_dates", ["natlib_metadata_id"], :name => "record_dates_natlib_metadata_id_fk"
-
-  create_table "relations", :force => true do |t|
-    t.column "name", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "relations", ["permalink"], :name => "index_relations_on_permalink", :unique => true
-  add_index "relations", ["name"], :name => "index_relations_on_name", :unique => true
-
-  create_table "rights", :force => true do |t|
-    t.column "name", :string
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "rights", ["permalink"], :name => "index_rights_on_permalink", :unique => true
-  add_index "rights", ["name"], :name => "index_rights_on_name", :unique => true
-  add_index "rights", ["natlib_metadata_id"], :name => "rights_natlib_metadata_id_fk"
-
-  create_table "search_term_tags", :id => false, :options=>'ENGINE=', :force => true do |t|
-    t.column "search_text", :string
-    t.column "c", :integer, :limit => 8, :default => 0, :null => false
-  end
-
-  create_table "stop_words", :force => true do |t|
-    t.column "word", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-  end
-
-  add_index "stop_words", ["word"], :name => "index_stop_words_on_word"
-
-  create_table "subjects", :force => true do |t|
-    t.column "name", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "subjects", ["permalink"], :name => "index_subjects_on_permalink", :unique => true
-  add_index "subjects", ["name"], :name => "index_subjects_on_name", :unique => true
-
-  create_table "submissions", :force => true do |t|
-    t.column "body_of_text", :text
-    t.column "signature", :string
-    t.column "extent_id", :integer
-    t.column "centroid_id", :integer
-    t.column "natlib_metadata_id", :integer
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "area", :float
-  end
-
-  add_index "submissions", ["area"], :name => "index_submissions_on_area"
-  add_index "submissions", ["extent_id"], :name => "submissions_extent_id_fk"
-  add_index "submissions", ["centroid_id"], :name => "submissions_centroid_id_fk"
-  add_index "submissions", ["natlib_metadata_id"], :name => "submissions_natlib_metadata_id_fk"
-
-  create_table "tipes", :force => true do |t|
-    t.column "name", :string
-    t.column "created_at", :datetime
-    t.column "updated_at", :datetime
-    t.column "permalink", :string
-  end
-
-  add_index "tipes", ["name"], :name => "index_tipes_on_name"
-
-  add_foreign_key "cached_geo_searches", "accuracies", :name => "cached_geo_searches_accuracy_id_fk"
-  add_foreign_key "cached_geo_searches", "cached_geo_search_terms", :name => "cached_geo_searches_cached_geo_search_term_id_fk"
-
-  add_foreign_key "calais_entries", "calais_words", :name => "calais_entries_calais_child_word_id_fk", :column => "calais_child_word_id"
-  add_foreign_key "calais_entries", "calais_words", :name => "calais_entries_calais_parent_word_id_fk", :column => "calais_parent_word_id"
-
-  add_foreign_key "centroids", "submissions", :name => "centroids_submission_id_fk"
-
-  add_foreign_key "country_names", "countries", :name => "country_names_country_id_fk"
-
-  add_foreign_key "coverages", "natlib_metadatas", :name => "coverages_natlib_metadata_id_fk"
-
-  add_foreign_key "extents", "submissions", :name => "extents_submission_id_fk"
-
-  add_foreign_key "facet_fields", "facet_fields", :name => "facet_fields_parent_id_fk", :column => "parent_id"
-
-  add_foreign_key "filtered_phrases", "filter_types", :name => "filtered_phrases_filter_type_id_fk"
-  add_foreign_key "filtered_phrases", "phrases", :name => "filtered_phrases_phrase_id_fk"
-
-  add_foreign_key "phrase_frequencies", "phrases", :name => "phrase_frequencies_phrase_id_fk"
-  add_foreign_key "phrase_frequencies", "submissions", :name => "phrase_frequencies_submission_id_fk"
-
-  add_foreign_key "placenames", "natlib_metadatas", :name => "placenames_natlib_metadata_id_fk"
-
-  add_foreign_key "record_dates", "natlib_metadatas", :name => "record_dates_natlib_metadata_id_fk"
-
-  add_foreign_key "rights", "natlib_metadatas", :name => "rights_natlib_metadata_id_fk"
-
-  add_foreign_key "submissions", "centroids", :name => "submissions_centroid_id_fk"
-  add_foreign_key "submissions", "extents", :name => "submissions_extent_id_fk"
-  add_foreign_key "submissions", "natlib_metadatas", :name => "submissions_natlib_metadata_id_fk"
-
-end
