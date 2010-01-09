@@ -31,6 +31,10 @@ class GeoParserHelperTest < Test::Unit::TestCase
   #so this test checks that each search term is also searched against countries.
   def test_for_canterbury_in_nz
     result = geoparse_text("Canterbury is in New Zealand")
+    puts "==============="
+    puts result.keys.to_yaml
+    puts CachedGeoSearchTerm.find(:all).to_yaml
+    puts "/====="
     assert !CachedGeoSearchTerm.find_by_search_term("Canterbury").blank?
     assert !CachedGeoSearchTerm.find_by_search_term("New Zealand").blank?
     assert !CachedGeoSearchTerm.find_by_search_term("Canterbury, New Zealand").blank?
@@ -91,6 +95,9 @@ class GeoParserHelperTest < Test::Unit::TestCase
     assert_equal 8, cached_search_terms.length
     
   end
+  
+  
+
   
   #Performs the same search twice and ensure that the cached searches only contains one item
   def test_same_search_twice
