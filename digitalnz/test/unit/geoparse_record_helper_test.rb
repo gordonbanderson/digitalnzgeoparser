@@ -581,6 +581,20 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     def test_nil_parsing_error
        #86556 
     end
+    
+    
+    def test_submission_search_terms
+        parse_natlib_record 112354
+        s = Submission.find(:last)
+        puts "--------SUBMISSION--------"
+        puts s.to_yaml
+        puts s.cached_geo_searches.map{|g|g.address}
+        #cgst = CachedGeoSearchTerm.find_by_search_term("Cromwell")
+        
+        cgs = CachedGeoSearch.find_all_by_address('Napier, Hawkes Bay, New Zealand')
+        puts cgs.length
+        assert_equal 1, cgs.length
+    end
 end
 
 =begin
