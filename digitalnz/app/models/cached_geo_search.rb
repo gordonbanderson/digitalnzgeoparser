@@ -46,9 +46,10 @@ class CachedGeoSearch < ActiveRecord::Base
   end
   
   #Save a dig sig of some of the parameters in an attempt to identify duplicates
-  def before_validation
+  def update_signature
       sigstring = "#{address}:#{latitude}:#{longitude}:#{bbox_west}:#{bbox_east}:#{bbox_south}:#{bbox_north}"
-      signature = Digest::SHA256.hexdigest(sigstring)
+      self.signature = Digest::SHA256.hexdigest(sigstring)
+      puts "UPDATED SIG:#{signature}"
   end
   
 end
