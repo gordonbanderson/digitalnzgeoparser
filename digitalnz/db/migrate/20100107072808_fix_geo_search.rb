@@ -9,7 +9,7 @@ class FixGeoSearch < ActiveRecord::Migration
       add_column :cached_geo_searches, :latitude, :decimal, :precision => 15, :scale => 10
       add_column :cached_geo_searches, :longitude, :decimal,  :precision => 15, :scale => 10
 
-      create_table :cached_geo_search_terms_cached_geo_searches, :primary_key => false do |t|
+      create_table :cached_geo_search_terms_cached_geo_searches, :id => false do |t|
             t.integer :cached_geo_search_id
             t.integer :cached_geo_search_term_id
             t.foreign_key :cached_geo_searches
@@ -22,8 +22,8 @@ class FixGeoSearch < ActiveRecord::Migration
         if classname == 'ActiveRecord::ConnectionAdapters::MysqlAdapter'
 
 #ALTER TABLE `cached_geo_searches` DROP FOREIGN KEY `cached_geo_searches_cached_geo_search_term_id_fk`
-            c.execute 'CREATE  INDEX `index_cgs_join21_id` ON `cached_geo_searches_cached_geo_search_terms` (`cached_geo_search_id`)'
-            c.execute 'CREATE  INDEX `index_cgs_join22_id` ON `cached_geo_searches_cached_geo_search_terms` (`cached_geo_search_term_id`);'
+            c.execute 'CREATE  INDEX `index_cgs_join21_id` ON `cached_geo_search_terms_cached_geo_searches` (`cached_geo_search_id`)'
+            c.execute 'CREATE  INDEX `index_cgs_join22_id` ON `cached_geo_search_terms_cached_geo_searches` (`cached_geo_search_term_id`);'
         else
               add_index :cached_geo_search_terms_cached_geo_searches, :cached_geo_search_id
               add_index :cached_geo_search_terms_cached_geo_searches, :cached_geo_search_term_id
