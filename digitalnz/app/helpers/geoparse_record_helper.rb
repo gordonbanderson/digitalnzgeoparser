@@ -46,7 +46,11 @@ module GeoparseRecordHelper
 
           #Grab the metadata if so necessary
           if nl.blank? || nl.pending
+              Statistic.increment('digitalnzdownload')
              nl = NatlibMetadata.update_or_create_metadata_from_api(natlib_record_id)
+          else
+              puts "****** already downloaded *****"
+              Statistic.increment('digitalnzalreadyloadeded')
           end
 
           elapsed_time("Trace 1")
@@ -258,6 +262,7 @@ module GeoparseRecordHelper
              keepers = filtered[:keepers]
              google_placenames = {}
              for term in keepers
+                 #FIXME - old school and causing breaks in the no places found case
                 p = term.cached_geo_search_term.search_term
                 google_placenames[p]=p
              end
@@ -428,7 +433,7 @@ module GeoparseRecordHelper
           for calais_key in original_calais_tags.keys
              puts "KEY:#{calais_key}"
              for item in original_calais_tags[calais_key]
-                puts "\tVALUE:"+item
+                puts "\tVALUE:#{item}"
              end
           end
 
