@@ -81,12 +81,15 @@ class NatlibMetadatasController < ApplicationController
             @search_terms = {}
 
             for cached_geo_search in @submission.cached_geo_searches
-              search_term = cached_geo_search.cached_geo_search_term.search_term
-              if @search_terms[search_term].blank?
-                @search_terms[search_term] = 1
-              else
-                @search_terms[search_term] = @search_terms[search_term]+1
-              end
+                for search_term in cached_geo_search.cached_geo_search_terms.map{|c|c.search_term}
+                     if @search_terms[search_term].blank?
+                        @search_terms[search_term] = 1
+                      else
+                        @search_terms[search_term] = @search_terms[search_term]+1
+                      end
+                end
+             #search_term = cached_geo_search.cached_geo_search_term.search_term
+             
             end
             
             
@@ -125,37 +128,45 @@ class NatlibMetadatasController < ApplicationController
               @n_places_for_terms = {}
 
               for cached_search in @submission.cached_geo_searches
-                  search_term = cached_search.cached_geo_search_term.search_term
-                  @n_places_for_terms[search_term] = 0 if @n_places_for_terms[search_term].blank?
-                  @n_places_for_terms[search_term] = @n_places_for_terms[search_term] + 1
-                if cached_search.accuracy.google_id < @filter.to_i
-                  info_text = cached_search.address
-                  info_text << '<br/>'
-                  info_text << cached_search.accuracy.name
-                  info_text << '<br/>'
-                  info_text << '"'+cached_search.cached_geo_search_term.search_term+'"'
-                  @accuracies[cached_search.cached_geo_search_term.search_term] = cached_search.accuracy.name
-                  @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
-                   :title => cached_search.cached_geo_search_term.search_term,
-                   :options => {:draggable => true},
-                   :info_window =>info_text
-                   ))
+                  for cg_search_term in cached_search.cached_geo_search_terms
+                      search_term = cg_search_term.search_term
+                      
+                      #Only add a marker if there is a phrase match, otehrwise we will get all the
+                      #search phrases that match, e.g. 'Hataitai', 'Hataitai, Wellington' etc
+                      #Makes for a bushy map
+                      next if !@phrases.include? search_term
+                        @n_places_for_terms[search_term] = 0 if @n_places_for_terms[search_term].blank?
+                        @n_places_for_terms[search_term] = @n_places_for_terms[search_term] + 1
+                      if cached_search.accuracy.google_id < @filter.to_i
+                        info_text = cached_search.address
+                        info_text << '<br/>'
+                        info_text << cached_search.accuracy.name
+                        info_text << ':'
+                        info_text << '"'+search_term+'"'
+                        @accuracies[search_term] = cached_search.accuracy.name
+                        @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
+                         :title => search_term,
+                         :options => {:draggable => true},
+                         :info_window =>info_text
+                         ))
 
-                   w = cached_search.bbox_west
-                   e = cached_search.bbox_east
-                   s = cached_search.bbox_south
-                   n = cached_search.bbox_north
+                         w = cached_search.bbox_west
+                         e = cached_search.bbox_east
+                         s = cached_search.bbox_south
+                         n = cached_search.bbox_north
 
-                   minx = [minx,w].min
-                   maxx = [maxx,e].max
-                   miny = [miny,s].min
-                   maxy = [maxy,n].max
+                         minx = [minx,w].min
+                         maxx = [maxx,e].max
+                         miny = [miny,s].min
+                         maxy = [maxy,n].max
 
-                   fill_shade = SHADES[cached_search.accuracy.google_id].chr
-                   fill_color  = "#000"
-                   fill_alpha = cached_search.accuracy.google_id * 0.04
-                   polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",1,1,fill_color, fill_alpha)
-                   @map.overlay_init(polygon)
+                         fill_shade = SHADES[cached_search.accuracy.google_id].chr
+                         fill_color  = "#000"
+                         fill_alpha = cached_search.accuracy.google_id * 0.04
+                         polygon = GPolygon.new([[n,w],[n,e],[s,e],[s,w], [n,w]],"#ff0000",1,1,fill_color, fill_alpha)
+                         @map.overlay_init(polygon)    
+                  end
+                  
                 end
               end
             end
