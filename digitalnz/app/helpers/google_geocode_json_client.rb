@@ -100,6 +100,7 @@ class GoogleGeocodeJsonClient
         
         if geocoder_json.blank?
             
+            Statistic.increment('googlegeocoderhitslive')
             
             puts "GOOGLE: geocoder info not cached"
             #Restrict to viewpoint centre if avail
@@ -125,6 +126,8 @@ class GoogleGeocodeJsonClient
                 puts "MEMCACHE KEY:#{memcache_server}"
                 memcache_server[memcache_key] = geocoder_json
             end
+        else
+            Statistic.increment('googlegeocoderhitsmemcache')
         end
         
         
