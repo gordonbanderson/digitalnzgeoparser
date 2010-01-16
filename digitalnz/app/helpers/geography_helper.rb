@@ -28,7 +28,7 @@ module GeographyHelper
       cached_search_term.failed = false
       
       cached_search_term.is_country = false
-      cached_search_term.save! #Throw an exception if the save does not work
+      #cached_search_term.save! #Throw an exception if the save does not work
 
       geocode_result = gg.geocode geo_search_term, CACHE
       locations = geocode_result[:locations]
@@ -73,14 +73,19 @@ module GeographyHelper
         
           cached.accuracy = accuracy
           cached.address = location.address
-        
+          
+          #Use pre existing cached geo search if one exists
+          cached.update_signature
+          puts "ID of cached:#{cached.id}, of sig #{cached.signature}"
+          previous_cached = CachedGeoSearch.find_by_signature(cached.signature)
+          cached = previous_cached if !previous_cached.blank?
           current_terms = cached.cached_geo_search_terms
           cached.cached_geo_search_terms << cached_search_term if !current_terms.include? cached_search_term
         
 
             #FIXME - attached coordinates otherwise save fails...
             #FIXME - write test for this
-           # cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
+           cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
         
         
           begin
@@ -123,20 +128,22 @@ module GeographyHelper
      
                   if create_alternative_country_names == true
                     #Now we need to create a country - possibly
-                    country_name = cached_search.cached_geo_search_term.search_term
-                    puts "COUNTRY NAME IS #{country_name}"
-                    the_country_name = CountryName.find_by_name(country_name)
-                    puts "THE COUNTRY NAME IS BLANK? #{the_country_name.blank?}"
-                
-                    if the_country_name.blank?
-                      puts "CREATING COUNTRY NAME OBJECT FOR #{country_name}, address #{cached_search.address}, #{create_alternative_country_names}"
-                      the_country_name = CountryName::new
-                      the_country_name.name = country_name
-                      the_country = Country::find_by_abbreviation(cached_search.country)
-                      the_country_name.country = the_country
-                      the_country_name.save!
-                      break
+                    for country_name in cached_search.cached_geo_search_terms.map{|s|s.search_term}
+                        puts "COUNTRY NAME IS #{country_name}"
+                        the_country_name = CountryName.find_by_name(country_name)
+                        puts "THE COUNTRY NAME IS BLANK? #{the_country_name.blank?}"
+
+                        if the_country_name.blank?
+                          puts "CREATING COUNTRY NAME OBJECT FOR #{country_name}, address #{cached_search.address}, #{create_alternative_country_names}"
+                          the_country_name = CountryName::new
+                          the_country_name.name = country_name
+                          the_country = Country::find_by_abbreviation(cached_search.country)
+                          the_country_name.country = the_country
+                          the_country_name.save!
+                          break
+                        end
                     end
+                    
                   end
                 else
                   puts "#{search_term} is not a LOCS country"
