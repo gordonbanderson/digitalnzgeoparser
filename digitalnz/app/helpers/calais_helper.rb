@@ -4,7 +4,7 @@ require 'simple_http'
 require "rexml/document"
 require 'pp'
 include REXML
-
+require 'calais'
 
 raise(StandardError,"Set Open Calais login key in ENV: 'OPEN_CALAIS_KEY'") if !CALAIS_KEY
 
@@ -43,7 +43,7 @@ module CalaisHelper
   def get_cached_tags(text)
     puts "==== GET CACHED TAGS ===="
     digsig = Digest::SHA256.hexdigest(text)
-    calais_cache_key = "calais_#{digsig}"
+    calais_cache_key = "calais31_#{digsig}"
     puts digsig
     result = CalaisSubmission.find_by_signature(digsig)
     
@@ -51,7 +51,11 @@ module CalaisHelper
 puts "TAGS1:"
 puts tags.to_yaml
 
-    if result.blank?
+    if !result.blank?
+        Statistic.increment('calaismemcache')
+        
+    else
+        
       cs = CalaisSubmission::new
       cs.signature = digsig
       cs.save!
@@ -88,8 +92,123 @@ puts tags.to_yaml
     
     tags
   end
-
+  
+  
+  
   def get_tags(text, memcache_key)
+      
+      response = CACHE[memcache_key]
+      if response.blank?
+          Statistic.increment('calaislive')
+          
+          client = Calais::Client.new(:content => text, :license_id => 'cw7evzbgkhnhwj9d5msm7ree')
+
+          client.use_beta = false
+          client.output_format = :json
+          client.reltag_base_url = 'http://opencalais.com'
+          client.calculate_relevance = true
+          client.metadata_enables = Calais::KNOWN_ENABLES
+          client.metadata_discards = Calais::KNOWN_DISCARDS
+          client.allow_distribution = true
+          client.allow_search = true
+          client.external_id = Digest::SHA1.hexdigest(client.content)
+          client.submitter = 'calais.rb'
+
+          tags = {}
+          x = client.enlighten()
+          response = JSON.parse(x)
+          CACHE[memcache_key] = response 
+      else
+          Statistic.increment('calaismemcache')
+          
+      end
+      
+      tags = {}
+
+      puts response.to_yaml
+      puts "++++++++++++++++++++++++++\n\n\n\n\n\n\n\n\n"
+      for key in response.keys
+          next if key=='doc'
+          entry = response[key]
+          puts "\n\nKEY:#{key}"
+          puts "\t#{entry['name']}"
+          puts "\tRelevance=#{entry['relevance']}"
+          puts "\tType=#{entry['_type']}"
+          puts "\tOrgType=#{entry['organizationtype']}"
+          puts "\tTypeRef=#{entry['_typeReference']}"
+          puts "\t_typeGroup=#{entry['_typeGroup']}"
+          puts "\tnationality=#{entry['nationality']}"
+
+          tipe = entry['_type']
+
+          name = entry['categoryName']
+          typegroup = entry['_typeGroup']
+          puts "TG:#{typegroup}"
+          if typegroup != nil
+              puts "FOUND TYPEGROUP:#{typegroup}"
+              if ['relations', 'topics'].include? typegroup
+                  tags[typegroup] = [] if tags[typegroup] == nil
+                  tags[typegroup] << tipe
+              end
+
+          end
+
+          skip = false
+
+          if typegroup == 'topics'
+              name = entry['categoryName']
+              puts "Topic:#{name}"
+              tipe = typegroup
+              skip = true
+          elsif tipe == 'GenericRelations'
+              name = entry['verb']
+          elsif tipe == 'Quotation'
+              name = entry['quote']
+          elsif tipe == 'PersonCareer'
+              name = entry['careertype']
+          elsif tipe == 'PersonCommunication'
+              name = entry['persondescription']
+          elsif tipe == 'PersonTravel'
+              name = entry['locationdestination']
+          elsif tipe == 'FamilyRelation'
+              name = entry['familyrelationtype']
+          elsif tipe == 'NaturalDisaster'
+              name = entry['naturaldisaster']
+          else
+              name = entry['name']
+          end
+
+          puts "TIPE:#{tipe} of len #{tipe.length}"
+          tags[tipe] = [] if tags[tipe] == nil
+          tags[tipe] << name        
+
+          topics = tags['topics']
+          if topics != nil
+              new_topics = []
+              for topic in topics
+                 if topic != nil
+                     new_topics << topic
+                 end 
+              end
+
+              tags['topics'] = new_topics
+
+          end
+
+      end
+
+      for key in response.keys
+         puts "KEY:#{key}" if key[0,4] != 'http'
+      end
+
+      puts "TAGS:::::::"
+      puts tags.to_yaml
+      
+      tags
+      
+  end
+
+  def get_tags_old(text, memcache_key)
     data = "licenseID=#{CALAIS_KEY}&content=" + CGI.escape(text)
     puts "DATA:#{data.to_yaml}"
     
