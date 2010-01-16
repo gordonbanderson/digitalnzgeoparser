@@ -47,6 +47,11 @@ class NatlibMetadatasController < ApplicationController
         id_string = params[:id].split('-')[0]
         @natlib_metadata = NatlibMetadata.find_by_natlib_id(id_string)
     end
+    
+    #If still not found, download from Digital NZ
+    if @natlib_metadata.blank?
+        @natlib_metadata = NatlibMetadata.update_or_create_metadata_from_api(natlib_record_id)
+    end
 
 
     @title = 'Digital NZ:'+@natlib_metadata.title
@@ -212,7 +217,7 @@ class NatlibMetadatasController < ApplicationController
          else
            logger.debug "TRACE: Defaulting to the whole world as both yahoo and google cannot provide info"
            @size = 4
-           @map.center_zoom_init([0,0], @size)
+           @map.center_zoom_init([0,0], @size) if !@map.blank?
          
          end
       end
@@ -234,7 +239,7 @@ class NatlibMetadatasController < ApplicationController
      
     
     @all_accuracies = Accuracy.find(:all, :order => :id)
-    @inverted_accuracies = @accuracies.invert #Accuracy name => [geonames]
+    @inverted_accuracies = @accuracies.invert if !@accuracies.blank?
     @archive_search = ArchiveSearch::new
     render :layout => 'metadata_record'
   end
