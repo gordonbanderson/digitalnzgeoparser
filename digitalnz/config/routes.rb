@@ -71,10 +71,10 @@ map.calais_parent 'opencalais/:parent_permalink', :controller => 'natlib_metadat
 map.calais_all_parents 'opencalais', :controller => 'natlib_metadatas', :action => 'calais_all_parents'
 
 #Search URL - keep it short
-map.purchase 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
+map.search 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
 
 #Facetted search URL - build up a nice URL the likes of search/fred/category/images/type/lithograph/year/1900/to/1910
-map.purchase 'search/:q/*facets', :controller => 'archive_searches', :action => 'faceted_search', :id => 'q'
+map.facet_search 'search/:q/*facets', :controller => 'archive_searches', :action => 'faceted_search', :id => 'q'
 
 #Use 'collection' for methods that operate on the whole of the collection, in this case
 #a search of the digital nz api
