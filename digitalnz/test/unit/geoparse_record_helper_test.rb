@@ -593,6 +593,7 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         
         cgs = CachedGeoSearch.find_all_by_address('Napier, Hawkes Bay, New Zealand')
         puts cgs.length
+        puts cgs[0].signature
         assert_equal 1, cgs.length
     end
 end
