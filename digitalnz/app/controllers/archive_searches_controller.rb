@@ -145,6 +145,8 @@ class ArchiveSearchesController < ApplicationController
         
     rescue Exception => e
         @error_message = e.message
+        logger.debug "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
+        asdfsdf
     end
     
 
@@ -246,24 +248,28 @@ class ArchiveSearchesController < ApplicationController
       @child_facet_fields = {}
 
       #FIXME - make this more efficient
-      for f in digitalnz_facets
-        parent_name = f['facet_field']
-        parent_facet_field = FacetField.find_by_name(parent_name)
-        logger.debug "PARENT FACET:#{parent_facet_field}"
-        for child_facet_name_value in f['values']
-          child_facet_name = child_facet_name_value['name']
-          sql_conditions = "parent_id = ? and name = ?"
-          logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
+      if !digitalnz_facets.blank?
+          for f in digitalnz_facets 
+              parent_name = f['facet_field']
+              parent_facet_field = FacetField.find_by_name(parent_name)
+              logger.debug "PARENT FACET:#{parent_facet_field}"
+              for child_facet_name_value in f['values']
+                child_facet_name = child_facet_name_value['name']
+                sql_conditions = "parent_id = ? and name = ?"
+                logger.debug "parent id is #{parent_facet_field.id} , child facet name is #{child_facet_name}"
 
-          #FIXME - check for correct error conditino
-          
-          
-          child_facet = FacetField.find_or_create_with_parent(parent_facet_field.id, child_facet_name)
-          @child_facet_fields[child_facet_name] = child_facet
+                #FIXME - check for correct error conditino
 
 
-        end
-      end 
+                child_facet = FacetField.find_or_create_with_parent(parent_facet_field.id, child_facet_name)
+                @child_facet_fields[child_facet_name] = child_facet
+
+
+              end
+            end
+      end
+      
+       
   end
   
   
