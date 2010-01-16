@@ -43,8 +43,8 @@
 		<%
 		end%>
 </div>
-</div>
 <%end%>
+</div>
 
 <div class="extractedText">
 	<h2>Extracted Metadata Text</h2>
@@ -77,7 +77,7 @@
 	<ul>
 		<%for collection in @natlib_metadata.collections%>
 				<%=link_to collection.name, facet_search_url( :q => "collection: \"#{collection.name}\"")%></li>
-				</li>
+				
 		<%end%>
 	</ul>
 
@@ -104,33 +104,36 @@
 	<h4>Placenames</h4>
 	<ul>
 	<%for item in @natlib_metadata.placenames%>
-<li><%=link_to item.name, geo_property_single_url(:property_name=>'placename', :permalink => item.permalink)%></li>	<%end%>
+		<li><%=link_to item.name, search_url( :q => "placename: \"#{item.name}\"")%></li>
+	<%end%>
 	</ul>
 	<%end%>
 	
-	
-	<h3>Places Found</h3>
-	<%for acc in @all_accuracies
-		if !@inverted_accuracies[acc.name].blank?
-	%>
-		<h4><%=acc.name%></h4>
-		<ul>
-			<%for geoname in @accuracies.keys
-			if @accuracies[geoname] == acc.name
-				freak = @phrase_frequencies[geoname]
-				freak_string = ""
-				freak_string = " (#{freak})" if !freak.blank?
-			%>
-			<li><%=geoname%></li>
-			<%
+	<%if !@inverted_accuracies.blank?%>
+		<h3>Places Found</h3>
+		<%for acc in @all_accuracies
+			if !@inverted_accuracies[acc.name].blank?
+		%>
+			<h4><%=acc.name%></h4>
+			<ul>
+				<%for geoname in @accuracies.keys
+				if @accuracies[geoname] == acc.name
+					freak = @phrase_frequencies[geoname]
+					freak_string = ""
+					freak_string = " (#{freak})" if !freak.blank?
+				%>
+				<li><%=geoname%></li>
+				<%
+				end
+				end%>
+			</ul>
+		<%
 			end
-			end%>
-		</ul>
-	<%
 		end
 	end
 	%>
 	
+	<% if !@submisison.blank?%>
 	<h3>Area</h3>
 	<ul><li><%=SubmissionsHelper.pretty_area(@submission.area)%></li></ul>
 
@@ -196,6 +199,7 @@
 			</ul>
 		<%end%>
     <%end%>
+	<%end%>
 
 
 
