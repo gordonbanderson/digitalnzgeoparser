@@ -71,12 +71,13 @@
 	<h4>Content Partner</h4>
 	<ul>
 	<%for content_partner in @natlib_metadata.content_partners%>
-<li><%=link_to content_partner.name, geo_property_single_url(:property_name=>'content_partner', :permalink => content_partner.permalink)%></li>	<%end%>
+<li><%=link_to content_partner.name, facet_search_url( :q => 'content_partner', :facets => [ content_partner.permalink])%></li>	<%end%>
 	</ul>
 	<h4>Collection</h4>
 	<ul>
 		<%for collection in @natlib_metadata.collections%>
-			<li><%=link_to collection.name, geo_property_single_url(:property_name=>'collection', :permalink => collection.permalink)%></li>
+				<%=link_to collection.name, facet_search_url( :q => "collection: \"#{collection.name}\"")%></li>
+				</li>
 		<%end%>
 	</ul>
 
@@ -94,7 +95,7 @@
 	<ul>
 	<%for item in @natlib_metadata.subjects%>
 	<li>
-		<li><%=link_to item.name, geo_property_single_url(:property_name=>'subject', :permalink => item.permalink)%></li>
+		<%=link_to item.name, search_url( :q => "subject: \"#{item.name}\"")%></li>
 	<%end%>
 	</ul>
 	<%end%>
