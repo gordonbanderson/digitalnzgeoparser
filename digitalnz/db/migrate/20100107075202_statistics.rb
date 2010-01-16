@@ -16,6 +16,7 @@ class Statistics < ActiveRecord::Migration
   end
 
   def self.down
+      asdfsddf
       remove_index :statistics, :name
       drop_table :statistics
   end
