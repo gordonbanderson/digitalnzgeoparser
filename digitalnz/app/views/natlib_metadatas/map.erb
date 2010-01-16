@@ -13,9 +13,6 @@
 
 
 <%if !@submission.blank?%>
-<pre>
-	<%=@n_places_for_terms.to_yaml%>
-</pre>
         <%if !@map.blank?%>
          <%= @map.div(:width => 600, :height => 300) %>
         <%else%>
