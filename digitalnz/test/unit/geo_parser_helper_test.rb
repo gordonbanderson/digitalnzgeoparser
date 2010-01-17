@@ -296,6 +296,14 @@ South Island
   end
   
   
+  def test_apostrophe_s
+     result = possible_place_names("Whitcombe's map of Auckland City and suburbs")
+      puts result[:possible_place_names].to_yaml
+      check_for_place "Auckland City", result
+      assert !result[:possible_place_names].include?('Whitcombe')
+  end
+  
+  
   def check_for_place placename, geoparse_result
       assert nil != geoparse_result[:possible_place_names][placename]
       
