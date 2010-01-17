@@ -97,6 +97,43 @@ class GeoParserHelperTest < Test::Unit::TestCase
   end
   
   
+  #From http://localhost:3000/natlib_metadatas/53181/map
+  def test_mt_christina
+      text = "Looking across the heavily-wooded slopes to Mt. Christina, Eglinton Valley, South Island"
+      text_only_placenames = possible_place_names(text)[:possible_place_names]
+      puts text_only_placenames.to_yaml
+      
+      assert text_only_placenames.include? 'South Island'
+      assert text_only_placenames.include? 'Eglinton Valley'
+      
+      #This is from the end of the previous 'sentence', may be valid in a different case
+      assert (text_only_placenames.include? 'Mt')
+      
+      
+      result = geoparse_text(text)
+      puts result.keys.to_yaml
+      puts "+++++++++++++"
+       placenames = result[:geohits].keys.map{|l| l.search_term}
+       puts placenames.to_yaml
+       
+       puts "SHORT:"
+       puts result[:too_short].to_yaml
+      
+      
+      assert result[:too_short].length == 0 #Was 1 with Mt being in there
+       assert placenames.include? 'Eglinton Valley'
+      assert placenames.include? 'South Island'
+      
+      #Not figured out how to keep the dot here yet
+      assert placenames.include? 'Mt Christina, Eglinton Valley, South Island'
+=begin
+Christina, Eglinton Valley, South Island
+Eglinton Valley
+South Island
+=end
+  end
+  
+  
 
   
   #Performs the same search twice and ensure that the cached searches only contains one item
