@@ -225,9 +225,25 @@ module GeoparseRecordHelper
              bounding_extent.east = extents.north_east.lng
              bounding_extent.south = extents.south_west.lat
              bounding_extent.west = extents.south_west.lng
+             
+             deltax = bounding_extent.east - bounding_extent.west
+             deltay = bounding_extent.north - bounding_extent.south
+
+             #Use a stretched extend, 10% (arbitrary) around Yahoo
+              stretched_extent = Extent::new
+              stretched_extent.west = bounding_extent.west - deltax*0.1.to_f
+              stretched_extent.east = easting_extent + deltax*0.1.to_f
+              stretched_extent.north = northing_extent  + deltay*0.1.to_f
+              stretched_extent.south = southing_extent - deltay*0.1.to_f
+              
+              stretched_extent.west = -180 if stretched_extent.west < 180
+              stretched_extent.east = 180 if stretched_extent.east > 180
+              stretched_extent.north = 90 if stretched_extent.north > 90
+              stretched_extent.south = -90 if stretched_extent.south < -90
+            
           end
 
-          filtered = filter_google_results(place_details, admin_scope, geo_scope, bounding_extent, google_places )
+          filtered = filter_google_results(place_details, admin_scope, geo_scope, stretched_extent, google_places )
           keepers = filtered[:keepers]
           google_placenames = {}
           
