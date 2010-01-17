@@ -201,16 +201,28 @@ failed = []
     for paragraph in paragraphs
         puts "\n\nNEW PARAGRAPH"
         puts "++++++++++++++\n\n"
+        puts paragraph
+        puts "/+++++++"
       #puts "\n\n\n\nPARA:"
       #We now have paragraphs so split them into sentences - then we can look at words with capital letters
-       sentences = paragraph.split("\. ")
+        if paragraph.include? "\n"
+            sentences = paragraph.split("\n")
+            
+        else
+            sentences = paragraph.split("\. ")
+            
+        end
         for sentence in sentences
             #prefix sentence with an abbreviation if so require, e.g. Mt. Christina gets split on Mt.
             if abbrevidation_exceptions.include?(original_word.downcase)
                sentence = original_word+'. '+sentence 
+            else
+                puts "IGNORING LAST WORD:#{original_word}"
             end
-            puts "\n\nNEW SENTENCE, last word was #{original_word}"
-            puts "++++++++++++++\n\n"
+            puts "\n\nNEW SENTENCE"
+            puts "++++++++++++++\n"
+            puts sentence
+            puts "\n++++++++++++++\n\n"
           current_cap_words='' #Reset for start of a sentence
           words = sentence.split(" ")
           for word in words
@@ -423,6 +435,7 @@ failed = []
     #now delete crud
     possible_place_names.delete 'Dee' #This geocodes to Germany!
     possible_place_names.delete 'Tay' #And this to vietnam
+    
     
     {
       :possible_place_names => possible_place_names,
