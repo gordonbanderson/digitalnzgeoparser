@@ -96,6 +96,13 @@ class GeoParserHelperTest < Test::Unit::TestCase
     
   end
   
+ 
+  #From http://localhost:3000/natlib_metadatas/53181/map
+  #Test for other locations in Mt. Christina, Eglinton Valley, South Island
+  # Eglinton Valley, South Island is best match
+  def test_mt_christina_split_commas
+      
+  end
   
   #From http://localhost:3000/natlib_metadatas/53181/map
   def test_mt_christina
@@ -439,6 +446,11 @@ South Island
   end
   
   
+  def test_kumara
+     check_record_for_place(1216871, ["Kumara", "Hokitika"]) 
+  end
+  
+  
   
   private
   
@@ -453,17 +465,19 @@ South Island
   #Check a record for a place
   def check_record_for_place(natlib_record_id, places)
     nl = NatlibMetadata.find_by_natlib_id(natlib_record_id)
+    nl = NatlibMetadata.update_or_create_metadata_from_api(natlib_record_id) if nl.blank?
+    
     check_text_for_places(nl.geo_text, places)
   end
   
   def check_text_for_places(text, places)
-    puts "== PLACE CHECK =="
+    puts "== PLACE CHECK  POSSIBLE PLACE NAMES=="
     result = possible_place_names(text)[:possible_place_names]
     puts result.keys.to_yaml
    
 
       for place in places
-          puts "Checking for #{place} in '#{text}'"
+          puts "\n\nChecking for #{place}"
          assert !result[place].blank?
        end
   end
