@@ -596,6 +596,16 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         puts cgs[0].signature
         assert_equal 1, cgs.length
     end
+    
+    #Check for Kumara not showing in - was a yahoo boundary being borked issue
+    def test_kumara
+        parse_natlib_record 1216871
+        s = Submission.find(:last)
+        
+        puts s.cached_geo_searches.map{|g|g.address}
+        puts "--------SUBMISSION--------"
+       
+    end
 end
 
 =begin
