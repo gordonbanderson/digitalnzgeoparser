@@ -10,10 +10,14 @@ module GeoParserHelper
   
   @position_words = ['in']
   
+  
 
   
   
   def geoparse_text(text)
+      #Some abbreviations may cause sentence splits - if they do add the last word from the previous sentence to the current one
+      abbrevidation_exceptions = ['mt']
+      
     countries = []
     #puts "Parsing text"
     geoparsed_info = possible_place_names(text)
@@ -33,8 +37,13 @@ module GeoParserHelper
       
       #Check for too short - might occur with say M.Ellis splitting to an M character
       if name.length < 3
-        puts "\tAUDIT: TOO SHORT - #{name}"
-        too_short << name
+        puts "\tAUDIT: TOO SHORT - '#{name}'"
+        if !abbrevidation_exceptions.include? name.downcase
+            too_short << name 
+        else
+            puts "AUDIT: TOO SHORT - REPRIEVED '#{name.downcase}' as in exceptions list"            
+            
+        end
       elsif !StopWord.find_by_word(name.downcase).blank?
         puts "\tAUDIT: STOPPED - #{name}"
         stopped << name
@@ -172,7 +181,9 @@ failed = []
   
   #Collate all the words with capital letters or sequences of words with capital letters
   def possible_place_names(text)
-    
+      #Some abbreviations may cause sentence splits - if they do add the last word from the previous sentence to the current one
+      abbrevidation_exceptions = ['mt']
+      
     #Use the open calais service to help filter
     calias_tags = get_cached_tags(text)
     #puts calias_tags.to_yaml
@@ -186,11 +197,20 @@ failed = []
     
     #FIXME - fix paragraph breaks
     paragraphs = text.split("\n\n")
+    original_word=''
     for paragraph in paragraphs
+        puts "\n\nNEW PARAGRAPH"
+        puts "++++++++++++++\n\n"
       #puts "\n\n\n\nPARA:"
       #We now have paragraphs so split them into sentences - then we can look at words with capital letters
        sentences = paragraph.split("\. ")
         for sentence in sentences
+            #prefix sentence with an abbreviation if so require, e.g. Mt. Christina gets split on Mt.
+            if abbrevidation_exceptions.include?(original_word.downcase)
+               sentence = original_word+'. '+sentence 
+            end
+            puts "\n\nNEW SENTENCE, last word was #{original_word}"
+            puts "++++++++++++++\n\n"
           current_cap_words='' #Reset for start of a sentence
           words = sentence.split(" ")
           for word in words
@@ -237,14 +257,16 @@ failed = []
             
             phrase_end = PHRASE_ENDERS.include?(last_char)
             
+            puts "PHRASE END:#{phrase_end}"
+            
             #puts "WORD #{word} is numeric? #{numeric}"
             precaps = (first_letter.upcase == first_letter)
-            #puts "WORD #{word} is CAPS: #{precaps}"
+            puts "WORD #{word} is CAPS: #{precaps}"
             
             trailing_char = ' '
             trailing_char = ', ' if original_word.ends_with?(',')
             current_cap_words << word+trailing_char if precaps && !numeric
-            #puts "WORD,ORIG=#{word} | #{original_word}"
+            puts "WORD,ORIG=#{word} | #{original_word}"
             
 
    
@@ -313,7 +335,7 @@ failed = []
                 long_enough = (current_cap_words.length > 2)
                 if !filtered_by_calais && long_enough
                   current_cap_words = geo_clean(current_cap_words)
-                  #puts "TRACE1:Adding #{current_cap_words}"
+                  puts "ADDED: [T1] #{current_cap_words}"
                   possible_place_names[current_cap_words] = 0 if possible_place_names[current_cap_words].blank?
                   possible_place_names[current_cap_words] = possible_place_names[current_cap_words] + 1
                 end
@@ -343,6 +365,7 @@ failed = []
           current_cap_words.strip!
           if !current_cap_words.blank?
             current_cap_words = geo_clean(current_cap_words)
+            puts "ADDED: [T2] #{current_cap_words}, LAST WAS BANKABLE IS #{last_was_bankable}"
             possible_place_names[current_cap_words] = 0 if possible_place_names[current_cap_words].blank?
             possible_place_names[current_cap_words] = possible_place_names[current_cap_words] + 1
             
@@ -370,6 +393,8 @@ failed = []
         if !cities.blank?
           for city in cities 
             geoname = geo_clean("#{facility}, #{city}")
+            puts "ADDED: [T3] #{current_cap_words}"
+            
             possible_place_names[geoname]= 1 if possible_place_names[geoname].blank?
           end
           
@@ -388,6 +413,8 @@ failed = []
         place = geo_clean(nf)
         
         #This may overwrite an existing entry
+        puts "ADDED: [T4] #{current_cap_words}"
+        
         possible_place_names[place] = frequency
       end
     end
