@@ -85,7 +85,7 @@ module GeographyHelper
 
             #FIXME - attached coordinates otherwise save fails...
             #FIXME - write test for this
-           cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
+           #cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
         
         
           begin
