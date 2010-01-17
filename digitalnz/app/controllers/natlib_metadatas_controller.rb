@@ -50,7 +50,7 @@ class NatlibMetadatasController < ApplicationController
     
     #If still not found, download from Digital NZ
     if @natlib_metadata.blank?
-        @natlib_metadata = NatlibMetadata.update_or_create_metadata_from_api(natlib_record_id)
+        @natlib_metadata = NatlibMetadata.update_or_create_metadata_from_api(id_string)
     end
 
 
