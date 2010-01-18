@@ -606,6 +606,21 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
         puts "--------SUBMISSION--------"
        
     end
+    
+    
+    
+    #Check for a record including Kohokohu school, that is not picking up the town
+    def test_kohukohu
+       parse_natlib_record 43988
+       s = Submission.find(:last)
+       
+       items = n.placenames       
+       names = items.map{|c| c.name}
+       perms = items.map{|i| i.permalink}
+       assert names.include? 'Kohukohu School'
+       
+       assert_equal 5, names.length
+    end
 end
 
 =begin
