@@ -256,6 +256,9 @@ td.imageResult p {
 }
 
 #geonameFrequencies {
+	display:block;
+	width:600px; /* same as map */
+	background: #000;
 	color: #777;
 }
 
