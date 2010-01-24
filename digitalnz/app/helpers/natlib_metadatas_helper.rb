@@ -3,6 +3,29 @@ DigitalNZ.api_key = DIGITAL_NZ_KEY
 
 module NatlibMetadatasHelper
   
+  #Convert a distance in metres to the likes of 240m or 12.3km
+  def self.pretty_distance(area)
+    result = 'No area defined'
+    
+    
+    if !area.blank?
+        rounded_area = area.round.to_s
+          if area < 10
+              rounded_area = number_to_n_significant_digits(area,2)
+          elsif area < 100
+              rounded_area = number_to_n_significant_digits(area,2)
+
+          end
+      result = "#{rounded_area} m"
+    end
+    result
+  end
+  
+  
+  def self.number_to_n_significant_digits(number, n = 3)
+    ("%f"%[("%.#{n}g"%number).to_f]).sub(/\.?0*\z/,'')
+  end
+  
  
 #  Populate the natlib_metadatas table with shells of metadata records discovered from searches
 #  against the desired facets
