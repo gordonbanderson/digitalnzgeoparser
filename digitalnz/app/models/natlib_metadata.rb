@@ -96,11 +96,25 @@ class NatlibMetadata < ActiveRecord::Base
     metadata.title = searchresult.title
     metadata.description = searchresult.description
     metadata.pending = true
+    metadata.categories = [Category.find_or_create(searchresult.category)]
+    metadata.content_partners = [ContentPartner.find_or_create(searchresult.content_provider)]
     metadata.save!
     return metadata
   end
   
 =begin
+metadata_url: http://api.digitalnz.org/records/v1/1325482
+category: Images
+title: The beginnings of Roseneath
+content_provider: National Library of New Zealand
+source_url: http://api.digitalnz.org/records/v1/1325482/source
+syndication_date: "2009-12-10T01:53:36.234Z"
+id: "1325482"
+date: ""
+thumbnail_url: http://www.natlib.govt.nz/images/collections-highlighted/roseneath-map-1888.jpg/image_thumb
+description: This map from about 1888 shows the birth of the Wellington suburb of Roseneath.
+display_url: http://www.natlib.govt.nz/collections/highlighted-items/roseneath-map
+
 
 id              | integer                     | not null default nextval('natlib_metadatas_id_seq1'::regclass)
 creator         | text                        | 
