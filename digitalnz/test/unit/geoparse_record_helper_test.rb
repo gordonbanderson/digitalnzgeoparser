@@ -623,6 +623,38 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
        
        assert_equal 1, addresses.length
     end
+    
+    
+    #test long dash, example with Hamilton Railway Station
+    def test_hamilton_railway_station
+       parse_natlib_record 130293
+       n = NatlibMetadata.find_by_natlib_id 130293 
+       cgs = n.submission.cached_geo_searches       
+       addresses = cgs.map{|c| c.address}
+       
+       puts addresses.to_yaml
+       
+       fail 'Hamilton not found'
+    end
+    
+    
+    # Test an example where the placename is at the end of a sentence and not found
+    def test_ends_with_hamilton
+        parse_natlib_record 128454
+        n = NatlibMetadata.find_by_natlib_id 128454 
+        cgs = n.submission.cached_geo_searches       
+        addresses = cgs.map{|c| c.address}
+
+        puts addresses.to_yaml
+    end
+    
+    
+    
+    
+    
+    
+    
+    
 end
 
 =begin
