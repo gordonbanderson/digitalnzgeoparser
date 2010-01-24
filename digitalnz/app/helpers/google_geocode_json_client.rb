@@ -80,6 +80,44 @@ class GoogleGeocodeJsonClient
   end
   
   
+  # Geocode a string of the form PART1, PART2, PART3, PART4
+  # by gradually knocoking off PART1, PART2 etc
+  # and use the most accurate result
+  def geocode_recursive(address, memcache_server = nil)
+      splits = address.split(',').reverse
+      n_parts = splits.length
+      addresses = []
+      0.step(n_parts-1, 1) {|x| 
+          address=[]
+          puts "X:#{x}"
+          for i in 0..x
+              puts "\t#{i} - PART IS #{splits[i]}"
+              address << splits[i]
+              puts "JOIN:"+address.join('|')
+          end
+          
+          address_joined = address.reverse.join(',').strip
+          addresses << address_joined
+          puts "ADDRESSREV:"
+      }
+      
+      addresses.reverse
+      
+      puts addresses.to_yaml
+      for a in addresses
+          puts "ADDRESS:#{a}"
+      end
+      
+      asfd
+      
+ 
+      
+     
+      
+      return {}
+  end
+  
+  
   def geocode(address, memcache_server=nil)
         geo_url = @url+'&q=' + CGI.escape(address)
         
