@@ -12,7 +12,7 @@ class Submission < ActiveRecord::Base
   has_one :centroid, :dependent => :destroy
   belongs_to :natlib_metadata
   has_many :phrases
-  has_many :phrase_frequencies, :include => [:phrase], :dependent => :destroy
+  has_many :phrase_frequencies, :include => [:phrase], :dependent => :destroy, :autosave => true
   
   
   #Return a decent description of the location found from the text submitted
