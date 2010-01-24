@@ -18,6 +18,6 @@ module SubmissionsHelper
     
     
     def self.number_to_n_significant_digits(number, n = 3)
-    ("%f"%[("%.#{n}g"%number).to_f]).sub(/\.?0*\z/,'')
+      ("%f"%[("%.#{n}g"%number).to_f]).sub(/\.?0*\z/,'')
     end
 end
