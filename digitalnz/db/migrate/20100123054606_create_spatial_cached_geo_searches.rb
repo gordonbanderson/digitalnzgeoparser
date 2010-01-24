@@ -44,9 +44,6 @@ class CreateSpatialCachedGeoSearches < ActiveRecord::Migration
       end
       steps = steps + 1
     end
-    
-
-    remove_column :cached_geo_searches, :geom
   end
   
   
