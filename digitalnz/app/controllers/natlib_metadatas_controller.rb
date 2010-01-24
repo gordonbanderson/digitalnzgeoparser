@@ -165,8 +165,8 @@ class NatlibMetadatasController < ApplicationController
                           splits = l.address.split(',')
                           crunched_address = splits[0]
                           place_search = [splits[0], splits[1]].join(',')
-                          if duplicate_addresses[place_search].blank?
-                            duplicate_addresses[place_search]=place_search
+                          if duplicate_addresses[crunched_address].blank?
+                            duplicate_addresses[crunched_address]=crunched_address
                             distance = NatlibMetadatasHelper.pretty_distance 1000*l.distance.to_f
                             info_text << '<a href="/search/'+ URI.encode(place_search)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
                             ctr = ctr + 1
