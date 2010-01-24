@@ -85,8 +85,8 @@ module GeographyHelper
 
             #FIXME - attached coordinates otherwise save fails...
             #FIXME - write test for this
-           cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
-        
+#           cached.geom =  Point.from_x_y(cached.longitude, cached.latitude)
+          cached.spatialize
         
           begin
             puts "Search term object is #{cached.cached_geo_search_terms}"
