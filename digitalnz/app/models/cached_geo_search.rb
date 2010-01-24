@@ -124,13 +124,10 @@ named_scope :visible, {
       puts "UPDATED SIG:#{signature}"
   end
   
-  
-  def before_save_NOT
-    spatialize
-  end
-  
   #Update the spatial version of these coordinates prior to a save
+  #Before_save did not work here, not investigated why
   def spatialize
+    RAILS_DEFAULT_LOGGER.debug "++++ SPATIALIZING ++++"
     s = spatial_cached_geo_search
     s = SpatialCachedGeoSearch::new if s.blank?
     s.cached_geo_search = self
