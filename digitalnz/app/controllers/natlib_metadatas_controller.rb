@@ -160,13 +160,18 @@ class NatlibMetadatasController < ApplicationController
                         nearby_locations = cached_search.find_all_within_km_radius(1)
                         @nearby_locations[cached_search] = nearby_locations
                         ctr = 0
+                        duplicate_addresses = {}
                         for l in nearby_locations
                           splits = l.address.split(',')
                           crunched_address = splits[0]
                           place_search = [splits[0], splits[1]].join(',')
-                          distance = NatlibMetadatasHelper.pretty_distance 1000*l.distance.to_f
-                          info_text << '<a href="/search/'+ URI.encode(place_search)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
-                          ctr = ctr + 1
+                          if duplicate_addresses[place_search].blank?
+                            duplicate_addresses[place_search]=place_search
+                            distance = NatlibMetadatasHelper.pretty_distance 1000*l.distance.to_f
+                            info_text << '<a href="/search/'+ URI.encode(place_search)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
+                            ctr = ctr + 1
+                          end
+                         
                           break if ctr > 20 #Limit to 6
                         end
                         
