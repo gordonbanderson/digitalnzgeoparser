@@ -592,10 +592,38 @@ Organization:
       items = calais_tags[key_non_geo]
       if !items.blank?
         for item in calais_tags[key_non_geo]
-          puts "REMOVING FROM GEO SEARCH:#{item}"
-          result_for_google.gsub!(item, item.downcase)
-          result_for_yahoo.gsub!(item, '')
-          removed << item
+            filter_by_open_calais = true
+            
+            #Some organisations have geographic info - to review
+            if key_non_geo == 'Organization'
+                values = calais_tags[key_non_geo] #An array
+                for value in values
+                    puts "VALUE:#{value}"
+                    splits = value.split ' '
+
+                    #Allow schools and colleges through
+                    if ["school", "college"].include?  splits[-1].downcase
+                        filter_by_open_calais = false 
+
+                    end
+                    
+                        if filter_by_open_calais
+                             puts "REMOVING FROM GEO SEARCH:#{item}"
+                                result_for_google.gsub!(item, item.downcase)
+                                result_for_yahoo.gsub!(item, '')
+                                removed << item
+                        end
+                end
+                
+            else
+                puts "REMOVING FROM GEO SEARCH:#{item}"
+                result_for_google.gsub!(item, item.downcase)
+                result_for_yahoo.gsub!(item, '')
+                removed << item 
+            end
+            
+        
+
         end
       else
         #puts "No non geo items of type #{key_non_geo}"
