@@ -1,7 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  cached_geo_search_id: 1
-
-two:
-  cached_geo_search_id: 1
