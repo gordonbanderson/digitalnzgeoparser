@@ -216,6 +216,11 @@ td.imageResult p {
 }
 
 /* Information about natlib record being viewed with map */
+.mapInfo {
+	width: 400px;
+	font-size: 0.8em;
+}
+
 #natlibRecordInformation {
 	font-size: 0.8em;
 }
