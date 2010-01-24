@@ -8,6 +8,8 @@ Record any examples of poor geoparsing in this document, well at least until a p
 In this example Kohokohu School is removed, which is the only geoparsable info in the record
 http://localhost:3000/natlib_metadatas/43988/map
 
+ALLOW ORGANIZATIONS THAT ARE SCHOOLS AND COLLEGES THROUGH
+FIXME: CHECK OTHERS
 
 
 
@@ -19,22 +21,28 @@ http://localhost:3000/natlib_metadatas/43988/map
 If only a town and region returned, and town is of that region, then only show region
 
 http://localhost:3000/natlib_metadatas/1175758/map is an example, containing Rawene and Northland
-
+DEALT WITH BY BOUNDING BOXES
 
 === Region Town and Street Example
 Do the same again?
 
 http://localhost:3000/natlib_metadatas/112896/map
+DEALT WITH BY BOUNDING BOXES
+
 
 Perhaps apply recursive algoritm
 http://localhost:3000/natlib_metadatas/1226315/map << good example, only Coopers Beach should be returned
+DEALT WITH BY BOUNDING BOXES
+
 
 Counterexample... http://localhost:3000/natlib_metadatas/116840/map
+Note Northland Region has 2 hits... CAN WE USE THIS?
 
 
 == Errors in Word Parsing
 === Semi Colons not splitting phrases
 http://localhost:3000/natlib_metadatas/1319179/map
+APPEARS TO BE FIXED
 
 
 == Issues with Algorithm
@@ -42,34 +50,43 @@ http://localhost:3000/natlib_metadatas/1319179/map
 === Clustering
 http://localhost:3000/natlib_metadatas/103059/map
 One way off point
+DEALT WITH BY REGIONAL BOUNDING BOXES
 
 === Issue with Full Stop
 http://localhost:3000/natlib_metadatas/53181/map
 
 Mt. Christina parsed as Christina...  due to 'Too Short' parsing
-
+WAS A SENTENCE SPLIT, NOW FIXED
 
 === Word Frequency
 Word frequency is currently not taken into account
 e.g. http://localhost:3000/natlib_metadatas/116520/map has Houhora Harbour appearing 3 times
+TAG CLOUD
+
 
 === Positional Prepositions
 http://localhost:3000/natlib_metadatas/58625/map
 
 Probably *in* Auckland
+NOT A BUG - or can use preposition?
+
 
 === Line Breaks
 http://localhost:3000/natlib_metadatas/1216871/map
 Is this line breaked correctly?
+FIXED LINE BREAKS - SPLIT INTO SENTENCES IF \n FOUND
+EXTENDED YAHOO BY 10%
 
 === Recognising Maori
 http://localhost:3000/natlib_metadatas/1226315/map
 
 Aotorea not recognised....
+LISTED AS BUG FOR GOOGLE
+
 
 == Stopwords
 http://localhost:3000/natlib_metadatas/1302557/map << why is miramar in stop list?
-
+LISTED TO REMOVE - TESTING WITH STOP WORD REMOVE WORKS
 
 === Erroneous Word
 http://localhost:3000/natlib_metadatas/28895/map
@@ -84,15 +101,23 @@ Remove any capitalised words ending in apostrophe s ??
 == All Terms Being Used
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/69053/map
 Why no 'Wellington Region'?
+APPEARS FIXED - MULTI POLYGONS OVER CORRECT POINT
 
 
 == Foxton
 150353 looks suspicous - Foxton in the UK?
+FIXME - GOOGLE GEOCODER PROBLEM
 
 
 MISC
 
 http://localhost:3000/natlib_metadatas/130293/map << why no Hamilton Railway Station?
+HAMILTON RAILWAY STATION NOT FOUND
+TRY REPLACING 'RAILWAY STATION' AND TRYING AGAIN?
+FIXME
+
+
+
 http://localhost:3000/natlib_metadatas/128454/map << lacks nz
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/130450/map
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/139802/map << area incorrect
@@ -157,6 +182,17 @@ WHy no Rotorua?  Last word of sentence perhaps?
 
 http://localhost:3000/map/the-auckland-wellington-express-passing-campbells-point-near-auckland
 Auckland-Wellington << dash is incorrect
+
+1342878 - encoded text
+
+
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1320023-portrait-of-h-a-litchfield-t-h-mcwilliam-charles/map << Christchurch, New Zealand is missing
+
+
+http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/1269602-chapter-3-william-raymond-wright/map << long example
+
+
+BRIEF:  36306 - 125079 [Lawn mower repairs, Waitoa Road, Hataitai, 25/5/00]  0 locations, area =  TIME=3.587278 << trailing numbers
 
 
 20913 << full address not geoparsed - try comma splits thing?
