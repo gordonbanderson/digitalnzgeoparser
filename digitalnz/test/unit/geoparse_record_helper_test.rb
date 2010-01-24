@@ -608,6 +608,25 @@ class GeoparseRecordHelperTest < ActiveRecord::TestCase
     end
     
     
+    #Check that when a record is geoparsed spatial information is also stored in the DB
+    def test_spatial_created
+      parse_natlib_record 1344363
+      n = NatlibMetadata.find_by_natlib_id 1344363
+      cgs = n.submission.cached_geo_searches
+      puts cgs.length
+      for cg in cgs
+        puts "#{cg.id} - #{cg.address}"
+        s = cg.spatial_cached_geo_search
+        puts "SPATIAL:#{s.to_yaml}"
+        lat = cg.latitude
+        lon = cg.longitude
+        assert_equal lat,s.coordinates.y
+        assert_equal lon,s.coordinates.x
+        
+        #FIXME - check boudning box
+        assert !s.blank?
+      end
+    end
     
     #Check for a record including Kohokohu school, that is not picking up the town
     def test_kohukohu
