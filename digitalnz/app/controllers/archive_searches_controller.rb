@@ -146,7 +146,6 @@ class ArchiveSearchesController < ApplicationController
     rescue Exception => e
         @error_message = e.message
         logger.debug "Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}"
-        asdfsdf
     end
     
 
