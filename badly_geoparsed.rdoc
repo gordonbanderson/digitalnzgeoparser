@@ -118,6 +118,8 @@ FIXME
 
 
 
+http://localhost:3000/map/wanganui-f-g-r-4775 << no places found :(
+
 http://localhost:3000/natlib_metadatas/128454/map << lacks nz
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/130450/map
 http://digitalnzgeoparser.tripodtravel.co.nz/natlib_metadatas/139802/map << area incorrect
