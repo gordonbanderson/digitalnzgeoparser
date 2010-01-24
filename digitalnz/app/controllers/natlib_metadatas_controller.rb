@@ -1,5 +1,6 @@
 class NatlibMetadatasController < ApplicationController
   require 'will_paginate'
+  require 'cgi'
   
   ZOOM_BOUNDS = [0.00001, 0.00005, 0.0002, 0.002, 0.02, 0.2,0.5,1,2,4,32,64,128,256,512]
   
@@ -78,6 +79,11 @@ class NatlibMetadatasController < ApplicationController
        # from the google search results
        @n_places_found = @submission.cached_geo_searches.length
        logger.debug "TRACE:#{@n_places_found} found"
+       
+       #This will hold a mapping of the current cached geo search to the N nearest ones
+       #These will be rendered in the HTML map popups
+       @nearby_locations = {}
+
        @calais_hash = {}
        if @n_places_found > 0
          # if the submission area is small, zoom in more
@@ -143,12 +149,29 @@ class NatlibMetadatasController < ApplicationController
                         @n_places_for_terms[search_term] = 0 if @n_places_for_terms[search_term].blank?
                         @n_places_for_terms[search_term] = @n_places_for_terms[search_term] + 1
                       if cached_search.accuracy.google_id < @filter.to_i
-                        info_text = cached_search.address
+                        info_text = '<div class="mapInfo">'
+                        info_text << cached_search.address
                         info_text << '<br/>'
                         info_text << cached_search.accuracy.name
                         info_text << ':'
                         info_text << '"'+search_term+'"'
-                        @accuracies[search_term] = cached_search.accuracy.name
+                        
+                        info_text << '<br/>Nearby:'
+                        nearby_locations = cached_search.find_all_within_km_radius(1)
+                        @nearby_locations[cached_search] = nearby_locations
+                        ctr = 0
+                        for l in nearby_locations
+                          splits = l.address.split(',')
+                          crunched_address = splits[0]
+                          place_search = [splits[0], splits[1]].join(',')
+                          distance = NatlibMetadatasHelper.pretty_distance 1000*l.distance.to_f
+                          info_text << '<a href="/search/'+ URI.encode(place_search)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
+                          ctr = ctr + 1
+                          break if ctr > 20 #Limit to 6
+                        end
+                        
+                        info_text << "</div>"
+                             @accuracies[search_term] = cached_search.accuracy.name
                         @map.overlay_init(GMarker.new([cached_search.latitude, cached_search.longitude],
                          :title => search_term,
                          :options => {:draggable => true},
