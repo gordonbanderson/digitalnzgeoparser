@@ -12,10 +12,15 @@ newrowclass=''
 if (ctr % 4) == 0
 	newrowclass=' newrow'
 end
+
+turn = rand(10)-5
 %>
     <li>
 		<div class="imageSlide<%=newrowclass%>">
-        <a href="<%=result.display_url%>" title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
+        <a href="<%=result.display_url%>" 
+			style=" -moz-transform: rotate(<%=turn%>deg);
+			 -webkit-transform: rotate(<%=turn%>deg);"
+	title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
 	alt="<%=metarecord.title%>"/></a>
 
         </div>
