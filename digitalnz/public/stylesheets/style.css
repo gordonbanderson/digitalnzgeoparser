@@ -1,3 +1,18 @@
+.logo {
+	font-family: Arials, Helvetica, Sans-serif;
+	color: #333;
+}
+
+.logoLarge {
+	font-size: 40pt;
+}
+
+.logoSmall {
+	font-size: 14pt;
+	padding: 3px;
+}
+
+
 .frontPageLinks {
 	color: #777;
 	font-size: 0.8em;
