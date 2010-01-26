@@ -1,48 +1,50 @@
 <div class="searchPanel">
     <%= render :partial => 'search_form' %>
 </div>
-
-	
-	<%
-		for offset in 0..4
-		%>
-		<div id="frontPageImageRotate<%=offset%>">
-		<%for image in 0..4
-			nl=@random_images[offset*5+image]
-			%>
-			<div class="natlibRandomImage">
-				<a href="/map/<%=nl.permalink%>" title="<%=nl.title%>">
-					<img src="<%=nl.thumbnail_url%>" alt="<%=nl.title%>"/>
-				</a>
-			</div>
-		<%
-		end
-		%>
-		<div>
-	<%end%>
-	
-<script type="text/javascript">
-
-$('#frontPageImageRotate0').cycle();
-$('#frontPageImageRotate1').cycle();
-$('#frontPageImageRotate2').cycle();
-$('#frontPageImageRotate3').cycle();
-$('#frontPageImageRotate4').cycle();
+<script type="text/javascript"> 
+$(function() {
+    $('#slideshow1').cycle();
+    $('#slideshow0').cycle();
+    $('#slideshow4').cycle();
+    $('#slideshow2').cycle();
+	$('#slideshow3').cycle();
+    
+   
+});
 </script>
+	
+<div id="frontPageSlideshow"> 
+    <table cellspacing="2">
+	
+		<%for cell in 0..4%>
+		<td class="slideshow" style="width:200px;">
+	        <div id="slideshow<%=cell%>">
+				<%for image in 0..3
+				nl = @random_images[4*cell+image]
+				%>
+				<a href="/map/<%=nl.permalink%>" title="<%=nl.title%>">
+				<img src="<%=nl.thumbnail_url%>" alt="<%=nl.title%>" /> 
+	            </a>
+				<%end%>
+	        </div>
+			</td> 
+		<%end%>
+        
+      
+        </td> 
+    </tr></table> 
+</div>
 
 <%if !@search_term_tags.blank?%>
 <div class="searchTermTags">
 	<%
 	max_font_size =24
 	max_tag_count = @search_term_tags[0].c
-	for tag_text in @search_term_hash.keys.sort
-		tag = @search_term_hash[tag_text]
-		tag_count = tag.c.to_f
-		font_size = 8+tag_count*max_font_size/max_tag_count
+	for tag_text in ['Auckland', 'Wellington', 'Rotorua']
 	%>
-	<span class="searchTermTag" style="font-size: <%=font_size%>pt;">
-	<a href="/archive_searches/search?q=<%=tag.search_text%>">
-	<%=tag.search_text%>
+	<span class="searchTermTag">
+	<a href="/archive_searches/search?q=<%=tag_text%>">
+	<%=tag_text%>
 	</a>
 	</span>
 	<%
