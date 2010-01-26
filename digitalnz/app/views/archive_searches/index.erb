@@ -2,6 +2,33 @@
     <%= render :partial => 'search_form' %>
 </div>
 
+	
+	<%
+		for offset in 0..4
+		%>
+		<div id="frontPageImageRotate<%=offset%>">
+		<%for image in 0..4
+			nl=@random_images[offset*5+image]
+			%>
+			<div class="natlibRandomImage">
+				<a href="/map/<%=nl.permalink%>" title="<%=nl.title%>">
+					<img src="<%=nl.thumbnail_url%>" alt="<%=nl.title%>"/>
+				</a>
+			</div>
+		<%
+		end
+		%>
+		<div>
+	<%end%>
+	
+<script type="text/javascript">
+
+$('#frontPageImageRotate0').cycle();
+$('#frontPageImageRotate1').cycle();
+$('#frontPageImageRotate2').cycle();
+$('#frontPageImageRotate3').cycle();
+$('#frontPageImageRotate4').cycle();
+</script>
 
 <%if !@search_term_tags.blank?%>
 <div class="searchTermTags">
