@@ -167,8 +167,11 @@ class NatlibMetadatasController < ApplicationController
                           place_search = [splits[0], splits[1]].join(',')
                           if duplicate_addresses[crunched_address].blank?
                             duplicate_addresses[crunched_address]=crunched_address
+                            
+                            #Work out solr query for place address, e.g. Willis St, Wellington
+                            solr_query = NatlibMetadatasHelper.solr_query(place_search)
                             distance = NatlibMetadatasHelper.pretty_distance 1000*l.distance.to_f
-                            info_text << '<a href="/search/'+ URI.encode(place_search)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
+                            info_text << '<a href="/search/'+ URI.encode(solr_query)+'">'+crunched_address+"</a>&nbsp;(#{distance})"+'&nbsp;'
                             ctr = ctr + 1
                           end
                          
