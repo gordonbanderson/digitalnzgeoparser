@@ -1,8 +1,14 @@
-<div id="lightBox">
+<%
+width = 4 #A la google
+
+lightBoxHeight = 160* (@digital_nz_search_result.results.length / width)
+%>
+<div id="lightBox" style="height:<%=lightBoxHeight%>px;">
 <ul class="polaroids"> 
 <%
 ctr = 0
-width = 4 #A la google
+rowctr = -1
+colctr = 0
 for result in @digital_nz_search_result.results
     metarecord = @metadata_records[result.id]
     %>
@@ -11,6 +17,8 @@ for result in @digital_nz_search_result.results
 newrowclass=''
 if (ctr % 4) == 0
 	newrowclass=' newrow'
+	rowctr = rowctr+1
+	colctr = 0
 end
 
 turn = rand(10)-5
@@ -18,7 +26,8 @@ turn = rand(10)-5
     <li>
 		<div class="imageSlide<%=newrowclass%>">
         <a href="<%=result.display_url%>" 
-			style=" -moz-transform: rotate(<%=turn%>deg);
+			style=" position: absolute; top: <%=rowctr*150%>px; left: <%=colctr*190%>px;
+			-moz-transform: rotate(<%=turn%>deg);
 			 -webkit-transform: rotate(<%=turn%>deg);"
 	title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
 	alt="<%=metarecord.title%>"/></a>
@@ -28,7 +37,7 @@ turn = rand(10)-5
 
 <%
 
-
+colctr = colctr + 1
 ctr = ctr + 1
 end
 %>
