@@ -1,3 +1,7 @@
+body {
+	min-width: 1000px;
+}
+
 .logo {
 	font-family: Arials, Helvetica, Sans-serif;
 	color: #333;
@@ -228,20 +232,25 @@ td.imageResult p {
 	background: yellow;
 }
 
+
 #lightBox {
 	display: block;
 	float: none;
 }
 
 .newrow {
-	clear: left;
 }
 
 ul.polaroids { margin: 0 0 18px -30px; display: block;}
 		ul.polaroids li { display: inline; }
-		ul.polaroids a { background: #fff; display: inline; float: left; margin: 0 0 4px 8px; 
+		ul.polaroids a { background: #fff; display: inline; float: none; margin: 0 0 4px 8px; 
 			width: auto; padding: 10px 10px 15px; text-align: center; max-width: 200px; font-family: "Marker Felt",
-			 sans-serif; text-decoration: none; color: #333; font-size: 1em; -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.25); -moz-box-shadow: 0 3px 6px rgba(0,0,0,.25); -webkit-transform: rotate(-2deg); -webkit-transition: -webkit-transform .15s linear; -moz-transform: rotate(-2deg); }
+			 sans-serif; text-decoration: none; color: #333; font-size: 1em;
+			 -webkit-box-shadow: 0 3px 6px rgba(0,0,0,.25); -moz-box-shadow: 0 3px 6px rgba(0,0,0,.25);
+			 -webkit-transition: -webkit-transform .15s linear;
+			 -moz-transform: rotate(-2deg);
+			 -webkit-transform: rotate(-2deg);
+			 }
 		ul.polaroids img { display: block; margin-left: auto; margin-right: auto;
 			margin-bottom: 12px; height: 80px; }
 		ul.polaroids a:after { content: attr(title); }
