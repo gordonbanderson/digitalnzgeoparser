@@ -267,8 +267,11 @@ ul.polaroids { margin: 0 0 18px -30px; display: block;}
 			-webkit-transform: rotate(-5deg); -moz-transform: rotate(-5deg); }
 		
 		ul.polaroids li a:hover { -webkit-transform: scale(1.25); -moz-transform: scale(1.25); 
-			-webkit-box-shadow: 0 3px 6px rgba(0,0,0,.5); -moz-box-shadow: 0 3px 6px rgba(0,0,0,.5);
-			 position: relative; z-index: 5; }
+			-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.5); -moz-box-shadow: 0 6px 12px rgba(0,0,0,.5);
+			 position: relative; 
+			z-index: 5; 
+			 background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(240, 240, 240)), to(rgb(250,250,220)));
+			}
 
 
 /* Links in the footer to geoparsed records */
