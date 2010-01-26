@@ -1,21 +1,36 @@
-	<ul class="polaroids"> 
-
+<div id="lightBox">
+<ul class="polaroids"> 
 <%
+ctr = 0
+width = 4 #A la google
 for result in @digital_nz_search_result.results
     metarecord = @metadata_records[result.id]
     %>
 <%cache "IMAGERESULT:#{metarecord.natlib_id}" do%>
+<%
+newrowclass=''
+if (ctr % 4) == 0
+	newrowclass=' newrow'
+end
+%>
     <li>
-		<div class="imageSlide">
+		<div class="imageSlide<%=newrowclass%>">
         <a href="<%=result.display_url%>" title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
 	alt="<%=metarecord.title%>"/></a>
 
         </div>
     </li>
-<%end%>
+
+<%
+
+
+ctr = ctr + 1
+end
+%>
     <%
 
 end
 %>
     
 </ul>
+</div>
