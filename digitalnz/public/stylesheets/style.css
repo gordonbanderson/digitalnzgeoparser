@@ -245,13 +245,14 @@ ul.polaroids { margin: 0 0 18px -30px; display: block;}
 		ul.polaroids img { display: block; margin-left: auto; margin-right: auto;
 			margin-bottom: 12px; height: 80px; }
 		ul.polaroids a:after { content: attr(title); }
-		
+/*		
 		ul.polaroids li:nth-child(even) a { -webkit-transform: rotate(3deg);  -moz-transform: rotate(3deg); }
 		ul.polaroids li:nth-child(3n) a { -webkit-transform: none; position: relative; top: -5px;  -moz-transform: none; }
 		ul.polaroids li:nth-child(5n) a { -webkit-transform: rotate(5deg); 
 			position: relative; right: 5px;  -moz-transform: rotate(5deg); }
 		ul.polaroids li:nth-child(8n) a { position: relative; right: 5px; top: 8px; }
 		ul.polaroids li:nth-child(11n) a { position: relative; left: -5px; top: 3px; }
+*/
 		
 		ul.polaroids li.messy a { margin-top: -375px; margin-left: 160px; 
 			-webkit-transform: rotate(-5deg); -moz-transform: rotate(-5deg); }
