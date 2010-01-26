@@ -1,44 +1,21 @@
-<table class="imageResultsTable">
+	<ul class="polaroids"> 
 
 <%
-width = 4 # a la google
-ctr = 0
 for result in @digital_nz_search_result.results
     metarecord = @metadata_records[result.id]
-    if ctr % width == 0
-        %>
-        <tr>
-        <%
-    end
     %>
 <%cache "IMAGERESULT:#{metarecord.natlib_id}" do%>
-    <td class="imageResult">
-        <a href="<%=result.display_url%>"><img src="<%=result.thumbnail_url%>"/></a>
-        <p><%=result.title%><br/>
-			<%if metarecord.pending %>
-			Not Geoparsed (<%=metarecord.natlib_id%>)
-            <%elsif !metarecord.submission.blank?
-			id_string = seo_id(metarecord.natlib_id, metarecord.title)
-			%>
-			<%=link_to 'Map', natlib_map_url(:permalink=>metarecord.permalink)%>
-            <%else%>
-			<%=link_to 'Metadata', natlib_map_url(:permalink=>metarecord.permalink)%>
-            <%end%>    
-        <br/>
-        <%=hostof(result.display_url)%>
-        </p>
-        
-    </td>
+    <li>
+		<div class="imageSlide">
+        <a href="<%=result.display_url%>" title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
+	alt="<%=metarecord.title%>"/></a>
+
+        </div>
+    </li>
 <%end%>
     <%
-    ctr = ctr + 1
-    
-    if ctr % width == 0
-        %>
-        </tr>
-        <%
-    end
+
 end
 %>
     
-</table>
+</ul>
