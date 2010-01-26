@@ -3,6 +3,38 @@ DigitalNZ.api_key = DIGITAL_NZ_KEY
 
 module NatlibMetadatasHelper
   
+  
+  #Search for a placename in SOLR land by converting the likes of Willis St, Wellington into a
+  #title search, an exact search, and a free search with weighting towards the former
+  def self.solr_query(address)
+    parts = address.split(',')
+    
+    if parts[-1] =~ /\d{4}/
+      address.gsub!(parts[-1], '')
+      RAILS_DEFAULT_LOGGER.debug address[-1]
+      address[-1] = '' if address[-1] == 44
+        
+      address.strip!
+      parts = address.split(',')
+      
+    end
+
+    result = ""
+    
+    result << '(title:"'+address+'")^4 OR '
+    result << '("'+address+'")^3 '
+    result << 'OR ('
+    part_string = ''
+    for part in parts
+      part_string << "+#{part} "
+    end
+    part_string.strip!
+    result << part_string
+    result << ")^2 OR (#{address})"
+    
+    result
+  end
+  
   #Convert a distance in metres to the likes of 240m or 12.3km
   def self.pretty_distance(area)
     result = 'No area defined'
