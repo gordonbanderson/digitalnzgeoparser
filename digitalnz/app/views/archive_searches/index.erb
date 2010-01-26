@@ -3,12 +3,9 @@
 </div>
 <script type="text/javascript"> 
 $(function() {
-    $('#slideshow1').cycle();
-    $('#slideshow0').cycle();
-    $('#slideshow4').cycle();
-    $('#slideshow2').cycle();
-	$('#slideshow3').cycle();
-    
+	<%for s in 0..4%>
+	$('#slideshow<%=s%>').cycle();
+	<%end%>
    
 });
 </script>
