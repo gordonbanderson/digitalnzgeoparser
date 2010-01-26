@@ -1,7 +1,9 @@
 require 'digitalnz'
 require 'digitalnz_helper'
+require 'archive_searches_helper'
 
 include DigitalnzHelper
+include ArchiveSearchesHelper
 
 class NatlibMetadata < ActiveRecord::Base
   
@@ -94,6 +96,17 @@ class NatlibMetadata < ActiveRecord::Base
     metadata = NatlibMetadata::new
     metadata.natlib_id = searchresult.id
     metadata.title = searchresult.title
+    targethost = hostof(searchresult.display_url)
+    if targethost == 'find.natlib.govt.nz'
+      title_parts = searchresult.title.split(' ')
+      last_part = title_parts[-1]
+      dash_parts = last_part.split '-'
+      if dash_parts.length > 1
+        title_parts.pop
+        metadata.title = title_parts.join ' '
+      end
+    end
+    
     metadata.description = searchresult.description
     metadata.pending = true
     metadata.categories = [Category.find_or_create(searchresult.category)]
@@ -167,7 +180,23 @@ http://api.digitalnz.org/records/v1/273830.xml?api_key=7dffce0c64ee6a5e2df936a11
       if the_title.class == Array
           metadata.title = the_title.join('  ')
       else
+        targethost = hostof(result['dnz']['landing_url'])
+        
+        #Strip newly appeared metadata crud
+        #FIXME - generic title fixer as some other titles were messed up
+        if targethost == 'find.natlib.govt.nz'
+          title_parts = the_title.split(' ')
+          last_part = title_parts[-1]
+          dash_parts = last_part.split '-'
+          if dash_parts.length > 1
+            title_parts.pop
+            metadata.title = title_parts.join ' '
+          end
+        else
           metadata.title = the_title #Assume string
+          
+        end
+        #
       end
       
       #Deal with potentially habtm creators
