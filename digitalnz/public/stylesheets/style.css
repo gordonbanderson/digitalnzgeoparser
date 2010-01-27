@@ -31,10 +31,16 @@ body {
 	color: #777;
 }
 
+.slideshow img, #frontPageSlideShow {
+	margin-left: auto;
+	margin-right: auto;
+}
+
 /* Tags on the home page */
 .searchTermTags {
-	padding: 20px 40px 20px 40px;
+	padding: 200px 0px 0px 0px;
 }
+
 
 .searchTermTags a {
 	color: #777;
@@ -123,8 +129,10 @@ li.searchResult p {
 }
 
 /* Centre the home page search a la google */
-#searchPanelHomePage {
+#searchPanelHomePage, #frontPageSlideshow table {
     text-align: center;
+		margin-left: auto;
+		margin-right: auto;
 }
 
 #searchPanelSmall img {
