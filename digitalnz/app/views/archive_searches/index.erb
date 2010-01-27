@@ -2,11 +2,22 @@
     <%= render :partial => 'search_form' %>
 </div>
 <script type="text/javascript"> 
+
+
 $(function() {
-	<%for s in 0..4%>
-	$('#slideshow<%=s%>').cycle();
+    <%for i in 0..4%>
+    $('#slideshow<%=i%>').cycle({
+        delay: 5000,
+        speed: 100,
+        before: onBefore
+    });
 	<%end%>
-   
+    
+
+    
+    function onBefore() {
+        $('#title').html(this.alt);
+    }
 });
 </script>
 	
@@ -16,8 +27,8 @@ $(function() {
 		<%for cell in 0..4%>
 		<td class="slideshow" style="width:200px;">
 	        <div id="slideshow<%=cell%>">
-				<%for image in 0..3
-				nl = @random_images[4*cell+image]
+				<%for image in 0..9
+				nl = @random_images[cell+image]
 				%>
 				<a href="/map/<%=nl.permalink%>" title="<%=nl.title%>">
 				<img src="<%=nl.thumbnail_url%>" alt="<%=nl.title%>" /> 
