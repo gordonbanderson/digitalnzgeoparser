@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Digital NZ Search</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<%=stylesheet_link_tag 'layout2col'%>
+<%=stylesheet_link_tag 'typography'%>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+
+<%= javascript_include_tag 'jquery.cycle.all.min.js' %>
+
+<!--[if lt IE 7]>
+   <style media="screen" type="text/css">
+   .col1 {
+           width:100%;
+       }
+   </style>
+   <![endif]--> 
+
+<script type="text/javascript"> 
+
+
+$(function() {
+
+    $('#slideshow1').cycle({
+        delay: -2000,
+        speed: 3000,
+        before: onBefore
+    });
+
+
+
+
+
+
+    function onBefore() {
+        $('#title').html(this.alt);
+    }
+});
+</script>
+
+</head>
+
+<body> 
+ 
+<div id="header"> 
+ 
+    <div id="logo">&nbsp;</div> 
+ 	<ul> 
+        <li><a href="http://matthewjamestaylor.com/blog/ultimate-3-column-holy-grail-pixels.htm" class="active">All</a></li> 
+        <li><a href="/search/category/images">Images</a></li> 
+<li><a href="/search/category/videos">Video</a></li>
+<li><a href="/search/category/audio">Audio</a></li>
+<li><a href="/search/category/books">Books</a></li>
+<li><a href="/search/category/newspapers">Newspapers</a></li>
+<li><a href="/search/category/manuscripts">Manuscripts</a></li>
+     </ul> 
+</div> 
+<div id="headerUnderFooter">&nbsp;</div> 
+<div class="colmask holygrail"> 
+    <div class="colmid"> 
+        <div class="colleft"> 
+            <div class="col1wrap"> 
+                <div class="col1"> 
+					<!-- Column 1 start --> 
+							<div class="indentedContent"> 
+							<form action="http://digitalnzgeoparser.tripodtravel.co.nz/archive_searches/search" class="new_archive_search" id="new_archive_search" method="post"><div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value="9kWxewJJfi6u5mM6amxPMFgQQFGUaLvCoc0HG3gErak=" /></div> 
+							  <p> 
+							    <input id="archive_search_search_text" name="archive_search[search_text]" class="input" size="30" type="text" /> 
+ 
+							    <input id="archive_search_submit" name="commit" class="super button" type="submit" value="Search »" /> 
+							  </p> 
+							</form> 
+						</div> 
+					
+						<div class="fromTheArchive"> 
+							<div class="slideshow" id="slideshow1">
+							<%for nl in @random_images%>
+										<a href="/map/<%=nl.permalink%>" title="<%=nl.title%>">
+										<img src="<%=nl.thumbnail_url%>" alt="<%=nl.title%>" /> 
+							            </a>
+							<%end%>
+								</div> 
+						</div> 
+					
+					
+					
+				
+				<!-- Column 1 end --> 
+                </div> 
+            </div> 
+            <div class="col2"> 
+				<!-- Column 2 start --> 
+				<div id="map"> 
+					<img src="/images/nz2.png" alt="Map of New Zealand"/> 
+				</div> 
+                <!-- Column 2 end --> 
+            </div> 
+            <div class="col3"> 
+			
+			</div> 
+		</div> 
+	</div> 
+</div> 
+<div id="footer"> 
+<div id="footerLinksContainer">
+	
+
+	
+	<div class="footerLinks"> 
+		
+	
+		
+		<h5>Images</h5> 
+		<ul> 
+			<li><a href="/search/category/images/content_partner/matapihi">Matapihi</a></li> 
+			<li><a href="/search/category/images/content_partner/flickr">Flickr</a></li> 
+			<li><a href="/search/category/images/content_partner/alexander-turnbull-library">Alexander Turnbull Library</a></li> 
+			<li><a href="/search/category/images/content_partner/new-zealand-electronic-text-centre">Matapihi</a></li> 
+			<li><a href="/search/category/images/content_partner/matapihi">NZETC</a></li> 
+<li><a href="/search/category/images/content_partner/museum-of-new-zealand-te-papa-tongarewa">Te Papa</a></li>
+			<li><a href="/search/category/images/content_partner/vc-browne-son">V.C. Browne &amp; Son</a></li> 
+		 
+		</ul> 
+	</div> 
+	
+	<div class="footerLinks"> 
+		<h5>Video</h5> 
+		<ul> 
+			<li><a href="/search/category/videos/content_partner/museum-of-new-zealand-te-papa-tongarewa">Te Papa</a></li>
+			<li><a href="/search/category/videos/content_partner/ourspace">Our Space</a></li> 
+			<li><a href="/search/category/videos/content_partner/matapihi">Matapihi</a></li> 
+			<li><a href="/search/category/videos/content_partner/ministry-for-culture-and-heritage">Ministry for Culture and Heritage</a></li> 
+			<li><a href="/search/category/videos/content_partner/nz-on-screen">NZ On Screen</a></li> 
+			<li><a href="/search/category/videos/content_partner/puke-ariki">Puke Ariki</a></li> 
+			<li><a href="/search/category/videos/content_partner/department-of-conservation-te-papa-atawhai">Department of Conservation</a></li> 
+		</ul> 
+	</div> 
+	
+	<div class="footerLinks">
+		<h5>Open Calais</h5>
+		<ul>
+			<li><a href="/opencalais/country">Company</a></li>
+			<li><a href="/opencalais/country">Country</a></li>
+			<li><a href="/opencalais/facility">Facility</a></li>
+			<li><a href="/opencalais/naturalfeature">Natural Feature</a></li>	
+			<li><a href="/opencalais/organization">Organization</a></li>
+			<li><a href="/opencalais/person">People</a></li>
+			<li><a href="/opencalais/position">Position</a></li>
+			<li><a href="/opencalais/provinceorstate">Province or State</a></li>
+			<li><a href="/opencalais/region">Region</a></li>
+
+			
+		</ul>
+	</div>
+	
+</div> 
+</div> 
+ 
+ 
+ 
+</body> 
+</html>
