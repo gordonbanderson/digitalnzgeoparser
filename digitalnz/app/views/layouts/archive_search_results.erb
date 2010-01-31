@@ -41,105 +41,22 @@
 		</script>
 	</head>
 	<body>
-		<div id="header">
-			<div id="logo">
-				&nbsp;
-			</div>
-			<ul>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-holy-grail-pixels.htm" class="active">All</a>
-				</li>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-blog-style-pixels.htm">Images</a>
-				</li>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-blog-style-pixels.htm">Video</a>
-				</li>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-blog-style-pixels.htm">Audio</a>
-				</li>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-blog-style-pixels.htm">Newspapers</a>
-				</li>
-				<li>
-					<a href="http://matthewjamestaylor.com/blog/ultimate-3-column-blog-style-pixels.htm">Manuscripts</a>
-				</li>
-			</ul>
-		</div>
-		<div id="headerUnderFooter">
-			&nbsp;
-		</div>
+		<%= render :partial => 'shared/header'%>
+
 		<div class="colmask holygrail">
 			<div class="colmid">
 				<div class="colleft">
 					<div class="col1wrap">
 						<div class="col1">
 							<!-- Column 1 start -->
-							<div id="searchResultsColumn">
-								<ul>
-									<li class="searchResult">
-										<a href="http://kete.digitalnz.org/site/video/show/1-digitalnz-promotional-video">DigitalNZ promotional video</a><br />
-										<p>
-											DigitalNZ digital story. Created by the Digital New Zealand team and Boost New Media, for the launch of DigitalNZ.
-										</p>
-										<div class="searchByLine">
-											kete.digitalnz.org - Unknown origin - Videos - - <a href="http://localhost:3000/archive_searches/similar?id=digitalnz-promotional-video">Similar Pages</a> - <a href="http://localhost:3000/map/digitalnz-promotional-video">View Record</a> &nbsp;241085
-										</div>
-									</li>
-									<li class="searchResult">
-										<a href="http://audiovisual.archives.govt.nz/wiki/index.php/ANTARCTIC_ADVENTURE">ANTARCTIC ADVENTURE</a><br />
-										<img src="http://ndhadeliver.natlib.govt.nz/delivery/DeliveryManagerServlet?dps_pid=IE414815&amp;dps_func=thumbnail" class="searchResultImage" />
-										<p>
-											B&amp;W 22 mins. 35mm 1,970 ft. Film Censor's Certificate No. G5712 (24 May 1957) NFU Film Information Sheet No. 130 Cat. Refs. 1958 p.49; 1962 p.64; 1967-68 p.36;1973 p.18; 1977 p.17. B&amp;W 22 mins. 35mm 1,970 ft. The New Zealand section of the British Commonwealth Trans-Antarctic Expedition, led by Sir Edmund Hillary, sails in the Endeavour from N.Z. to the Ross Sea. They build their base on Ross Island, make aerial surveys of the vast glaciers and Antarctic mountain ranges, and by planes and dog-teams establish depots on the polar plateau. They also conduct research into seal and penguin life around McMurdo Sound, visit Scott's and Shackleton's huts, and some members fly over the South Pole before the Endeavour returns to New Zealand, leaving 23 men to spend the Antarctic winter at Scott Base. Viewing copies&nbsp;: VHS Video- R.V. 28 16mm film- W3471/16BW185 35mm film- W3606/g/8 VHS Video (Preview Tape)- BITC 144
-										</p>
-										<div class="searchByLine">
-											audiovisual.archives.govt.nz - Archives New Zealand Te Rua Mahara o te Kāwanatanga - Videos - - <a href="http://localhost:3000/archive_searches/similar?id=antarctic-adventure">Similar Pages</a> - <a href="http://localhost:3000/map/antarctic-adventure">View Record</a> &nbsp;632092
-										</div>
-									</li>
-									<li class="searchResult">
-										<a href="http://audiovisual.archives.govt.nz/wiki/index.php/K-FORCE">K-FORCE</a><br />
-										<img src="http://ndhadeliver.natlib.govt.nz/delivery/DeliveryManagerServlet?dps_pid=IE414815&amp;dps_func=thumbnail" class="searchResultImage" />
-										<p>
-											Final training and embarkation of New Zealand volunteers for active service with the United Nations' Forces in Korea.
-										</p>
-										<div class="searchByLine">
-											audiovisual.archives.govt.nz - Archives New Zealand Te Rua Mahara o te Kāwanatanga - Videos - - <a href="http://localhost:3000/archive_searches/similar?id=k-force">Similar Pages</a> - <a href="http://localhost:3000/map/k-force">View Record</a> &nbsp;632117
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div class="pageLinks">
-								<div class="pagination">
-									<span class="disabled prev_page">« Previous</span> <span class="current">1</span> <a href="http://localhost:3000/search/category/videos?page=2" rel="next">2</a> <a href="http://localhost:3000/search/category/videos?page=3">3</a> <a href="http://localhost:3000/search/category/videos?page=4">4</a> <a href="http://localhost:3000/search/category/videos?page=5">5</a> <a href="http://localhost:3000/search/category/videos?page=6">6</a> <a href="http://localhost:3000/search/category/videos?page=7">7</a> <a href="http://localhost:3000/search/category/videos?page=8">8</a> <a href="http://localhost:3000/search/category/videos?page=9">9</a> <span class="gap">…</span> <a href="http://localhost:3000/search/category/videos?page=208">208</a> <a href="http://localhost:3000/search/category/videos?page=209">209</a> <a href="http://localhost:3000/search/category/videos?page=2" class="next_page" rel="next">Next »</a>
-								</div>
-							</div><!-- Column 1 end -->
+							<%= yield :col1 %>
+							<!-- Column 1 end -->
 						</div>
 					</div>
 					<div class="col2">
 						<!-- Column 2 start -->
-						<div id="facetsColumn">
-							<div class="portletBox">
-								<h5>
-									Year (85)
-								</h5>
-								<ul id="expander_facet_panel_year">
-									<li>
-										<a href="http://localhost:3000/search/category/videos#" onclick="document.getElementById('facet_panel_year').style.display='block'; document.getElementById('expander_facet_panel_year').style.display='none';">+Show all</a>
-									</li>
-								</ul>
-								<ul id="facet_panel_year">
-									<li>
-										<a href="http://localhost:3000/search/category/videos/year/1895">1895 (1)</a>
-									</li>
-									<li>
-										<a href="http://localhost:3000/search/category/videos/year/1897">1897 (1)</a>
-									</li>
-									<li>
-										<a href="http://localhost:3000/search/category/videos/year/1900">1900 (2)</a>
-									</li>
-								</ul>
-							</div>
-						</div><!-- Column 2 end -->
+							<%= yield :col2 %>
+						<!-- Column 2 end -->
 					</div>
 					<div class="col3">
 						<div class="portletBox">
@@ -250,53 +167,8 @@
 				</div>
 			</div>
 		</div>
-		<div id="footer">
-			<div id="footerLinksContainer">
-				<div class="footerLinks">
-					<h5>
-						Images
-					</h5>
-					<ul>
-						<li>
-							<a href="#">Link Uno</a>
-						</li>
-						<li>
-							<a href="#">Link 2</a>
-						</li>
-						<li>
-							<a href="#">Another link 3</a>
-						</li>
-						<li>
-							<a href="#">Link 4</a>
-						</li>
-						<li>
-							<a href="#">Link 5</a>
-						</li>
-						<li>
-							<a href="#">Some Link 6</a>
-						</li>
-					</ul>
-				</div>
-				<div class="footerLinks">
-					<h5>
-						Video
-					</h5>
-					<ul>
-						<li>
-							<a href="#">Link 7</a>
-						</li>
-						<li>
-							<a href="#">Link 8</a>
-						</li>
-						<li>
-							<a href="#">Link 9</a>
-						</li>
-						<li>
-							<a href="#">Link 10</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+	
+		<%=render :partial => 'shared/footer.erb'%>
+
 	</body>
 </html>
