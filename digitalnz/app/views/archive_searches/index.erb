@@ -6,13 +6,13 @@
 
 <% content_for :col1 do%>
 	<div class="indentedContent"> 
-	<form action="http://digitalnzgeoparser.tripodtravel.co.nz/archive_searches/search" class="new_archive_search" id="new_archive_search" method="post"><div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value="9kWxewJJfi6u5mM6amxPMFgQQFGUaLvCoc0HG3gErak=" /></div> 
-	  <p> 
-	    <input id="archive_search_search_text" name="archive_search[search_text]" class="input" size="30" type="text" /> 
+	<% form_for(@archive_search, :url => search_archive_searches_url,:html => {:method => :post}) do |f| %>
+	  <p>
+	    <%= f.text_field :search_text,  {:class=>'input', :size => 30} %>
 
-	    <input id="archive_search_submit" name="commit" class="super button" type="submit" value="Search »" /> 
-	  </p> 
-	</form> 
+	    <%= f.submit "Search", :class => 'button' %>
+	  </p>
+	<% end %>
 </div> 
 
 <div class="fromTheArchive"> 
