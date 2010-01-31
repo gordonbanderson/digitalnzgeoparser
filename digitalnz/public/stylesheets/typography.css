@@ -1,10 +1,10 @@
 /* Shades of grey */
-/* Portlet boxes */
 /* Colours from kuler */
-
+/* ff7e19 orange b4a3ff light blue 2e00ff blue 51cc51 greenish 00ff00 green also */
+/* This is how much to reduce the colours by on the unactive header items */
+/* Portlet boxes */
 /* Column sizes */
 /* Minimum width */
-
 .centreItem {
   margin-left: auto;
   margin-right: auto; }
@@ -78,7 +78,6 @@ body {
   padding: 0;
   border: 0;
   width: 100%;
-  background: #b1bf62;
   min-width: 1024px;
   font-size: 90%;
   font-family: Arial, Helvetica, Sans-serif; }
@@ -87,19 +86,18 @@ body {
   color: !bgcolor; }
 
 a {
-  color: red; }
+  color: blue; }
   a:hover {
-    color: #aaaaff;
-    background: red;
-    text-decoration: none; }
+    color: white;
+    background: blue; }
 
 h1, h2, h3 {
   margin: .8em 0 .2em 0;
   padding: 0; }
 
 p {
-  margin: .4em 0 .8em 0;
-  padding: 0; }
+  padding: 0px;
+  margin: 0px; }
 
 img {
   margin: 10px 0 5px; }
@@ -111,7 +109,7 @@ img {
   border-bottom: 1px solid !header_fg;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(0,0,0)), to(rgb(100,100,100))); }
   #header #logo {
-    background-image: url(/images/header.png);
+    background-image: url(file:///Users/gordon/work/git/sasslayouts/3col/header.png);
     width: 1000px;
     height: 130px;
     margin-left: auto;
@@ -136,8 +134,8 @@ img {
         margin: 0 0 0 1px;
         padding: 3px 10px;
         text-align: center;
-        background: #888888;
-        color: #0000ee;
+        background: #dd5c00;
+        color: #dddddd;
         text-decoration: none;
         position: relative;
         left: 15px;
@@ -154,41 +152,63 @@ img {
           color: white; }
         #header ul li a.active {
           color: white;
-          background: #0000ee;
+          background: #ff7e19;
           font-weight: bold; }
           #header ul li a.active:hover {
-            color: !bgcolor;
-            background: #0000ee;
+            background: #ee6d08;
+            color: #eeeeee;
             font-weight: bold; }
         #header ul li a span {
           display: block; }
 
 #headerUnderFooter {
   clear: both;
-  background: #aaaaff;
-  border-top: 4px solid #0000ee;
-  height: 15px; }
+  background: #e7d6ff;
+  border-top: 4px solid #ff7e19;
+  height: 15px;
+  -webkit-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6); }
 
 /* Portlet boxes */
 .portletBox {
-  background: #ffffaa;
+  background: #ffff33;
   border-style: solid;
-  border-color: black;
+  border-color: #2e00ff;
   border-width: 1px;
   padding: 0px;
+  margin-bottom: 5px;
   border-radius: 8px;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
-  -webkit-box-shadow: 3px 3px 6px rgba(0,0,0,.25);
-  -moz-box-shadow: 3px 3px 6px rgba(0,0,0,.25);
-  background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(blue), to(white) );
+  -webkit-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+  background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(black), to(#888888) );
   margin-left: auto;
   margin-right: auto; }
   .portletBox h5 {
     padding: 4px 2px 4px 2px;
     border-bottom: solid black 1px;
     margin: 0px;
-    color: white; }
+    color: white;
+    background: black; }
+  .portletBox ul {
+    padding: 0px;
+    margin: 0px;
+    padding: 2px 0px 6px 0px; }
+    .portletBox ul li {
+      padding: 0px;
+      margin: 0px;
+      display: block;
+      color: #FFF;
+      font-size: 0.9em; }
+      .portletBox ul li a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding-left: 2px; }
+        .portletBox ul li a:hover {
+          background: blue;
+          color: white; }
 
 /* Geo specific items here */
 #map img {
@@ -202,17 +222,67 @@ img {
   height: 400px;
   padding-top: 50px; }
 
+#searchResultsColumn ul {
+  padding: 0px;
+  margin: 0px; }
+  #searchResultsColumn ul li {
+    padding-bottom: 10px; }
+
+.searchResultImage {
+  float: left;
+  height: 40px;
+  padding: 0px 10px 0px 0px;
+  width: 40px; }
+
+.searchByLine {
+  font-size: 0.9em;
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+  padding-top: 3px;
+  color: #2faa2f; }
+
+#searchResultsColumn {
+  padding-bottom: 20px; }
+
+/* Page links */
+.pageLinks {
+  clear: both;
+  display: inline;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-bottom: 10px; }
+  .pageLinks .pagination {
+    display: block;
+    padding-bottom: 10px; }
+  .pageLinks a {
+    border: solid black 1px;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    padding: 2px 6px;
+    background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(#ff7e19), to(black) );
+    -webkit-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6); }
+    .pageLinks a:hover {
+      background: blue;
+      color: white; }
+    .pageLinks a.active {
+      color: white;
+      background: #0000ee;
+      font-weight: bold; }
 
 #digitalNzLogo {
   background: white;
-  float: left;
-}
+  float: left; }
 
 #footer {
-  background: #0c60a5;
+  background: #ff7e19;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(100,100,100)), to(rgb(0,0,0)));
-  padding: !footer_padding; 
-  font-size: 0.9em;}
+  padding: !footer_padding; }
   #footer p {
     padding: 10px;
     margin: 0; }
