@@ -3,7 +3,7 @@
     facet_parent_name = facet['facet_field']
     facet_already_chosen = !@filters[facet_parent_name].blank?
     %>
-    <div class="facetField">
+    <div class="portletBox">
     <%if facet_already_chosen
         child_facet = @filters[facet_parent_name]
         fparam = "&f[]=#{child_facet.id}"
@@ -54,7 +54,7 @@
 		link.gsub!('//', '/')  #Empty search case
         %>
         <li>
-            <a href="<%=link%>"><%=value['name']%></a> (<%=value['num_results']%>)
+            <a href="<%=link%>"><%=value['name']%> (<%=value['num_results']%>)</a>
         </li>
         <%end%>
     </ul>
