@@ -1,13 +1,4 @@
-<% content_for :header do %>
-<%= render :partial => 'search_form_small' %>
-<%if @error_message.blank?%>
-<div id="searchMetaInformation">
-<p>
-   Results <%=1+@digital_nz_search_result.start%> - <%=@n_last_result_on_page%> of about <%=@digital_nz_search_result.count%><%if !@archive_search.search_text.blank?%> for '<%=@archive_search.search_text%>'<%end%>. (<%=@elapsed_time%> seconds) 
-</p>
-</div>
-<%end%>
-<%end%>
+
 
 
 
@@ -34,6 +25,10 @@
 <%=render :partial => 'facets'%>
 <%end%>
 <% end %>
+
+<% content_for :col3 do%>
+<p>This is column 3.  This is column 3.  This is column 3.  This is column 3.  This is column 3.  This is column 3.  This is column 3.  This is column 3.  </p>
+<%end%>
 
 
 
