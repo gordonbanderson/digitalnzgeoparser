@@ -12,7 +12,7 @@ class ArchiveSearchesController < ApplicationController
   PAGE_SIZE=20
   
   #Page size for images only
-  IMAGE_PAGE_SIZE=40
+  IMAGE_PAGE_SIZE=100
   
   #Parse a list of parameters in name value pairs and search the relevant facets
   # URLs can be of the form
@@ -234,6 +234,10 @@ class ArchiveSearchesController < ApplicationController
     for tag in @search_term_tags
        @search_term_hash[tag.search_text] = tag 
     end
+    
+    @random_images = NatlibMetadata.find(:all, :offset => rand(1000), :limit => 8)
+    
+    render :layout => 'homepage'
   end
   
   
