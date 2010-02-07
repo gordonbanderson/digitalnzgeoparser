@@ -1,7 +1,7 @@
-
-
-
-
+<% content_for :header do%>
+<%set_title "Search FIXME"%>
+<%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
 
 <% content_for :col1 do %>
 <%if @error_message.blank?%>

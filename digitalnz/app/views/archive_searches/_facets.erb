@@ -3,6 +3,8 @@
     facet_parent_name = facet['facet_field']
     facet_already_chosen = !@filters[facet_parent_name].blank?
     %>
+    <h5 class="portletBoxHeader"><%=FacetFieldsHelper.parent_facet_name(facet_parent_name)%></h5>
+
     <div class="portletBox">
     <%if facet_already_chosen
         child_facet = @filters[facet_parent_name]
@@ -10,7 +12,6 @@
         link = '/search/'+@archive_search.search_text+'/?'+@previous_params
         link << @facet_params_chosen.gsub(fparam,'')
         %>
-        <h5><%=FacetFieldsHelper.parent_facet_name(facet_parent_name)%></h5>
         <ul>
             <%for value in facet['values']
             child_facet_result = @child_facet_fields[value['name']]

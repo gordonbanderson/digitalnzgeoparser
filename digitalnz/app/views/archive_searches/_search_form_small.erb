@@ -1,6 +1,5 @@
 <div id="searchPanelSmall">
 <div>
-<div class="logoSmall logo">GEOPARSER</div>
 <% form_for(@archive_search, :url => search_archive_searches_url,:html => {:method => :post}) do |f| %>
   <p>
     <%= f.text_field :search_text,  :size => 60 %>
@@ -43,4 +42,3 @@ end
 %>	
 </div>
 <%end%>
-</div>
