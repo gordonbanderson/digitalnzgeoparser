@@ -1,11 +1,111 @@
 <% content_for :header do%>
+<%set_title "Map and Metadata for Record #{@natlib_metadata.natlib_id}, #{@natlib_metadata.title}"%>
 <%= render :partial => 'archive_searches/search_form_small' %>
+<%end%>
+
+<% content_for :col3 do%>
+<div id="geoparsingInformation">
+
+<%if !@natlib_metadata.thumbnail_url.blank?%>
+<div id="recordThumbnailContainer">
+	<h4>Photo</h4>
+<a href="<%=@natlib_metadata.landing_url%>">
+<img src="<%=@natlib_metadata.thumbnail_url%>" alt="Image for record of title <%=@natlib_metadata.title%>" />
+</a>
+</div>
+<%end%>
+
+<%if !@inverted_accuracies.blank?%>
+
+	<h4>Places Found</h4>
+	<%for acc in @all_accuracies
+		if !@inverted_accuracies[acc.name].blank?
+	%>
+	<p class="portletBoxHeader"><%=acc.name%></p>
+	
+		<div class="portletBox">
+			<ul>
+				<%for geoname in @accuracies.keys
+				if @accuracies[geoname] == acc.name
+					freak = @phrase_frequencies[geoname]
+					freak_string = ""
+					freak_string = " (#{freak})" if !freak.blank?
+				%>
+				<li><%=geoname%></li>
+				<%
+				end
+				end%>
+			</ul>
+		</div>
+	<%
+		end
+	end
+%>
+</div>
+<%
+end
+%>
+
+<h3>Rejected Terms</h3>	
+<%if !@removed_by_calais.blank?%>
+	<p class="portletBoxHeader">Open Calais</p>
+	<div class="portletBox">
+	<ul>
+	<%for calais in @removed_by_calais%>
+		<li><%=calais.phrase.words%></li>
+	<%end%>
+	</ul>
+	</div>
+<%end%>
+
+<%if !@too_short.blank?%>
+	<p class="portletBoxHeader">Too Short</p>
+	<div class="portletBox">
+	<ul>
+	<%for item in @too_short%>
+		<li><%=item.phrase.words%></li>
+	<%end%>
+	</ul>
+	</div>
+<%end%>
+
+<%if !@no_matches.blank?%>
+<p class="portletBoxHeader">No Geo Matches</p>
+<div class="portletBox">
+	<ul>
+	<%for item in @no_matches%>
+		<li><%=item.phrase.words%></li>
+	<%end%>
+	</ul>
+</div>
+<%end%>
+
+
+<%if !@stopped.blank?%>
+<p class="portletBoxHeader">Stopped</p>
+<div class="portletBox">
+	<ul>
+	<%for item in @stopped%>
+		<li><%=item.phrase.words%></li>
+	<%end%>
+	</ul>
+<%end%>
+</div>
+
+<%if !@geoparser_failed.blank?%>
+<p class="portletBoxHeader">Geoparser Failed</p>
+<div class="portletBox">
+<ul>
+	<%for item in @geoparser_failed%>
+		<li><%=item.phrase.words%></li>
+	<%end%>
+	</ul>
+<%end%>
 <%end%>
 
 <% content_for :col1 do %>
 <div class="content">
-    <%if !@natlib_metadata.thumbnail_url.blank?%>
-    <a href="<%=@natlib_metadata.landing_url%>"><img style="float:right;" src="<%=@natlib_metadata.thumbnail_url%>" /></a><%end%>
+    
     <h1><%=@natlib_metadata.title%></h1>
 <div class="metadataDescription">
 <%=@natlib_metadata.description%>
@@ -13,8 +113,10 @@
 
 
 <%if !@submission.blank?%>
+<div id="mapAndGeoparsingInformation" class="centreItem">
+	<div id="mapShadow">
         <%if !@map.blank?%>
-         <%= @map.div(:width => 600, :height => 500) %>
+         <%= @map.div(:width => 640, :height => 500) %>
         <%else%>
         No map available
         <%end%>
@@ -43,6 +145,7 @@
 		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt; color:#<%=n_results_color%>;" title="<%=tooltip%>"><%=words%></span>
 		<%
 		end%>
+	</div>
 </div>
 <%end%>
 </div>
@@ -57,6 +160,8 @@
 	</div>
 
 </div>
+</div>
+&nbsp;
 <%end%>
 
 
@@ -64,141 +169,100 @@
 <% content_for :col2 do %>
 	<div id="natlibRecordInformation">
 		
-	<h3>Digital NZ Metadata</h3>
-	<h4>Record Number</h4>
-	<ul>
-	<li><%=@natlib_metadata.natlib_id%></li>
-	</ul>
-	<h4>Content Partner</h4>
-	<ul>
-	<%for content_partner in @natlib_metadata.content_partners%>
-<li><%=link_to content_partner.name, facet_search_url( :q => 'content_partner', :facets => [ content_partner.permalink])%></li>	<%end%>
-	</ul>
-	<h4>Collection</h4>
-	<ul>
-		<%for collection in @natlib_metadata.collections%>
-				<%=link_to collection.name, facet_search_url( :q => "collection: \"#{collection.name}\"")%></li>
-				
-		<%end%>
-	</ul>
+	<h4>Digital NZ Metadata</h4>
+	<p class="portletBoxHeader">Record Number</p>
+	
+	<div class="portletBox">
+		<ul>
+			<li><%=@natlib_metadata.natlib_id%></li>
+		</ul>
+	</div>
+	
+	<p class="portletBoxHeader">Content Partner</p>
+	
+	<div class="portletBox">
+		<ul>
+		<%for content_partner in @natlib_metadata.content_partners%>
+	<li><%=link_to content_partner.name, facet_search_url( :q => 'content_partner', :facets => [ content_partner.permalink])%></li>
+	<%end%>
+		</ul>
+	</div>
+	
+	
+	
+	<p class="portletBoxHeader">Collection</p>
+	<div class="portletBox">
+		<ul>
+			<%for collection in @natlib_metadata.collections%>
+					<li><%=link_to collection.name, facet_search_url( :q => "collection: \"#{collection.name}\"")%></li>
+
+			<%end%>
+		</ul>
+	</div>
+
+
 
 	<%if !@natlib_metadata.coverages.blank?%>
-	<h4>Coverages</h4>
+	<p class="portletBoxHeader">Coverages</p>
+	
+	<div class="portletBox">
+	
 	<ul>
 	<%for item in @natlib_metadata.coverages%>
 	<li><%=link_to item.name, geo_property_single_url(:property_name=>'coverage', :permalink => item.permalink)%></li>
 	<%end%>
 	</ul>
+	</div>
 	<%end%>
 
 	<%if !@natlib_metadata.subjects.blank?%>
-	<h4>Subjects</h4>
+	<p class="portletBoxHeader">Subjects</p>
+	<div class="portletBox">
 	<ul>
 	<%for item in @natlib_metadata.subjects%>
 	<li>
 		<%=link_to item.name, search_url( :q => "subject: \"#{item.name}\"")%></li>
 	<%end%>
 	</ul>
+	</div>
 	<%end%>
 
 	<%if !@natlib_metadata.placenames.blank?%>
-	<h4>Placenames</h4>
+	<p class="portletBoxHeader">Placenames</p>
+	<div class="portletBox">
 	<ul>
 	<%for item in @natlib_metadata.placenames%>
 		<li><%=link_to item.name, search_url( :q => "placename: \"#{item.name}\"")%></li>
 	<%end%>
 	</ul>
+	</div>
 	<%end%>
 	
-	<%if !@inverted_accuracies.blank?%>
-		<h3>Places Found</h3>
-		<%for acc in @all_accuracies
-			if !@inverted_accuracies[acc.name].blank?
-		%>
-			<h4><%=acc.name%></h4>
-			<ul>
-				<%for geoname in @accuracies.keys
-				if @accuracies[geoname] == acc.name
-					freak = @phrase_frequencies[geoname]
-					freak_string = ""
-					freak_string = " (#{freak})" if !freak.blank?
-				%>
-				<li><%=geoname%></li>
-				<%
-				end
-				end%>
-			</ul>
-		<%
-			end
-		end
-	end
-	%>
+
 	
-	<% if !@submisison.blank?%>
-	<h3>Area</h3>
+	<% if !@submission.blank?%>
+	<p class="portletBoxHeader">Area</p>
+	<div class="portletBox">
 	<ul><li><%=SubmissionsHelper.pretty_area(@submission.area)%></li></ul>
-
+	</div>
 	
-	<h3>Rejected Terms</h3>	
-	<%if !@removed_by_calais.blank?%>
-		<h4>Open Calais</h4>
-		<ul>
-		<%for calais in @removed_by_calais%>
-			<li><%=calais.phrase.words%></li>
-		<%end%>
-		</ul>
-    <%end%>
-
-	<%if !@too_short.blank?%>
-		<h4>Too Short</h4>
-		<ul>
-		<%for item in @too_short%>
-			<li><%=item.phrase.words%></li>
-		<%end%>
-		</ul>
-    <%end%>
-
-	<%if !@no_matches.blank?%>
-		<h4>No Geo Matches</h4>
-		<ul>
-		<%for item in @no_matches%>
-			<li><%=item.phrase.words%></li>
-		<%end%>
-		</ul>
-    <%end%>
-
-	<%if !@stopped.blank?%>
-		<h4>Stopped</h4>
-		<ul>
-		<%for item in @stopped%>
-			<li><%=item.phrase.words%></li>
-		<%end%>
-		</ul>
-    <%end%>
-
-	<%if !@geoparser_failed.blank?%>
-		<h4>Geoparser Failed</h4>
-		<ul>
-		<%for item in @geoparser_failed%>
-			<li><%=item.phrase.words%></li>
-		<%end%>
-		</ul>
-    <%end%>
+	
 
 	<%if !@calais_hash.keys.blank?%>
-		<h3>Open Calais</h3>
-		
-		<%for key in @calais_hash.keys%>
-			<h4><%=key.word%></h4>
-			<ul>
-			<%for child in @calais_hash[key]%>
-				<li><%=link_to child.word, 
-					  calais_child_url(:child_permalink => child.permalink,
-					:parent_permalink => key.permalink
-						)%></li>
+			<h4>Open Calais Derived Metadata</h4>
+			<%for key in @calais_hash.keys%>
+				<p class="portletBoxHeader"><%=key.word%></p>
+				<div class="portletBox">
+				<ul>
+				<%for child in @calais_hash[key]%>
+					<li><%=link_to child.word, 
+						  calais_child_url(:child_permalink => child.permalink,
+						:parent_permalink => key.permalink
+							)%></li>
+				<%end%>
+				</ul>
+				</div>
 			<%end%>
-			</ul>
-		<%end%>
     <%end%>
 	<%end%>
 
