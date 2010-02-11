@@ -219,8 +219,7 @@ hierarchy_each_node = {}
 for key in keys
   all_child_descendents = []
   children = contains_hash[key]
-  bb = BoundingBoxTree::new
-  bb.cached_geo_search_id = key.id
+
   
   puts "\n\n++++\n\nCHECKING KEY:#{key.address}"
   key_direct_children = []
@@ -235,6 +234,7 @@ for key in keys
     descendents.flatten!
     all_child_descendents << descendents
     all_child_descendents.flatten!
+    all_child_descendents.uniq!
 
     puts "\t\t\t\tChecking child:#{child.address}"
     if !contains_hash[child].blank? #ie not a leaf, ie grandchildren exist
@@ -242,7 +242,7 @@ for key in keys
       puts "\t\t\t\t ADDING PARENTAL #{child.address}"
       #Now remove any descendants of this node
       #FIXME recurse
-      hierarchy_each_node[child.address] = contains_hash[child].map{|c| c.cached_geo_search.address}
+      hierarchy_each_node[child] = contains_hash[child].map{|c| c.cached_geo_search}
  #     for grandchild in contains_hash[child]
  #       puts "DEAL WITH #{grandchild.cached_geo_search.address}"
  #     end
@@ -280,7 +280,6 @@ for key in keys
     puts "all_child_descendents: #{all_child_descendents.map{|o| o.address}.join(' | ')}"
     child_orphans = []
     for gc in possible_direct_children
-      puts gc.class
       child_orphans << gc if !all_child_descendents.include?(gc)
     end
     
@@ -297,15 +296,26 @@ for key in keys
   
 
   
-  hierarchy_each_node[key.address] = key_direct_children.map{|k| k.address} if !key_direct_children.blank?
+  hierarchy_each_node[key] = key_direct_children if !key_direct_children.blank?
+  puts "T2 "
+  hierarchy_each_node.keys.map{|k| puts k.class}
   
+  puts key.class
   puts "--\n\n"
   
 end
 
 
 puts "HHHHHHHHHHHHHHH"
-puts hierarchy_each_node.to_yaml
+puts "T3 "
+hierarchy_each_node.keys.map{|k| puts k.class}
+
+for key in hierarchy_each_node.keys
+  puts key.address
+  for child in hierarchy_each_node[key]
+    puts "\t#{child.address}"
+  end
+end
 puts "/HHHHHHHHHHHHHHH"
 
 
