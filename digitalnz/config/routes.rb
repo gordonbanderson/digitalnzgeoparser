@@ -72,6 +72,7 @@ map.calais_all_parents 'opencalais', :controller => 'natlib_metadatas', :action 
 
 #Search URL - keep it short
 map.search 'search/:q', :controller => 'archive_searches', :action => 'search', :id => 'q'
+map.search 'search', :controller => 'archive_searches', :action => 'search', :id => ''
 
 #Facetted search URL - build up a nice URL the likes of search/fred/category/images/type/lithograph/year/1900/to/1910
 map.facet_search 'search/:q/*facets', :controller => 'archive_searches', :action => 'faceted_search', :id => 'q'
