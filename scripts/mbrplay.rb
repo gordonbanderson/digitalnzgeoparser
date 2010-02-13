@@ -308,15 +308,77 @@ end
 
 puts "HHHHHHHHHHHHHHH"
 puts "T3 "
-hierarchy_each_node.keys.map{|k| puts k.class}
+hierarchy_each_node.keys.map{|k| puts k.address}
+
+puts "\n\nHIERARCHY\n\n"
+for key in hierarchy_each_node.keys
+  puts "PARENT:#{key.address}"
+  for child in hierarchy_each_node[key]
+    puts "\tCHILD:#{child.address}"
+  end
+end
+puts "\n\n/++++++++\n\n\n\n"
+
+#Store a list of those items that have children to store
+parents_with_children = []
 
 for key in hierarchy_each_node.keys
-  puts key.address
+  puts "PARENT:"+key.id.to_s+' - '+key.address
+  
+  BoundingBoxTree.find(:all, :conditions => ["submission_id=?", n.submission]).map{|b|b.destroy}
+  
+  
+  bb_parent = BoundingBoxTree::new
+  bb_parent.cached_geo_search = key
+  bb_parent.submission = n.submission
+  bb_parent.save!
+  
+  
   for child in hierarchy_each_node[key]
-    puts "\t#{child.address}"
+    puts "\tCHILD: #{child.id} - #{child.address}"
+    bb_child = BoundingBoxTree::new
+    bb_child.cached_geo_search = child
+    bb_child.submission = n.submission
+    bb_child.parent = bb_parent
+    bb_child.save!
+    
+    if !hierarchy_each_node[child].blank?
+      puts "**** #{child.address} has more children"
+      parents_with_children << bb_child
+    end
   end
 end
 puts "/HHHHHHHHHHHHHHH"
+
+#Make into a tree
+for i in 1..1000
+  puts "LOOP:#{i}"
+  
+  new_parents_with_children = []
+  for parent_bbox in parents_with_children
+    cgs = parent_bbox.cached_geo_search
+    for child in hierarchy_each_node[cgs]
+      puts "\tCHILD: #{child.id} - #{child.address}"
+      bb_child = BoundingBoxTree::new
+      bb_child.cached_geo_search = child
+      bb_child.submission = n.submission
+      bb_child.parent = parent_bbox
+      bb_child.save!
+
+      if !hierarchy_each_node[child].blank?
+        puts "**** #{child.address} has more children"
+        new_parents_with_children << bb_child
+      end
+    end
+  end
+  
+  parents_with_children = new_parents_with_children
+  break if parents_with_children.blank?
+end
+
+
+
+
 
 
 puts n.submission.body_of_text
