@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100123054606) do
+ActiveRecord::Schema.define(:version => 20100209121054) do
 
   create_table "accuracies", :force => true do |t|
     t.column "name", :string
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(:version => 20100123054606) do
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
+
+  create_table "bounding_box_trees", :force => true do |t|
+    t.column "parent_id", :integer
+    t.column "cached_geo_search_id", :integer
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+    t.column "submission_id", :integer
+  end
+
+  add_index "bounding_box_trees", ["cached_geo_search_id"], :name => "index_bounding_box_trees_on_cached_geo_search_id"
 
   create_table "cached_geo_search_terms", :force => true do |t|
     t.column "search_term", :string
