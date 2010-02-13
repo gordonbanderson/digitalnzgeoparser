@@ -14,7 +14,9 @@ class Submission < ActiveRecord::Base
   has_many :phrases
   has_many :phrase_frequencies, :include => [:phrase], :dependent => :destroy, :autosave => true
   
-  
+  has_many :bounding_box_trees
+
+
   #Return a decent description of the location found from the text submitted
   
   def geo_description
