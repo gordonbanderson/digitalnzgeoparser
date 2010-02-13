@@ -1,13 +1,22 @@
+<%
+@active_tab = :home if @active_tab.blank?
+tabs = {
+	'Home' => '/',
+	'Explore' => '/search',
+	'Open Calais' => '/opencalais',
+	'Geoparsed' => '/',
+}
+%>
 <div id="header"> 
  	<%=yield :header %>
     <div id="logo">&nbsp;</div> 
  	<ul> 
-        <li><a href="/" class="active">Home</a></li> 
-        <li><a href="/search">Explore</a></li> 
-        <li><a href="/opencalais">Open Calais</a></li> 
-        <li><a href="/">Geoparsed</a></li> 
-
-
+		<%for tabname in tabs.keys
+		class_string = ''
+		class_string = " class='active'" if tabname.to_sym == @active_tab
+		%>
+        	<li><a href="/search"<%=class_string%>><%=tabname%></a></li> 
+    	<%end%>
      </ul> 
 </div> 
 <div id="headerUnderFooter">&nbsp;</div>
