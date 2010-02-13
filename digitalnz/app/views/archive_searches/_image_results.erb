@@ -27,12 +27,25 @@ turn = rand(10)-5
 %>
     <li>
 		<div class="imageSlide<%=newrowclass%>">
-        <a href="<%=result.display_url%>" 
-			style=" position: absolute; top: <%=rowctr*150%>px; left: <%=colctr*190%>px;
+        <a href="<%=natlib_map_url(:permalink=>metarecord.permalink)%>" 
+			style=" position: absolute; top: <%=rowctr*140+rand(20)%>px; left: <%=colctr*190+rand(20)%>px;
 			-moz-transform: rotate(<%=turn%>deg);
 			 -webkit-transform: rotate(<%=turn%>deg);"
 	title="<%=metarecord.title%>"><img src="<%=result.thumbnail_url%>"
-	alt="<%=metarecord.title%>"/></a>
+	alt="<%=metarecord.title%>"/>
+	<br/>
+	<%=metarecord.title%>
+	<br/>
+	<span class="contentProvider">
+	 <%=hostof(result.display_url)%> - <%=result.content_provider%> - <%=result.category%> - <%=metarecord.dateinfo%>
+	</span>
+	<br/>
+	<span class="recordId"><%=metarecord.natlib_id%></span>
+	<%if !metarecord.pending %>
+		<br/><p>Map</p>
+	<%end%>
+	</a>
+	
         </div>
     </li>
 
