@@ -12,7 +12,7 @@ class ArchiveSearchesController < ApplicationController
   PAGE_SIZE=20
   
   #Page size for images only
-  IMAGE_PAGE_SIZE=100
+  IMAGE_PAGE_SIZE=40
   
   #Parse a list of parameters in name value pairs and search the relevant facets
   # URLs can be of the form
