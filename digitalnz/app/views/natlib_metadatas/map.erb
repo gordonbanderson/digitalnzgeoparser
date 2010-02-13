@@ -46,7 +46,7 @@
 end
 %>
 
-<h3>Rejected Terms</h3>	
+<h4>Rejected Terms</h4>	
 <%if !@removed_by_calais.blank?%>
 	<p class="portletBoxHeader">Open Calais</p>
 	<div class="portletBox">
@@ -105,63 +105,61 @@ end
 
 <% content_for :col1 do %>
 <div class="content">
-    
     <h1><%=@natlib_metadata.title%></h1>
-<div class="metadataDescription">
-<%=@natlib_metadata.description%>
-</div>
-
-
-<%if !@submission.blank?%>
-<div id="mapAndGeoparsingInformation" class="centreItem">
-	<div id="mapShadow">
-        <%if !@map.blank?%>
-         <%= @map.div(:width => 640, :height => 500) %>
-        <%else%>
-        No map available
-        <%end%>
-<div id="geonameFrequencies">
-		<%for words in @phrases
-			freak = @phrase_frequencies[words]
-			tooltip = "#{freak} occurences found in source text"
-			n_results_color = '0';
-			the_size = 7+2*freak.to_f
-			non_geo_string = ''
-			if @accuracies[words].blank?
-				non_geo_string = ' nongeo'
-				tooltip << "\nNo location found"
-				n_results_color='f00';
-			else
-				n_places = @n_places_for_terms[words]
-				tooltip << "\nLocation found #{n_places}"
-				#Green for good, red for bad
-				if n_places <= 11
-					n_results_color = ['0f0','2d0','4b0','690','870','a50','b40','c30','e10','f00'][n_places-1]
-				else
-					n_results_color = 'f00' #Red enough
-				end
-			end
-		%>
-		<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt; color:#<%=n_results_color%>;" title="<%=tooltip%>"><%=words%></span>
-		<%
-		end%>
+	<div class="metadataDescription">
+		<%=@natlib_metadata.description%>
 	</div>
-</div>
-<%end%>
-</div>
-
-<div class="extractedText">
-	<h2>Extracted Metadata Text</h2>
-	<p>The following text was collated from the metadata and used for geoparsing:</p>
-	<div class="metatext">
-	<%for para in @natlib_metadata.geo_text(true)%>
-	<p><%=para%></p>
+	
+	<%if !@submission.blank?%>
+		<div id="mapAndGeoparsingInformation" class="centreItem">
+			<div id="mapShadow">
+		        <%if !@map.blank?%>
+		         <%= @map.div(:width => 640, :height => 500) %>
+		        <%else%>
+		        No map available
+		        <%end%>
+				<div id="geonameFrequencies">
+					<%for words in @phrases
+						freak = @phrase_frequencies[words]
+						tooltip = "#{freak} occurences found in source text"
+						n_results_color = '0';
+						the_size = 7+2*freak.to_f
+						non_geo_string = ''
+						if @accuracies[words].blank?
+							non_geo_string = ' nongeo'
+							tooltip << "\nNo location found"
+							n_results_color='f00';
+						else
+							n_places = @n_places_for_terms[words]
+							tooltip << "\nLocation found #{n_places}"
+							#Green for good, red for bad
+							if n_places <= 11
+								n_results_color = ['0f0','2d0','4b0','690','870','a50','b40','c30','e10','f00'][n_places-1]
+							else
+								n_results_color = 'f00' #Red enough
+							end
+						end
+					%>
+					<span class="geonameFrequency<%=non_geo_string%>" style="font-size: <%=the_size%>pt; color:#<%=n_results_color%>;" title="<%=tooltip%>"><%=words%></span>
+					<%
+					end%>
+				</div><!-- end of geoname freqs -->
+			</div><!-- end of map shadow -->
+		</div><!-- end of map and geo parsing information -->
 	<%end%>
-	</div>
+	
+	
+	<div class="extractedText">
+		<h2>Extracted Metadata Text</h2>
+		<p>The following text was collated from the metadata and used for geoparsing:</p>
+		<div class="metatext">
+			<%for para in @natlib_metadata.geo_text(true)%>
+				<p><%=para%></p>
+			<%end%>
+		</div>
+	</div><!-- end of extracted text -->
 
-</div>
-</div>
-&nbsp;
+</div><!-- end of content div -->
 <%end%>
 
 
