@@ -53,14 +53,27 @@ class NatlibMetadata < ActiveRecord::Base
     puts "TITLE class:#{title.class}"
     puts title.to_yaml
     
+    puts "TITLE IS ARRAY!!!: #{natlib_id}" if title.class == Array
     title << '.' if !title.ends_with? dot
     result << title
     result << PARA_BREAK
 
     if !description.blank?
+      #Some records have descriptions as arrays, e.g. 24909
+      if description.class == Array
+        for d in description
+          d << dot if !d.ends_with? dot
+          result << d
+          result << PARA_BREAK
+        end
+              
+      #Description not an array case
+      else
         description << dot if !description.ends_with? dot
         result << description
         result << PARA_BREAK
+      end
+      
     end
     
     for p in placenames
