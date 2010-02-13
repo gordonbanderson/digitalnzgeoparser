@@ -12,6 +12,8 @@ class CachedGeoSearch < ActiveRecord::Base
   
   has_one :spatial_cached_geo_search
   
+  has_many :bounding_box_trees
+  
   
   #--- Spatial helpers for radius searching ---
   #Taken from http://www.frankodwyer.com/blog/?p=355 and amended
@@ -127,17 +129,25 @@ named_scope :visible, {
   #Update the spatial version of these coordinates prior to a save
   #Before_save did not work here, not investigated why
   def spatialize
-    RAILS_DEFAULT_LOGGER.debug "++++ SPATIALIZING ++++"
     s = spatial_cached_geo_search
     s = SpatialCachedGeoSearch::new if s.blank?
     s.cached_geo_search = self
     s.coordinates = Point.from_x_y(longitude, latitude)
+    
+    west = bbox_west
+    east = bbox_east
+    
+    #Since we are not using the bounding boxes for anything other than a containment tree, we do not care about the coors
+    #being geographically correct.  So add 180 to any easting that is less than a westing
+    if east < west
+      east = east + 360
+    end
     bbox_polygon = Polygon.from_coordinates(
     [[
     [bbox_west, bbox_south],
     [bbox_west, bbox_north],
-    [bbox_east, bbox_north],
-    [bbox_east, bbox_south],
+    [east, bbox_north],
+    [east, bbox_south],
     [bbox_west, bbox_south]
     ]]
     )
