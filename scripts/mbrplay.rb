@@ -93,6 +93,8 @@ limit 100;
 #1473616 is a good example, lots of US hits but not containment
 #1512897 also, 1525780, 1467153
 
+#Good example for intersection testing - 1512897
+
 cgs = n.submission.cached_geo_searches
 cgs_spatial_ids = cgs.map{|c| c.spatial_cached_geo_search.id}
 
@@ -378,7 +380,71 @@ end
 
 
 
+#Find the number of parents for a bounding box tree
+def depth(bbox_tree)
+  counter = 0
+  current_bbox = bbox_tree
+  while !current_bbox.parent.blank?
+    current_bbox = current_bbox.parent
+    counter = counter + 1
+  end
+  counter
+end
+
+#Using the bounding box trees, heuristically guess at the probable location
+def probable_location(natlib_metadata)
+  depths = {}
+  for bbox in natlib_metadata.submission.bounding_box_trees
+    depth = depth(bbox)
+    depths[bbox] = depth
+  end
+  
+  max_depth = depths.values.max
+  max_depth = - 1 if max_depth.blank?
+
+  result = []
+  for key in depths.keys
+    depth = depths[key]
+    result << key if depth == max_depth
+  end
+  
+  {
+    :max_depth => max_depth,
+    :bounding_boxes => result
+  }
+end
 
 
+def print_hierarchy(bbox_tree)
+  result = ""
+  nodes = [bbox_tree]
+  current_node = bbox_tree
+  while !current_node.parent.blank?
+    current_node = current_node.parent
+    nodes << current_node
+  end
+  nodes.map{|n| n.cached_geo_search.address }.join('  <  ')
+end
 
 puts n.submission.body_of_text
+probable_location = probable_location(n)
+puts "\n\n--\n\n"
+puts "MAX DEPTH:#{probable_location[:max_depth]}"
+for location in probable_location[:bounding_boxes]
+  puts print_hierarchy(location)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
