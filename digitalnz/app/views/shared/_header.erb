@@ -10,7 +10,6 @@ tabs = {
  	<%=yield :header %>
     <div id="logo">&nbsp;</div> 
  	<ul> 
-		<li>ACTIVE=<%=@active_tab%></li>
 		<%for tabname in tabs.keys
 		class_string = ''
 		class_string = " class='active'" if tabname.titleize.singularize.to_sym == @active_tab
