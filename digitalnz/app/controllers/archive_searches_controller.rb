@@ -19,6 +19,7 @@ class ArchiveSearchesController < ApplicationController
   # * /search/fish/category/images
   # * /search/category/images/year/1920-1940
   def faceted_search
+      @active_tab = :explore
       start_time = Time.now
       
       
@@ -79,6 +80,8 @@ class ArchiveSearchesController < ApplicationController
 
   def search
     start_time = Time.now
+    @active_tab = :explore
+    
     
     #This is the case where a search is submitted using the submit button
     #Facet fields are under the f[] param by facet field id
@@ -224,6 +227,8 @@ class ArchiveSearchesController < ApplicationController
   end
   
   def index
+    @active_tab = :home
+    
     #We just want to render a form here
     @archive_search = ArchiveSearch::new
     
