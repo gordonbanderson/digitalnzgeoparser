@@ -25,6 +25,8 @@ class NatlibMetadatasController < ApplicationController
   }
   
   def map
+    @active_tab = :explore
+    
     
 =begin
     select s.id as submission_id, s.area, n.id as natlib_id, n.natlib_id as natlib_record_id from submissions s
@@ -384,6 +386,8 @@ order by n.title;
 =end
   
   def calais_child
+    @active_tab = :open_calais
+    
     @page = 1
     @page = params[:page] if !params[:page].blank?
     parent_perm = params[:parent_permalink]
@@ -449,6 +453,8 @@ order by n.title;
   
   
   def calais_parent
+    @active_tab = :open_calais
+    
         @clazz = CalaisEntry
         @page = 1
         @page = params[:page] if !params[:page].blank?
@@ -495,6 +501,8 @@ order by n.title;
   
   
   def calais_all_parents
+    @active_tab = :open_calais
+    
       sql = <<-EOF
         select distinct calais_parent_word_id, cw.word, cw.permalink from calais_entries
         inner join calais_words cw
