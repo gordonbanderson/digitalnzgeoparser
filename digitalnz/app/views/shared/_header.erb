@@ -3,20 +3,20 @@
 tabs = {
 	'Home' => '/',
 	'Explore' => '/search',
-	'Open Calais' => '/opencalais',
-	'Geoparsed' => '/',
+	'Open Calais' => '/opencalais'
 }
 %>
 <div id="header"> 
  	<%=yield :header %>
     <div id="logo">&nbsp;</div> 
  	<ul> 
+		<li>ACTIVE=<%=@active_tab%></li>
 		<%for tabname in tabs.keys
 		class_string = ''
-		class_string = " class='active'" if tabname.to_sym == @active_tab
+		class_string = " class='active'" if tabname.titleize.singularize.to_sym == @active_tab
 		%>
-        	<li><a href="/search"<%=class_string%>><%=tabname%></a></li> 
+        	<li><a href="<%=tabs[tabname]%>"<%=class_string%>><%=tabname%></a></li> 
     	<%end%>
      </ul> 
-</div> 
+</div> i	
 <div id="headerUnderFooter">&nbsp;</div>
