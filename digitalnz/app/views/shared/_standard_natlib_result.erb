@@ -12,10 +12,8 @@ Not Geoparsed
 <%elsif !record.submission.blank?
 id_string = seo_id(record.natlib_id, record.title)
 %>
-<%=link_to 'Map', map_natlib_metadata_url(:id=>id_string)%>
-<%else%>
-<%=link_to 'Metadata', map_natlib_metadata_url(:id=>record.natlib_id)%>
-<%end%>
+<%=link_to 'Map', natlib_map_url(:permalink=>record.permalink)%><%else%>
+<%=link_to 'Metadata', natlib_map_url(:permalink=>record.permalink)%><%end%>
 &nbsp;<%=record.natlib_id%> 
 </div>
 </li>
