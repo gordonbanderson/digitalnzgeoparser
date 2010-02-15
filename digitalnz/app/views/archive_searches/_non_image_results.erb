@@ -16,8 +16,7 @@ metarecord = @metadata_records[result.id]
 <%elsif !metarecord.submission.blank?
 id_string = seo_id(metarecord.natlib_id, metarecord.title)
 %>
-<%=link_to 'Map', natlib_map_url(:permalink=>metarecord.permalink)%>
-<%else%>
+<%=link_to 'Map', natlib_map_url(:permalink=>metarecord.permalink)%><%else%>
 <%=link_to 'View Record', natlib_map_url(:permalink=>metarecord.permalink)%>
 <%end%>
 &nbsp;<%=result.id%> 
