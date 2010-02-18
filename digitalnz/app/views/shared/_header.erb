@@ -11,8 +11,10 @@ tabs = {
     <div id="logo">&nbsp;</div> 
  	<ul> 
 		<%for tabname in tabs.keys
+		le_sym = tabname.titleize.singularize.downcase.gsub(' ', '_').to_sym
+		
 		class_string = ''
-		class_string = " class='active'" if tabname.titleize.singularize.to_sym == @active_tab
+		class_string = " class='active'" if le_sym == @active_tab
 		%>
         	<li><a href="<%=tabs[tabname]%>"<%=class_string%>><%=tabname%></a></li> 
     	<%end%>
