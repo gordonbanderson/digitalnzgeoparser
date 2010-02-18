@@ -4,7 +4,7 @@ metarecord = @metadata_records[result.id]
 %>
 <%cache "NONIMAGERESULT:#{metarecord.natlib_id}" do%>
 <li class="searchResult">
-    <a href="<%=result.display_url%>"><%=result.title%></a>
+    <a class="searchResultTitle" href="<%=result.display_url%>"><%=result.title%></a>
     <br/>
 <%if !result.thumbnail_url.blank?%><img src="<%=result.thumbnail_url%>" class="searchResultImage"/><%end%>
 
