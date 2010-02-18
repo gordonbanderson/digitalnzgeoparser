@@ -55,7 +55,7 @@ img { margin: 10px 0 5px; }
 #headerUnderFooter { clear: both; background: #f3f3f3; border-top: 4px solid #004000; margin-bottom: 16px; margin-top: 0px; padding: 0px; height: 0px; -webkit-box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.9); -moz-box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.9); }
 
 /* Search results facet filters 8096c0 */
-#searchPanelSmall { background: rgba(128,150,192,0.8); display: inline; position: absolute; top: 110px; left: 4px; padding: 10px; border: solid !theme_color1_dark 2px; }
+#searchPanelSmall { background: rgb(128,150,192); background: rgba(128,150,192,0.8); display: inline; position: absolute; top: 110px; left: 4px; padding: 10px; border: solid !theme_color1_dark 2px; }
 #searchPanelSmall p { padding: 0px; margin: 0px; }
 
 /* Facets */
@@ -96,14 +96,15 @@ div#geoparsingInformation img { padding: 0px; margin: 0px; color: #f3f3f3; displ
 
 .fromTheArchive { height: 400px; padding-top: 50px; }
 
+#searchResultsColumn { padding-bottom: 20px; }
+#searchResultsColumn a.searchResultTitle { color: #290080; padding-bottom: 4px; }
 #searchResultsColumn ul { padding: 0px; margin: 0px; }
-#searchResultsColumn ul li { padding-bottom: 10px; }
+#searchResultsColumn ul li { padding-bottom: 20px; }
 
 .searchResultImage { float: left; height: 40px; padding: 0px 10px 0px 0px; width: 40px; }
 
-.searchByLine { font-size: 0.9em; clear: both; padding: 0px; margin: 0px; padding-top: 3px; color: #004000; }
-
-#searchResultsColumn { padding-bottom: 20px; }
+.searchByLine { font-size: 0.9em; clear: both; padding: 0px; margin: 0px; padding-top: 3px; color: green; }
+.searchByLine a { color: green; }
 
 /* Page links */
 .pageLinks { clear: both; display: inline; margin-left: auto; margin-right: auto; text-align: center; padding-bottom: 10px; }

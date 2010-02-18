@@ -2,7 +2,9 @@
 /* Page links */
 /* Body colours */
 
-/* Column sizes */
+/* Minimum width */
+/* Default initial font size */
+/* --- portlets --- */
 
 .centreItem { margin-left: auto; margin-right: auto; }
 
@@ -26,10 +28,6 @@
 .clearfix { overflow: auto; overflow: -moz-scrollbars-none; display: inline-block; }
 .clearfix { display: block; }
 
-/* Minimum width */
-/* Default initial font size */
-/* --- portlets --- */
-
 body { margin: 0; padding: 0; border: 0; width: 100%; background: #f3f3f3; min-width: 1024px; font-size: 90%; }
 
 #main { color: !bgcolor; }
@@ -40,7 +38,7 @@ a:hover { color: #f3f3f3; background: green; text-decoration: none; }
 .colmask { position: relative; clear: both; float: left; width: 100%; overflow: hidden; }
 
 .holygrail { background: #f3f3f3; }
-.holygrail .colmid { float: left; width: 200%; /* Width of right col */ /* FIXME - REVIEW LAST 2 ITEMS */ margin-left: -208px; position: relative; right: 100%; background: !mid_col_background; }
+.holygrail .colmid { float: left; width: 200%; /* Width of right col */ /* FIXME - REVIEW LAST 2 ITEMS */ margin-left: -208px; position: relative; right: 100%; background: !bgcolor; }
 .holygrail .colleft { float: left; width: 100%; margin-left: -50%; position: relative; /* Width of lhs column plus rhs column */ /* This is currently too far left */ /* FIXME ... */ left: 416px; background: #f3f3f3; }
 .holygrail .col1wrap { float: left; width: 50%; position: relative; /* Width of left column */ right: 200px; /* Remove this if not required */ padding-bottom: 1em; /* Centre column side padding:Left padding  left column width + centre column left padding width  */ /* Right padding  right column width  centre column right padding width */ }
 .holygrail .col1 { margin-top: 0px; margin-bottom: 0px; /* This is the position where the LHS column meets the centre one */ margin-left: 210px; /* This is where the centre column meets the RHS one */ margin-right: 226px; position: relative; left: 200%; overflow: hidden; }
