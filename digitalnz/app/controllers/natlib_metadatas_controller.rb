@@ -386,7 +386,7 @@ order by n.title;
 =end
   
   def calais_child
-    @active_tab = :open_calais
+    @active_tab = :open_calai
     
     @page = 1
     @page = params[:page] if !params[:page].blank?
@@ -453,7 +453,7 @@ order by n.title;
   
   
   def calais_parent
-    @active_tab = :open_calais
+    @active_tab = :open_calai
     
         @clazz = CalaisEntry
         @page = 1
@@ -501,7 +501,7 @@ order by n.title;
   
   
   def calais_all_parents
-    @active_tab = :open_calais
+    @active_tab = :open_calai
     
       sql = <<-EOF
         select distinct calais_parent_word_id, cw.word, cw.permalink from calais_entries
